@@ -36,7 +36,6 @@ namespace XFFurniture.ViewModels
         {
             IsBusy = true;
             await GetTienda();
-            //await DisplayAlert("", Tiendas.Count.ToString(), "OK");
             await Navigation.PushModalAsync(new PinPage { BindingContext = Tiendas });
             IsBusy = false;
         });
