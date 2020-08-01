@@ -4,7 +4,7 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="WorkingWithMaps.PinPage"
              Title="Pins demo">
-    <StackLayout Margin="10">
+    <StackLayout>
         <maps:Map x:Name="map" >
             <x:Arguments >
                 <maps:MapSpan>
