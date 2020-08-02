@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using SwipeMenu.Models;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using XFFurniture.Interfaces;
 using XFFurniture.Models;
@@ -8,7 +9,7 @@ namespace XFFurniture.ViewModels
 {
     public class DetailPageViewModel : BaseViewModel
     {
-        public DetailPageViewModel(INavigation navigation, Product product)
+        public DetailPageViewModel(INavigation navigation, ProductoModelo product)
         {
             Navigation = navigation;
             DependencyService.Get<IStatusBarStyle>().ChangeTextColor(true);
@@ -17,7 +18,7 @@ namespace XFFurniture.ViewModels
         }
 
         public Command PopDetailPageCommand { get; }
-        public Product Product { get; set; }
+        public ProductoModelo Product { get; set; }
 
         private async Task ExecutePopDetailPageCommand()
         {

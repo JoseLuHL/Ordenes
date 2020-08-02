@@ -5,25 +5,40 @@
              x:Class="WorkingWithMaps.PinPage"
              Title="Pins demo">
     <StackLayout>
-        <maps:Map x:Name="map" >
-            <x:Arguments >
-                <maps:MapSpan>
-                    <x:Arguments >
-                        <maps:Position>
-                            <x:Arguments>
-                                <x:Double>5.6845709</x:Double>
-                                <x:Double>-76.6540463</x:Double>
-                            </x:Arguments>
-                        </maps:Position>
-                        <x:Double>0.01</x:Double>
-                        <x:Double>0.01</x:Double>
-                    </x:Arguments>
-                </maps:MapSpan>
-            </x:Arguments>
-            
-        </maps:Map>
-        <!--<Button Text="Add more pins"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <maps:Map x:Name="map" IsShowingUser="True" HeightRequest="600" MapType="Hybrid"  Grid.Row="0" Grid.RowSpan="2" >
+                <x:Arguments >
+                    <maps:MapSpan>
+                        <x:Arguments >
+                            <maps:Position>
+                                <x:Arguments>
+                                    <x:Double>5.6845709</x:Double>
+                                    <x:Double>-76.6540463</x:Double>
+                                </x:Arguments>
+                            </maps:Position>
+                            <x:Double>0.01</x:Double>
+                            <x:Double>0.01</x:Double>
+                        </x:Arguments>
+                    </maps:MapSpan>
+                </x:Arguments>
+            </maps:Map>
+
+            <Frame Opacity="0.7" Grid.Row="0">
+                <StackLayout>
+                    <Label FontAttributes="Bold" FontSize="25" Text="Nombre de la tienda"/>
+                    <Entry/>
+
+                    <Label FontSize="25" FontAttributes="Bold" Text="Barrio"/>
+                    <Picker/>
+                </StackLayout>
+            </Frame>
+            <!--<Button Text="Add more pins"
                 Clicked="OnButtonClicked"
                 />-->
+        </Grid>
+        
     </StackLayout>
 </ContentPage>

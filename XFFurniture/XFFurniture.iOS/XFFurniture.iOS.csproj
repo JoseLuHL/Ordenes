@@ -275,4 +275,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\cart_white%402x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\tienda.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mapa.png" />
+  </ItemGroup>
 </Project>

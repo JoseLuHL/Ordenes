@@ -99,7 +99,7 @@
                         FontFamily="FontMontserratSemiBold"
                         FontSize="{OnPlatform Android='14',
                                               iOS='18'}"
-                        Text="{Binding Product.description}" />
+                        Text="{Binding Product.ProdNombre}" />
                     <Label
                         Grid.Row="1"
                         Grid.Column="1"
@@ -108,14 +108,14 @@
                         FontSize="{OnPlatform Android='14',
                                               iOS='18'}"
                         HorizontalOptions="End"
-                        Text="{Binding Product.newPrice, StringFormat='$ {0:N0}'}"
+                        Text="{Binding Product.ProdPreciounitario, StringFormat='$ {0:N0}'}"
                         TextColor="{StaticResource colorRedFF}" />
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
                         FontFamily="FontMontserratSemiBold"
                         FontSize="10"
-                        Text="{Binding Product.createdBy, StringFormat='by {0}'}" />
+                        Text="{Binding Product.ProdIdtiendaNavigation.TienRazonsocial, StringFormat='by {0}'}" />
                     <StackLayout
                         Grid.Row="3"
                         Margin="0,15,0,10"
@@ -132,14 +132,14 @@
                             FontFamily="FontMontserratMedium"
                             FontSize="{OnPlatform Android='10',
                                                   iOS='12'}"
-                            Text="{Binding Product.rating, StringFormat='{0:N1}  |'}"
+                            Text="{Binding Product.ProdRanking, StringFormat='{0:N1}  |'}"
                             TextColor="{StaticResource colorGray95}"
                             VerticalTextAlignment="Center" />
                         <Label
                             FontFamily="FontMontserratMedium"
                             FontSize="{OnPlatform Android='10',
                                                   iOS='12'}"
-                            Text="{Binding Product.review, StringFormat=' {0} Review'}"
+                            Text="{Binding Product.ProdCountventas, StringFormat=' {0} Review'}"
                             TextColor="{StaticResource colorGray95}"
                             VerticalTextAlignment="Center" />
                     </StackLayout>
@@ -165,7 +165,7 @@
                             FontSize="{OnPlatform Android='10',
                                                   iOS='14'}"
                             HorizontalOptions="End"
-                            Text="OVERVIEW"
+                            Text="GENERAL"
                             TextColor="{StaticResource colorRedFF}" />
                         <Label
                             Grid.Row="0"
@@ -174,7 +174,7 @@
                             FontSize="{OnPlatform Android='10',
                                                   iOS='14'}"
                             HorizontalOptions="Start"
-                            Text="DETAILS"
+                            Text="DETALLE"
                             TextColor="{StaticResource colorGray95}" />
                         <BoxView
                             Grid.Row="1"
@@ -192,7 +192,7 @@
                         Grid.ColumnSpan="2"
                         FontSize="{OnPlatform Android='10',
                                               iOS='12'}"
-                        Text="{Binding Product.overview}" />
+                        Text="{Binding Product.ProdDescripcion}" />
                 </Grid>
             </pancake:PancakeView>
         </Grid>
@@ -201,7 +201,7 @@
             HeightRequest="{OnPlatform Android='200',
                                        iOS='320'}"
             HorizontalOptions="Center"
-            Source="{Binding Product.image}"
+            Source="{Binding Product.ProdFoto}"
             TranslationY="28"
             VerticalOptions="Start" />
         <pancake:PancakeView
@@ -237,7 +237,7 @@
                             TextColor="{StaticResource colorWhite}" />
                         <Label
                             FontSize="10"
-                            Text="added"
+                            Text="adicional"
                             TextColor="{StaticResource colorWhite}" />
                     </StackLayout>
                 </Grid>
@@ -249,7 +249,7 @@
                         FontFamily="FontMontserratSemiBold"
                         FontSize="12"
                         HorizontalTextAlignment="Center"
-                        Text="Add to Cart +"
+                        Text="Añadir al carrito +"
                         TextColor="{StaticResource colorWhite}"
                         VerticalTextAlignment="Center" />
                 </Grid>
