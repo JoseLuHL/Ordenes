@@ -11,51 +11,50 @@ namespace WorkingWithMaps
     public partial class PinPage : ContentPage
     {
         //List<Pin> boardwalkPin;
-        ObservableCollection< TiendaModelo> tiendas => ((ObservableCollection<TiendaModelo>)BindingContext);
+        MainPageViewModel tiendas => ((MainPageViewModel)BindingContext);
         Property property;
         public PinPage()
         {
             InitializeComponent();
-            map.IsShowingUser = true;
-            map.IsShowingUser = true;
             
-            Pin boardwalkPin = new Pin
-            {
-                Position = new Position(5.687629, -76.659698),
-                Label = "Chocó",
-                Address = "Quibdo",
-                Type = PinType.Place
-            };
+            //Pin boardwalkPin = new Pin
+            //{
+            //    Position = new Position(5.687629, -76.659698),
+            //    Label = "Chocó",
+            //    Address = "Quibdo",
+            //    Type = PinType.Place
+            //};
 
-            map.Pins.Add(boardwalkPin);
-
-        }
-
-        public PinPage(Property property)
-        {
-            InitializeComponent();
-            //contexto.PropertyTypeList
-            map.IsShowingUser = true;
-            this.property = property;
+            //map.Pins.Add(boardwalkPin);
 
         }
+
+        //public PinPage(Property property)
+        //{
+        //    InitializeComponent();
+        //    //contexto.PropertyTypeList
+        //    map.IsShowingUser = true;
+        //    this.property = property;
+
+        //}
 
         protected override void OnAppearing()
         {
-            if (property != null)
-            {
-                Pin listPin = new Pin
-                {
-                    Position = new Position(property.Lat, property.Lng),
-                    AutomationId = property.Id,
-                    Label = property.Price,
-                    Address = property.Space,
-                    Type = PinType.Place
-                };
-                map.Pins.Add(listPin);
+            //if (property != null)
+            //{
+            //    Pin listPin = new Pin
+            //    {
+            //        Position = new Position(property.Lat, property.Lng),
+            //        AutomationId = property.Id,
+            //        Label = property.Price,
+            //        Address = property.Space,
+            //        Type = PinType.Place
+            //    };
+            //    map.Pins.Add(listPin);
 
-            }
-            else
+            //}
+            //else
+
                 Cargar();
 
             base.OnAppearing();
@@ -66,7 +65,8 @@ namespace WorkingWithMaps
             map.IsShowingUser = true;
             Pin boardwalkPin = new Pin();
             Pin listPin = new Pin();
-            foreach (var item in tiendas)
+            if (tiendas.Tiendas.Count>0)
+            foreach (var item in tiendas.Tiendas)
             {
                 listPin = new Pin
                 {
@@ -78,31 +78,31 @@ namespace WorkingWithMaps
                     Type = PinType.Place
                 };
 
-                listPin.MarkerClicked += OnMarkerClickedAsync;
+                //listPin.MarkerClicked += OnMarkerClickedAsync;
                 listPin.InfoWindowClicked += OnInfoWindowClickedAsync;
                 map.Pins.Add(listPin);
             }
 
 
-            boardwalkPin.MarkerClicked += OnMarkerClickedAsync;
+            //boardwalkPin.MarkerClicked += OnMarkerClickedAsync;
 
 
-            Pin wharfPin = new Pin
-            {
-                Position = new Position(5.6845709, -76.6540463),
-                Label = "Chocó",
-                Address = "Quibdo",
-                Type = PinType.Place
-            };
+            //Pin wharfPin = new Pin
+            //{
+            //    Position = new Position(5.6845709, -76.6540463),
+            //    Label = "Chocó",
+            //    Address = "Quibdo",
+            //    Type = PinType.Place
+            //};
 
-            wharfPin = new Pin
-            {
-                Position = new Position(5.68628372017091, -76.66052389815435),
-                Label = "Chocó",
-                Address = "Quibdo",
-                Type = PinType.Place
-            };
-            wharfPin.InfoWindowClicked += OnInfoWindowClickedAsync;
+            //wharfPin = new Pin
+            //{
+            //    Position = new Position(5.68628372017091, -76.66052389815435),
+            //    Label = "Chocó",
+            //    Address = "Quibdo",
+            //    Type = PinType.Place
+            //};
+            //wharfPin.InfoWindowClicked += OnInfoWindowClickedAsync;
 
 
             //map.Pins.Add(wharfPin);
@@ -121,8 +121,9 @@ namespace WorkingWithMaps
 
         async void OnInfoWindowClickedAsync(object sender, PinClickedEventArgs e)
         {
-            var property = ((Pin)sender).BindingContext as Property;
+            var property = ((Pin)sender).BindingContext as TiendaModelo;
             string pinName = ((Pin)sender).Label;
+            tiendas.SelectCategoryCommand.Execute(property);
             //await DisplayAlert("", property.Price , "Ok");
             //await Navigation.PushModalAsync(new DetailsPage(property));
         }

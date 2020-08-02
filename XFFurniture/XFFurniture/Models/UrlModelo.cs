@@ -12,5 +12,6 @@ namespace XFFurniture.Models
         public static string odenesTienda => $"{UrlBase}Ordenes/tienda/";
         public static string cliente => $"{UrlBase}Clientes";
         public static string producto => $"{UrlBase}Productoes";
+        public static string categoria => $"{UrlBase}Categoriums";
     }
 }

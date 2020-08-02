@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using XFFurniture.Models;
+using XFFurniture.Views;
 
 namespace XFFurniture.Service
 {
@@ -238,6 +239,21 @@ namespace XFFurniture.Service
             {
                 var contenido = await peticion.Content.ReadAsStringAsync();
                 var datos = JsonConvert.DeserializeObject<ObservableCollection<ProductoModelo>>(contenido);
+                respuesta = datos;
+            }
+            else
+                respuesta = null;
+            return respuesta;
+        }
+        public static async Task<ObservableCollection<Categoria>> GetCategoriaAsync(string urlCategoria)
+        {
+            var respuesta = new ObservableCollection<Categoria>();
+            Http = new HttpClient();
+            var peticion = await Http.GetAsync(urlCategoria);
+            if (peticion.IsSuccessStatusCode)
+            {
+                var contenido = await peticion.Content.ReadAsStringAsync();
+                var datos = JsonConvert.DeserializeObject<ObservableCollection<Categoria>>(contenido);
                 respuesta = datos;
             }
             else

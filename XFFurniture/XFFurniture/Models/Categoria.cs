@@ -15,7 +15,7 @@ namespace XFFurniture.Models
         public int CantId { get; set; }
         public string CatDescripcion { get; set; }
         public string CatIdestado { get; set; }
-
+        public string CatFoto { get; set; }
         public virtual ICollection<ProductoModelo> Productos { get; set; }
     }
 }

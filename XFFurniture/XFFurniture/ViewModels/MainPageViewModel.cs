@@ -19,22 +19,30 @@ namespace XFFurniture.ViewModels
         {
             IsBusy = true;
             Navigation = navigation;
-            SelectCategoryCommand = new Command<TiendaModelo>( async (param) => await ExecuteSelectCategoryCommand(param));
+            SelectCategoryCommand = new Command<TiendaModelo>(async (param) => await ExecuteSelectCategoryCommand(param));
             NavigateToDetailPageCommand = new Command<ProductoModelo>(async (param) => await ExeccuteNavigateToDetailPageCommand(param));
-            GetCategories();
+            _ = GetCategories();
             _ = GetProducts();
             _ = GetTienda();
             //IsBusy = false;
             //GetTienda();
         }
 
-        public ICommand ShowAllCommand => new Command(async () => {await GetProducts(); });
+        public ICommand ShowAllCommand => new Command(async () => { await GetProducts(); });
+        public ICommand CarritoCommand => new Command(async () => { await Navigation.PushModalAsync(new CarritoPage()); });
+        public ICommand TiendasCommand => new Command(async () => { await Navigation.PushModalAsync(new TiendasPage { BindingContext = this }); });
 
         public Command NavigateToDetailPageCommand { get; }
         public Command SelectCategoryCommand { get; }
         public ObservableCollection<Category> Categories { get; set; }
-        //public ObservableCollection<TiendaModelo> Tiendas { get; set; }
-        //public ObservableCollection<Product> Products { get; set; }
+        private ObservableCollection<Categoria> categorias;
+
+        public ObservableCollection<Categoria> Categorias
+        {
+            get => categorias;
+            set => SetProperty(ref categorias, value);
+        }
+
 
         private ObservableCollection<Product> products;
 
@@ -62,13 +70,19 @@ namespace XFFurniture.ViewModels
         {
             IsBusy = true;
             await GetTienda();
-            await Navigation.PushModalAsync(new PinPage { BindingContext = Tiendas });
+            await Navigation.PushModalAsync(new PinPage { BindingContext = this });
             IsBusy = false;
         });
 
-        void GetCategories()
+        public ICommand CategoriasCommand => new Command(async () => { await GetCategories(); });
+
+        async Task GetCategories()
         {
+            IsBusy = true;
             Categories = new ObservableCollection<Category>(DataService.GetCategories());
+            Categorias = await DataService.GetCategoriaAsync(UrlModelo.categoria);
+            IsBusy = false;
+            await Navigation.PushModalAsync(new CategoriaPage { BindingContext = this });
         }
 
         async Task GetTienda()
@@ -102,7 +116,7 @@ namespace XFFurniture.ViewModels
                 Tiendas[index].textColor = "#FFFFFF";
                 Tiendas[index].backgroundColor = "#F4C03E";
             }
-           await GetProductosTienda(model.TienId);
+            await GetProductosTienda(model.TienId);
         }
 
 

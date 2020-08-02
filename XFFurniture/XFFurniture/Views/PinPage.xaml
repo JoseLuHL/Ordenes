@@ -5,11 +5,8 @@
              x:Class="WorkingWithMaps.PinPage"
              Title="Pins demo">
     <StackLayout>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <maps:Map x:Name="map" IsShowingUser="True" HeightRequest="600" MapType="Hybrid"  Grid.Row="0" Grid.RowSpan="2" >
+
+            <maps:Map x:Name="map"  IsShowingUser="True"  MapType="Hybrid"   >
                 <x:Arguments >
                     <maps:MapSpan>
                         <x:Arguments >
@@ -26,7 +23,7 @@
                 </x:Arguments>
             </maps:Map>
 
-            <Frame Opacity="0.7" Grid.Row="0">
+            <!--<Frame Opacity="0.7" Grid.Row="0">
                 <StackLayout>
                     <Label FontAttributes="Bold" FontSize="25" Text="Nombre de la tienda"/>
                     <Entry/>
@@ -34,11 +31,10 @@
                     <Label FontSize="25" FontAttributes="Bold" Text="Barrio"/>
                     <Picker/>
                 </StackLayout>
-            </Frame>
+            </Frame>-->
             <!--<Button Text="Add more pins"
                 Clicked="OnButtonClicked"
                 />-->
-        </Grid>
         
     </StackLayout>
 </ContentPage>

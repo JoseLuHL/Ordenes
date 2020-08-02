@@ -43,7 +43,11 @@
                     Aspect="AspectFit"
                     HeightRequest="22"
                     Source="cart"
-                    WidthRequest="22" />
+                    WidthRequest="22" >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CarritoCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
                 <BoxView
                     Grid.Column="2"
                     Margin="0,4,16,0"
@@ -61,8 +65,8 @@
                 <Label FontFamily="FontMontserratBold" FontSize="30" Text="Nombre de la aplicación"/>
                 <Label FontSize="10" Text="Tiendas" />
                 <StackLayout Orientation="Horizontal" Spacing="20">
-                    <ImageButton Source="tienda"/>
-                    <ImageButton Source="mapa"/>
+                    <ImageButton Command="{Binding TiendasCommand}" Source="tienda"/>
+                    <ImageButton Command="{Binding MapaCommand}" Source="mapa"/>
                 </StackLayout>
             </StackLayout>
             <CollectionView x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding Tiendas}" SelectionMode="None">
@@ -135,7 +139,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Grid Grid.Row="3" Margin="{OnPlatform Android='0,20,20,20', iOS='0,20,20,0'}">
+            <Grid Grid.Row="3" Margin="{OnPlatform Android='0,0,20,20', iOS='0,0,20,0'}">
                 <pancake:PancakeView
                     Padding="15"
                     BackgroundColor="{StaticResource colorBlack27}"
@@ -225,7 +229,20 @@
                 FontSize="{OnPlatform Android='12',
                                       iOS='12'}"
                 TextColor="{StaticResource colorRedFF}"
-                Text="Categoría" />
+                Text="Categoría">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CategoriasCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+            
+            <Polygon
+                Grid.Row="4"
+                Margin="{OnPlatform Android='40,-5,0,0',
+                                    iOS='30,-5,0,0'}"
+                Fill="{StaticResource colorRedFF}"
+                HorizontalOptions="Start"
+                Points="10,10 20,15 10,20" />
+            
             <Label
                 Grid.Row="4"
                 Margin="0,0,35,0"
@@ -242,7 +259,7 @@
             </Label>
             <Polygon
                 Grid.Row="4"
-                Margin="{OnPlatform Android='0,-2,20,0',
+                Margin="{OnPlatform Android='0,-5,20,0',
                                     iOS='0,0,20,0'}"
                 Fill="{StaticResource colorRedFF}"
                 HorizontalOptions="End"
