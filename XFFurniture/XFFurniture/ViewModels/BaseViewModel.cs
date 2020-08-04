@@ -50,6 +50,27 @@ namespace XFFurniture.ViewModel
             }
         }
 
+        private bool isLoad;
+
+        public bool IsLoad
+        {
+            get { return isLoad; }
+            set
+            {
+                SetProperty(ref isLoad, value);
+            }
+        }
+        private bool _isLoad;
+
+        public bool IsCargando
+        {
+            get { return _isLoad; }
+            set
+            {
+                SetProperty(ref _isLoad, value);
+            }
+        }
+
         private bool _isBusy;
         public bool IsBusy
         {

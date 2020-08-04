@@ -5,7 +5,7 @@ using XFFurniture.ViewModel;
 
 namespace XFFurniture.Models
 {
-  public  class TiendaModelo: BaseViewModel
+    public class TiendaModelo : BaseViewModel
     {
         public int TienId { get; set; }
         public string TienNit { get; set; }
@@ -18,7 +18,7 @@ namespace XFFurniture.Models
         public double TienLatitud { get; set; }
         public double TienLongitud { get; set; }
         public string TienAltura { get; set; }
-
+        public bool? TienPremium { get; set; }
 
 
         private string _backgroundColor;

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using XFFurniture.Interfaces;
 using XFFurniture.ViewModels;
@@ -10,7 +11,7 @@ namespace XFFurniture
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        //MainPageViewModel MainPageViewModel => ((MainPageViewModel)BindingContext);
+        MainPageViewModel MainPageViewModel => ((MainPageViewModel)BindingContext);
         public MainPage()
         {
             InitializeComponent();
@@ -18,9 +19,16 @@ namespace XFFurniture
             
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
+            MainPageViewModel.IsLoad = true;
+            MainPageViewModel.IsCargando = false;
+
+            await Task.Delay(700);
             DependencyService.Get<IStatusBarStyle>().ChangeTextColor();
+
+            MainPageViewModel.IsLoad = false;
+            MainPageViewModel.IsCargando = true;
         }
     }
 }

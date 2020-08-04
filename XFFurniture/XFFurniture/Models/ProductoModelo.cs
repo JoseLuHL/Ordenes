@@ -45,5 +45,7 @@ namespace SwipeMenu.Models
         public int? ProdIdtienda { get; set; }
 
         public virtual TiendaModelo ProdIdtiendaNavigation { get; set; }
+
+        public virtual Subcategorium ProdIdcategoriaNavigation { get; set; }
     }
 }

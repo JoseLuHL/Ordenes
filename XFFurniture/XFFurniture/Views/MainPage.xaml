@@ -10,149 +10,145 @@
     NavigationPage.HasNavigationBar="False"
     mc:Ignorable="d">
 
-    <ScrollView>
-        <Grid Margin="20,30,0,20" RowDefinitions="auto, auto, 95, auto, auto, *">
-            <Grid
+    <ScrollView >
+        <StackLayout>
+            <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="200" WidthRequest="200" IsVisible="{Binding IsLoad}" IsRunning="{Binding IsLoad}"/>
+            <Grid Margin="20,30,0,20" RowDefinitions="auto, auto, 95, auto, auto, *" IsVisible="{Binding IsCargando}" >
+                <Grid
                 Grid.Row="0"
                 ColumnDefinitions="*, auto, auto"
                 ColumnSpacing="30">
-                <StackLayout Grid.Column="0">
-                    <BoxView
-                        BackgroundColor="{StaticResource colorBlack}"
-                        CornerRadius="3"
-                        HeightRequest="3"
-                        HorizontalOptions="Start"
-                        WidthRequest="25" />
-                    <BoxView
-                        BackgroundColor="{StaticResource colorBlack}"
-                        CornerRadius="3"
-                        HeightRequest="3"
-                        HorizontalOptions="Start"
-                        WidthRequest="25" />
-                </StackLayout>
-                
-                <Path
+                    <StackLayout Grid.Column="0" Orientation="Horizontal">
+                        <StackLayout>
+                            <BoxView
+                                BackgroundColor="{StaticResource colorBlack}"
+                                CornerRadius="3"
+                                HeightRequest="3"
+                                HorizontalOptions="Start"
+                                WidthRequest="25" />
+                            <BoxView
+                                BackgroundColor="{StaticResource colorBlack}"
+                                CornerRadius="3"
+                                HeightRequest="3"
+                                HorizontalOptions="Start"
+                                WidthRequest="25" />
+                        </StackLayout>
+                        <Label  Margin="0,-20,0,0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" FontFamily="FontMontserratBold" FontSize="15" Text="Nombre de la aplicación"/>
+
+                    </StackLayout>
+                    <Path
                     Grid.Column="1"
                     Data="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"
                     Fill="{StaticResource colorBlue232}"
                     HeightRequest="30"
                     WidthRequest="30" />
-                <Image
-                    Grid.Column="2"
-                    Margin="0,0,20,0"
-                    Aspect="AspectFit"
-                    HeightRequest="22"
-                    Source="cart"
-                    WidthRequest="22" >
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding CarritoCommand}"/>
-                    </Image.GestureRecognizers>
-                </Image>
-                <BoxView
-                    Grid.Column="2"
-                    Margin="0,4,16,0"
-                    BackgroundColor="{StaticResource colorRedFF}"
-                    CornerRadius="4"
-                    HeightRequest="8"
-                    HorizontalOptions="End"
-                    VerticalOptions="Start"
-                    WidthRequest="8" />
-            </Grid>
-            <StackLayout
-                Grid.Row="1"
-                Margin="0,0,0,0"
-                Spacing="0">
-                <Label FontFamily="FontMontserratBold" FontSize="30" Text="Nombre de la aplicación"/>
-                <Label FontSize="10" Text="Tiendas" />
-                <StackLayout Orientation="Horizontal" Spacing="20">
-                    <ImageButton Command="{Binding TiendasCommand}" Source="tienda"/>
-                    <ImageButton Command="{Binding MapaCommand}" Source="mapa"/>
+                    <Image
+                        Grid.Column="2"
+                        Margin="0,0,20,0"
+                        Aspect="AspectFit"
+                        HeightRequest="22"
+                        Source="cart"
+                        WidthRequest="22" >
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CarritoCommand}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <BoxView
+                        Grid.Column="2"
+                        Margin="0,4,16,0"
+                        BackgroundColor="{StaticResource colorRedFF}"
+                        CornerRadius="4"
+                        HeightRequest="8"
+                        HorizontalOptions="End"
+                        VerticalOptions="Start"
+                        WidthRequest="8" />
+                </Grid>
+                <StackLayout
+                Grid.Row="1" Margin="0,0,0,0" Spacing="0">
+                    <!--<Label FontFamily="FontMontserratBold" FontSize="30" Text="Nombre de la aplicación"/>-->
+                    <!--<Label FontSize="10" Text="Tiendas" />-->
+                    <StackLayout Orientation="Horizontal" Spacing="20">
+                        <ImageButton Command="{Binding TiendasCommand}" Source="tienda"/>
+                        <ImageButton Command="{Binding MapaCommand}" Source="mapa"/>
+                    </StackLayout>
                 </StackLayout>
-            </StackLayout>
-            <CollectionView x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding Tiendas}" SelectionMode="None">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="5" Orientation="Horizontal" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <shadows:Shadows CornerRadius="38" Shades="{shadows:SingleShade BlurRadius=10, Offset='0,3', Opacity=0.5, Color={StaticResource colorYellow99F4}}">
-                                <pancake:PancakeView
-                                    Margin="0,5,5,5"
-                                    Padding="8"
-                                    BackgroundColor="{Binding backgroundColor}"
-                                    CornerRadius="34"
-                                    HeightRequest="50"
-                                    VerticalOptions="Start"
-                                    WidthRequest="200">
-                                    <Grid
+                <CollectionView x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding TiendasPremiun}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="5" Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <shadows:Shadows CornerRadius="38" Shades="{shadows:SingleShade BlurRadius=10, Offset='0,3', Opacity=0.5, Color={StaticResource colorYellow99F4}}">
+                                    <pancake:PancakeView Margin="0,5,5,5" Padding="8" BackgroundColor="{Binding backgroundColor}" CornerRadius="34" HeightRequest="50" VerticalOptions="Start" WidthRequest="200">
+                                        <Grid
                                         ColumnDefinitions="auto, *"
                                         RowSpacing="0"
                                         VerticalOptions="Center">
-                                        <BoxView
+                                            <BoxView
                                             BackgroundColor="{StaticResource colorWhite}"
                                             CornerRadius="25"
                                             HeightRequest="50"
                                             WidthRequest="50" />
-                                        <Image
+                                            <Image
                                             Grid.Column="0"
                                             HeightRequest="34"
                                             HorizontalOptions="Center"
                                             Source="armchair.png"
                                             VerticalOptions="CenterAndExpand"
-                                            WidthRequest="34" />
-                                        <StackLayout
+                                            WidthRequest="34"/>
+                                            <StackLayout
                                             Grid.Row="0"
                                             Grid.Column="1"
                                             Margin="2,0,0,0"
                                             Spacing="0"
                                             VerticalOptions="Center">
-                                            <Label
+                                                <Label
                                                 FontFamily="FontMontserratMedium"
                                                 FontSize="11"
                                                 Text="{Binding TienRazonsocial}"
                                                 TextColor="{Binding textColor}"
                                                 VerticalOptions="Start" />
-                                            <!--<Label
+                                                <!--<Label
                                                 FontSize="9"
                                                 Text="{Binding numberItems, StringFormat='{0} items'}"
                                                 VerticalOptions="Start" />-->
-                                        </StackLayout>
-                                    </Grid>
-                                    <pancake:PancakeView.GestureRecognizers>
-                                        <TapGestureRecognizer
+                                            </StackLayout>
+                                        </Grid>
+                                        <pancake:PancakeView.GestureRecognizers>
+                                            <TapGestureRecognizer
                                             Command="{Binding Path=BindingContext.SelectCategoryCommand, Source={x:Reference listCategories}}"
                                             CommandParameter="{Binding .}"
                                             NumberOfTapsRequired="1" />
-                                    </pancake:PancakeView.GestureRecognizers>
-                                </pancake:PancakeView>
-                                <shadows:Shadows.Triggers>
-                                    <DataTrigger
+                                        </pancake:PancakeView.GestureRecognizers>
+                                    </pancake:PancakeView>
+                                    <shadows:Shadows.Triggers>
+                                        <DataTrigger
                                         Binding="{Binding selected}"
                                         TargetType="shadows:Shadows"
                                         Value="False">
-                                        <Setter Property="Shades" Value="{shadows:SingleShade BlurRadius=0, Offset='0,0', Opacity=0}" />
-                                    </DataTrigger>
-                                </shadows:Shadows.Triggers>
-                            </shadows:Shadows>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <Grid Grid.Row="3" Margin="{OnPlatform Android='0,0,20,20', iOS='0,0,20,0'}">
-                <pancake:PancakeView
+                                            <Setter Property="Shades" Value="{shadows:SingleShade BlurRadius=0, Offset='0,0', Opacity=0}" />
+                                        </DataTrigger>
+                                    </shadows:Shadows.Triggers>
+                                </shadows:Shadows>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Grid Grid.Row="3" Margin="{OnPlatform Android='0,0,20,20', iOS='0,0,20,0'}">
+                    <pancake:PancakeView
                     Padding="15"
                     BackgroundColor="{StaticResource colorBlack27}"
                     CornerRadius="10"
                     HasShadow="False"
                     VerticalOptions="Start">
-                    <Grid RowDefinitions="auto, auto, auto">
-                        <Label
+                        <Grid RowDefinitions="auto, auto, auto">
+                            <Label
                             Grid.Row="0"
                             FontSize="Micro"
                             Text="Publicidad"
                             TextColor="{StaticResource colorGrayC1}" />
-                        <Label
+                            <Label
                             Grid.Row="1"
                             VerticalOptions="Center"
                             HorizontalOptions="CenterAndExpand"
@@ -160,7 +156,7 @@
                             Text="Nombre de la tienda que esta pagando"
                             TextColor="{StaticResource colorWhite}">
 
-                            <!--<Label.FormattedText>
+                                <!--<Label.FormattedText>
                                 <FormattedString>
                                     <Span
                                         FontFamily="FontMontserratSemiBold"
@@ -182,9 +178,9 @@
                                         TextColor="{StaticResource colorWhite}" />
                                 </FormattedString>
                             </Label.FormattedText>-->
-                            
-                        </Label>
-                        <pancake:PancakeView
+
+                            </Label>
+                            <pancake:PancakeView
                             Grid.Row="2"
                             Padding="15,5"
                             BackgroundColor="{StaticResource colorWhite}"
@@ -192,28 +188,28 @@
                             HasShadow="False"
                             HorizontalOptions="Start"
                             VerticalOptions="Center">
-                            <Label
+                                <Label
                                 FontSize="8"
                                 HorizontalOptions="Center"
                                 Text="TIENDAS"
                                 IsEnabled="{Binding !IsBusy}"
                                 VerticalOptions="Center" >
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding MapaCommand}" />
-                                </Label.GestureRecognizers>
-                            </Label>
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding MapaCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
 
-                        </pancake:PancakeView>
-                        <ActivityIndicator  Grid.Row="3" 
+                            </pancake:PancakeView>
+                            <ActivityIndicator  Grid.Row="3" 
                                             IsRunning="{Binding IsBusy}" 
                                             VerticalOptions="Center" 
                                             HorizontalOptions="Center" 
                                             Color="Red" 
                                             WidthRequest="30" 
                                             HeightRequest="30" ></ActivityIndicator>
-                    </Grid>
-                </pancake:PancakeView>
-                <Image
+                        </Grid>
+                    </pancake:PancakeView>
+                    <Image
                     Margin="{OnPlatform Android='0,-45,-25,0',
                                         iOS='0,-90,-60,0'}"
                     HeightRequest="{OnPlatform Android='150',
@@ -222,28 +218,28 @@
                     Source="chair" 
                     WidthRequest="{OnPlatform Android='200',
                                               iOS='290'}" />
-            </Grid>
-            <Label
+                </Grid>
+                <Label
                 Grid.Row="4"
                 FontFamily="FontMontserratBold"
                 FontSize="{OnPlatform Android='12',
                                       iOS='12'}"
                 TextColor="{StaticResource colorRedFF}"
                 Text="Categoría">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding CategoriasCommand}"/>
-                </Label.GestureRecognizers>
-            </Label>
-            
-            <Polygon
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CategoriasCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <Polygon
                 Grid.Row="4"
                 Margin="{OnPlatform Android='40,-5,0,0',
                                     iOS='30,-5,0,0'}"
                 Fill="{StaticResource colorRedFF}"
                 HorizontalOptions="Start"
                 Points="10,10 20,15 10,20" />
-            
-            <Label
+
+                <Label
                 Grid.Row="4"
                 Margin="0,0,35,0"
                 FontFamily="FontMontserratMedium"
@@ -253,11 +249,11 @@
                 Text="Mostrar todo"
                 TextColor="{StaticResource colorRedFF}"
                 VerticalTextAlignment="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ShowAllCommand}"/>
-                </Label.GestureRecognizers>
-            </Label>
-            <Polygon
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ShowAllCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Polygon
                 Grid.Row="4"
                 Margin="{OnPlatform Android='0,-5,20,0',
                                     iOS='0,0,20,0'}"
@@ -265,29 +261,29 @@
                 HorizontalOptions="End"
                 Points="10,10 20,15 10,20"
                 StrokeThickness="1" />
-            <CollectionView
+                <CollectionView
                 x:Name="listProducts"
                 Grid.Row="5"
                 Margin="0,15,20,0"
                 ItemsSource="{Binding Productos}"
                 VerticalScrollBarVisibility="Never">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
                         HorizontalItemSpacing="15"
                         Orientation="Vertical"
                         Span="2"
                         VerticalItemSpacing="15" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <pancake:PancakeView
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <pancake:PancakeView
                                 Padding="0,0,0,10"
                                 BackgroundColor="{StaticResource colorGrayF6}"
                                 CornerRadius="12"
                                 HasShadow="False">
-                                <Grid RowDefinitions="auto, auto, auto, auto, auto" RowSpacing="0">
-                                    <Image
+                                    <Grid RowDefinitions="auto, auto, auto, auto, auto" RowSpacing="0">
+                                        <Image
                                         Margin="0,15,20,0"
                                         Aspect="AspectFit"
                                         HeightRequest="18"
@@ -295,16 +291,16 @@
                                         Source="heart_outline"
                                         VerticalOptions="Start"
                                         WidthRequest="18">
-                                        <Image.Triggers>
-                                            <DataTrigger
+                                            <Image.Triggers>
+                                                <DataTrigger
                                                 Binding="{Binding ProdFavorito}"
                                                 TargetType="Image"
                                                 Value="True">
-                                                <Setter Property="Source" Value="heart" />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <pancake:PancakeView
+                                                    <Setter Property="Source" Value="heart" />
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+                                        <pancake:PancakeView
                                         Padding="2,4"
                                         BackgroundColor="{StaticResource colorRedFF}"
                                         CornerRadius="12,0,0,20"
@@ -313,112 +309,112 @@
                                         HorizontalOptions="Start"
                                         VerticalOptions="Start"
                                         WidthRequest="30">
-                                        <Label HorizontalOptions="Center">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span
+                                            <Label HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span
                                                         FontFamily="FontMontserratSemiBold"
                                                         FontSize="8"
                                                         Text="{Binding prod_descuento, StringFormat='{0:N0}%'}"
                                                         TextColor="{StaticResource colorWhite}" />
-                                                    <Span
+                                                        <Span
                                                         FontFamily="FontMontserratSemiBold"
                                                         FontSize="8"
                                                         Text="&#10;DES"
                                                         TextColor="{StaticResource colorWhite}" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                        <pancake:PancakeView.Triggers>
-                                            <DataTrigger
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <pancake:PancakeView.Triggers>
+                                                <DataTrigger
                                                 Binding="{Binding discount}"
                                                 TargetType="pancake:PancakeView"
                                                 Value="0">
-                                                <Setter Property="IsVisible" Value="False" />
-                                            </DataTrigger>
-                                        </pancake:PancakeView.Triggers>
-                                    </pancake:PancakeView>
-                                    <Image
+                                                    <Setter Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                            </pancake:PancakeView.Triggers>
+                                        </pancake:PancakeView>
+                                        <Image
                                         Grid.Row="0"
                                         Margin="0,25,0,0"
                                         Aspect="AspectFit"
                                         HeightRequest="120"
                                         Source="{Binding ProdFoto}" />
-                                    <Label
+                                        <Label
                                         Grid.Row="1"
                                         Margin="10,0"
                                         FontFamily="FontMontserratSemiBold"
                                         FontSize="16"
                                         HorizontalTextAlignment="Center"
                                         Text="{Binding ProdNombre}" />
-                                    <StackLayout
+                                        <StackLayout
                                         Grid.Row="2"
                                         HorizontalOptions="Center"
                                         Orientation="Horizontal"
                                         Spacing="2">
-                                        <Image
+                                            <Image
                                             Aspect="AspectFit"
                                             HeightRequest="8"
                                             HorizontalOptions="Start"
                                             Source="star"
                                             WidthRequest="8" />
-                                        <Label
+                                            <Label
                                             FontSize="8"
                                             Text="{Binding ProdRanking, StringFormat='{0:N1}  |'}"
                                             TextColor="{StaticResource colorGray95}"
                                             VerticalTextAlignment="Center" />
-                                        <Label
+                                            <Label
                                             FontSize="8"
                                             Text="{Binding ProdStok, StringFormat=' {0} Review'}"
                                             TextColor="{StaticResource colorGray95}"
                                             VerticalTextAlignment="Center" />
-                                    </StackLayout>
-                                    <BoxView
+                                        </StackLayout>
+                                        <BoxView
                                         Grid.Row="3"
                                         Margin="0,10,0,5"
                                         BackgroundColor="{StaticResource colorGrayEA}"
                                         HeightRequest="1"
                                         HorizontalOptions="FillAndExpand" />
-                                    <StackLayout
+                                        <StackLayout
                                         Grid.Row="4"
                                         HorizontalOptions="Center"
                                         Orientation="Horizontal">
-                                        <Label
+                                            <Label
                                             FontSize="10"
                                             Text="{Binding ProdPrecioanterior, StringFormat='{0:G}'}"
                                             TextColor="{StaticResource colorGray95}"
                                             TextDecorations="Strikethrough"
                                             VerticalTextAlignment="Center">
-                                            <Label.Triggers>
-                                                <DataTrigger
+                                                <Label.Triggers>
+                                                    <DataTrigger
                                                     Binding="{Binding ProdPrecioanterior}"
                                                     TargetType="Label"
                                                     Value="0">
-                                                    <Setter Property="IsVisible" Value="False" />
-                                                </DataTrigger>
-                                            </Label.Triggers>
-                                        </Label>
-                                        <Label
+                                                        <Setter Property="IsVisible" Value="False" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                            <Label
                                             FontFamily="FontMontserratMedium"
                                             FontSize="16"
                                             HorizontalTextAlignment="Center"
                                             Text="{Binding ProdPreciounitario, StringFormat='${0:G}'}"
                                             TextColor="{StaticResource colorRedFF}"
                                             VerticalTextAlignment="Center" />
-                                    </StackLayout>
-                                </Grid>
-                                <pancake:PancakeView.GestureRecognizers>
-                                    <TapGestureRecognizer
+                                        </StackLayout>
+                                    </Grid>
+                                    <pancake:PancakeView.GestureRecognizers>
+                                        <TapGestureRecognizer
                                         Command="{Binding Path=BindingContext.NavigateToDetailPageCommand, Source={x:Reference listProducts}}"
                                         CommandParameter="{Binding .}"
                                         NumberOfTapsRequired="1" />
-                                </pancake:PancakeView.GestureRecognizers>
-                            </pancake:PancakeView>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
+                                    </pancake:PancakeView.GestureRecognizers>
+                                </pancake:PancakeView>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </StackLayout>
     </ScrollView>
-
 </ContentPage>

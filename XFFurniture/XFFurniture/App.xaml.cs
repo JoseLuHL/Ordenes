@@ -10,11 +10,10 @@ namespace XFFurniture
         {
             InitializeComponent();
 
-            Device.SetFlags(new[] { "Shapes_Experimental" });
-
+            Device.SetFlags(new[] { "Shapes_Experimental" , "Expander_Experimental" });
+            //Device.SetFlags(new[] { "Expander_Experimental" });
             MainPage = new NavigationPage(new MainPage());
         }
-
         protected override void OnStart()
         {
         }
