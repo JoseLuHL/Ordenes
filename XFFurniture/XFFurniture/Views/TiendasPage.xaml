@@ -58,7 +58,7 @@
                                                 Text="{Binding CatDescripcion}"
                                                 TextColor="{Binding textColor}"
                                                 VerticalOptions="Start" />
-                                                <CheckBox/>
+                                                <CheckBox IsChecked="{Binding Todos}"/>
                                                 <!--<Label
                                                 FontSize="9"
                                                 Text="{Binding numberItems, StringFormat='{0} items'}"

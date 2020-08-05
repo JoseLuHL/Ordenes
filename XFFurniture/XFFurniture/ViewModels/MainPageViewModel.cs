@@ -16,6 +16,7 @@ namespace XFFurniture.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
+
         public MainPageViewModel(INavigation navigation)
         {
             IsLoad = true;
@@ -26,6 +27,7 @@ namespace XFFurniture.ViewModels
             PopDetailPageCommand = new Command(async () => await ExecutePopDetailPageCommand());
             SelectCategoryCommand = new Command<TiendaModelo>(async (param) => await ExecuteSelectCategoryCommand(param));
             NavigateToDetailPageCommand = new Command<ProductoModelo>(async (param) => await ExeccuteNavigateToDetailPageCommand(param));
+            SelectProductoCarritoCommand = new Command<ProductoModelo>(async (param) => await ExeccuteNavigateToDetailPageCommand1(param));
             //_ = GetCategories();
             _ = GetTienda();
             _ = GetProducts();
@@ -45,7 +47,10 @@ namespace XFFurniture.ViewModels
         });
         public ICommand CarritoCommand => new Command(async () =>
         {
-            await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
+            if (TiendaCarrito != null && TiendaCarrito.Count > 0)
+                await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
+            else
+                await DisplayAlert("!", "No hay productos en el carro", "Ok");
         });
         public ICommand TiendasCommand => new Command(async () =>
         {
@@ -65,7 +70,6 @@ namespace XFFurniture.ViewModels
             await GetCategories();
             await Navigation.PushModalAsync(new CategoriaPage { BindingContext = this });
         });
-
         public ICommand AnadirCarrito => new Command(async () =>
         {
             try
@@ -99,7 +103,7 @@ namespace XFFurniture.ViewModels
                 }
                 ProductoDet.Cantidad++;
                 TiendaCarrito = tiendaCarrito_;
-
+                CalcularTotal();
                 TotalCarrito = TiendaCarrito.Count;
                 //totalCarrito = TiendaCarrito.Count;
                 //ProductoDet = null;
@@ -137,7 +141,7 @@ namespace XFFurniture.ViewModels
                             tiendaCarrito_.Add(ProductoDet);
                         }
                         else
-                            ProductoDet.Cantidad=0;
+                            ProductoDet.Cantidad = 0;
                     }
                 }
 
@@ -152,6 +156,7 @@ namespace XFFurniture.ViewModels
                 }
 
                 TiendaCarrito = tiendaCarrito_;
+                CalcularTotal();
                 TotalCarrito = TiendaCarrito.Count;
                 //totalCarrito = TiendaCarrito.Count;
                 //ProductoDet = null;
@@ -166,6 +171,7 @@ namespace XFFurniture.ViewModels
 
         });
         public Command NavigateToDetailPageCommand { get; set; }
+        public Command SelectProductoCarritoCommand { get; set; }
         public Command SelectCategoryCommand { get; set; }
         public Command PopDetailPageCommand { get; }
         private ObservableCollection<ProductoModelo> tiendaCarrito;
@@ -224,7 +230,15 @@ namespace XFFurniture.ViewModels
             get => productoDet;
             set => SetProperty(ref productoDet, value);
         }
-
+        private double totalCompra;
+        public double TotalCompra
+        {
+            get => totalCompra;
+            set
+            {
+                SetProperty(ref totalCompra, value);
+            }
+        }
         private int totalCarrito;
         public int TotalCarrito
         {
@@ -234,7 +248,27 @@ namespace XFFurniture.ViewModels
                 SetProperty(ref totalCarrito, value);
             }
         }
+        private int pagina;
 
+        public int Pagina
+        {
+            get => pagina;
+            set
+            {
+                SetProperty(ref pagina, value);
+            }
+        }
+
+        void CalcularTotal()
+        {
+            double tot = 0;
+            if (TiendaCarrito != null)
+                foreach (var item in TiendaCarrito)
+                {
+                    tot = tot + (item.Cantidad * item.ProdPreciounitario);
+                }
+            TotalCompra = tot;
+        }
         async Task GetCategories()
         {
             IsBusy = true;
@@ -299,14 +333,28 @@ namespace XFFurniture.ViewModels
         }
         private async Task ExeccuteNavigateToDetailPageCommand(ProductoModelo param)
         {
+            Pagina = 1;
             IsBusy = true;
             ProductoDet = param;
-            await Navigation.PushAsync(new DetailPage { BindingContext = this });
+            await Navigation.PushModalAsync(new DetailPage { BindingContext = this });
+            IsBusy = false;
+        }
+        private async Task ExeccuteNavigateToDetailPageCommand1(ProductoModelo param)
+        {
+            IsBusy = true;
+            ProductoDet = param;
+            await Navigation.PopModalAsync();
+            //await Navigation.PopModalAsync();
+            if (Pagina != 1)
+                await Navigation.PushModalAsync(new DetailPage { BindingContext = this });
+
+            //await Navigation.PushModalAsync(new DetailPage { BindingContext = this });
             IsBusy = false;
         }
         private async Task ExecutePopDetailPageCommand()
         {
-            await Navigation.PopAsync();
+            Pagina = 0;
+            await Navigation.PopModalAsync();
         }
 
     }

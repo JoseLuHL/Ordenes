@@ -32,7 +32,7 @@ namespace SwipeMenu.Models
         }
 
 
-        public double? ProdPreciounitario { get; set; }
+        public double ProdPreciounitario { get; set; }
         public string ProdFoto { get; set; }
         public string ProdColor { get; set; }
         public string ProdRanking { get; set; }
