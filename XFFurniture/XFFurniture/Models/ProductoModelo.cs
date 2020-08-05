@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using XFFurniture.Models;
+using XFFurniture.ViewModel;
+
 namespace SwipeMenu.Models
 {
-    public class ProductoModelo
+    public class ProductoModelo : BaseViewModel
     {
         public ProductoModelo()
         {
@@ -17,6 +19,18 @@ namespace SwipeMenu.Models
         public string ProdNombre { get; set; }
         public string ProdDescripcion { get; set; }
         public double? ProdPrecioanterior { get; set; }
+        //public int? Cantidad { get; set; }
+        private int cantidad;
+
+        public int Cantidad
+        {
+            get => cantidad;
+            set
+            {
+                SetProperty(ref cantidad, value);
+            }
+        }
+
 
         public double? ProdPreciounitario { get; set; }
         public string ProdFoto { get; set; }

@@ -80,6 +80,9 @@ namespace XFFurniture.ViewModel
                 SetProperty(ref _isBusy, value);
             }
         }
+
+       
+
     }
 }
 

@@ -15,10 +15,19 @@ namespace XFFurniture.ViewModels
             DependencyService.Get<IStatusBarStyle>().ChangeTextColor(true);
             PopDetailPageCommand = new Command(async () => await ExecutePopDetailPageCommand());
             Product = product;
+            Product = null;
         }
 
         public Command PopDetailPageCommand { get; }
-        public ProductoModelo Product { get; set; }
+        //public ProductoModelo Product { get; set; }
+        private ProductoModelo product;
+
+        public ProductoModelo Product
+        {
+            get => product;
+            set => SetProperty(ref product, value);
+        }
+
 
         private async Task ExecutePopDetailPageCommand()
         {

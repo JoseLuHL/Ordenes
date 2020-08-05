@@ -57,7 +57,7 @@
                         Margin="{OnPlatform Android='0,90,0,0',
                                             iOS='0,110,0,0'}"
                         Padding="6"
-                        BindableLayout.ItemsSource="{Binding Product.colors}"
+                        BindableLayout.ItemsSource="{Binding ProductoDet.colors}"
                         HeightRequest="40"
                         HorizontalOptions="Center"
                         Orientation="Horizontal"
@@ -99,7 +99,7 @@
                         FontFamily="FontMontserratSemiBold"
                         FontSize="{OnPlatform Android='14',
                                               iOS='18'}"
-                        Text="{Binding Product.ProdNombre}" />
+                        Text="{Binding ProductoDet.ProdNombre}" />
                     <Label
                         Grid.Row="1"
                         Grid.Column="1"
@@ -108,14 +108,14 @@
                         FontSize="{OnPlatform Android='14',
                                               iOS='18'}"
                         HorizontalOptions="End"
-                        Text="{Binding Product.ProdPreciounitario, StringFormat='$ {0:N0}'}"
+                        Text="{Binding ProductoDet.ProdPreciounitario, StringFormat='$ {0:N0}'}"
                         TextColor="{StaticResource colorRedFF}" />
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
                         FontFamily="FontMontserratSemiBold"
                         FontSize="10"
-                        Text="{Binding Product.ProdIdtiendaNavigation.TienRazonsocial, StringFormat='by {0}'}" />
+                        Text="{Binding ProductoDet.ProdIdtiendaNavigation.TienRazonsocial, StringFormat='by {0}'}" />
                     <StackLayout
                         Grid.Row="3"
                         Margin="0,15,0,10"
@@ -132,14 +132,14 @@
                             FontFamily="FontMontserratMedium"
                             FontSize="{OnPlatform Android='10',
                                                   iOS='12'}"
-                            Text="{Binding Product.ProdRanking, StringFormat='{0:N1}  |'}"
+                            Text="{Binding ProductoDet.ProdRanking, StringFormat='{0:N1}  |'}"
                             TextColor="{StaticResource colorGray95}"
                             VerticalTextAlignment="Center" />
                         <Label
                             FontFamily="FontMontserratMedium"
                             FontSize="{OnPlatform Android='10',
                                                   iOS='12'}"
-                            Text="{Binding Product.ProdCountventas, StringFormat=' {0} Review'}"
+                            Text="{Binding ProductoDet.ProdCountventas, StringFormat=' {0} Review'}"
                             TextColor="{StaticResource colorGray95}"
                             VerticalTextAlignment="Center" />
                     </StackLayout>
@@ -192,7 +192,7 @@
                         Grid.ColumnSpan="2"
                         FontSize="{OnPlatform Android='10',
                                               iOS='12'}"
-                        Text="{Binding Product.ProdDescripcion}" />
+                        Text="{Binding ProductoDet.ProdDescripcion}" />
                 </Grid>
             </pancake:PancakeView>
         </Grid>
@@ -201,7 +201,7 @@
             HeightRequest="{OnPlatform Android='200',
                                        iOS='320'}"
             HorizontalOptions="Center"
-            Source="{Binding Product.ProdFoto}"
+            Source="{Binding ProductoDet.ProdFoto}"
             TranslationY="28"
             VerticalOptions="Start" />
         <pancake:PancakeView
@@ -226,32 +226,65 @@
                         Source="cart_white"
                         WidthRequest="22" />
                     <StackLayout
+                        Margin="0,-5,0,0"
                         Grid.Column="1"
                         HorizontalOptions="Start"
                         Spacing="0"
                         VerticalOptions="Center">
                         <Label
                             FontFamily="FontMontserratSemiBold"
-                            FontSize="12"
-                            Text="2 Items"
+                            FontSize="18"
+                            Text="{Binding ProductoDet.Cantidad, StringFormat=' {0} Item', Mode=TwoWay}"
                             TextColor="{StaticResource colorWhite}" />
                         <Label
                             FontSize="10"
                             Text="adicional"
                             TextColor="{StaticResource colorWhite}" />
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CarritoCommand}"/>
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </Grid>
                 <Grid
                     Grid.Column="1"
                     Padding="20,10"
                     BackgroundColor="{StaticResource colorBlue232}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Label
+                        FontFamily="FontMontserratSemiBold"
+                        FontSize="12"
+                        HorizontalTextAlignment="Center"
+                        Text="Quitar al carrito  -"
+                        TextColor="{StaticResource colorWhite}"
+                        VerticalTextAlignment="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding QuitarCarrito}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <BoxView
+                         Grid.Column="1"
+                            BackgroundColor="{StaticResource colorWhite}"
+                            
+                            HeightRequest="50"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="1" />
+                    <Label
+                        Grid.Column="2"
                         FontFamily="FontMontserratSemiBold"
                         FontSize="12"
                         HorizontalTextAlignment="Center"
                         Text="Añadir al carrito +"
                         TextColor="{StaticResource colorWhite}"
-                        VerticalTextAlignment="Center" />
+                        VerticalTextAlignment="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AnadirCarrito}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Grid>
             </Grid>
         </pancake:PancakeView>

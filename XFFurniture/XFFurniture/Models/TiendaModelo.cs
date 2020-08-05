@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SwipeMenu.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using XFFurniture.ViewModel;
@@ -20,6 +21,14 @@ namespace XFFurniture.Models
         public string TienAltura { get; set; }
         public bool? TienPremium { get; set; }
 
+        public virtual ICollection<Detalletiendacategorium> Detalletiendacategoria { get; set; }
+        private ICollection<OrdenModelo> ordenes { get; set; }
+        public virtual ICollection<OrdenModelo> Ordenes
+        {
+            get { return ordenes; }
+            set { ordenes = value; }
+        }
+        public virtual ICollection<ProductoModelo> Productos { get; set; }
 
         private string _backgroundColor;
         public string backgroundColor

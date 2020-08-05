@@ -9,10 +9,10 @@ namespace XFFurniture.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DetailPage : ContentPage
     {
-        public DetailPage(ProductoModelo product)
+        public DetailPage()
         {
             InitializeComponent();
-            BindingContext = new DetailPageViewModel(Navigation, product);
+            //BindingContext = new DetailPageViewModel(Navigation, product);
         }
     }
 }

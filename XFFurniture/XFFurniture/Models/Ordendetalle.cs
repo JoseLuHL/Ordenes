@@ -6,8 +6,6 @@ namespace SwipeMenu.Models
 {
    public class Ordendetalle
     {
-
-
         public int DetordId { get; set; }
         public int? DetordIdproducto { get; set; }
         public int? DetordOrdennumero { get; set; }

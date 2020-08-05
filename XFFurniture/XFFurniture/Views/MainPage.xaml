@@ -12,7 +12,7 @@
 
     <ScrollView >
         <StackLayout>
-            <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="200" WidthRequest="200" IsVisible="{Binding IsLoad}" IsRunning="{Binding IsLoad}"/>
+            <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="100" IsVisible="{Binding IsLoad}" IsRunning="{Binding IsLoad}"/>
             <Grid Margin="20,30,0,20" RowDefinitions="auto, auto, 95, auto, auto, *" IsVisible="{Binding IsCargando}" >
                 <Grid
                 Grid.Row="0"
@@ -381,7 +381,7 @@
                                         Orientation="Horizontal">
                                             <Label
                                             FontSize="10"
-                                            Text="{Binding ProdPrecioanterior, StringFormat='{0:G}'}"
+                                            Text="{Binding ProdPrecioanterior, StringFormat='${0:N0}'}"
                                             TextColor="{StaticResource colorGray95}"
                                             TextDecorations="Strikethrough"
                                             VerticalTextAlignment="Center">
@@ -398,7 +398,7 @@
                                             FontFamily="FontMontserratMedium"
                                             FontSize="16"
                                             HorizontalTextAlignment="Center"
-                                            Text="{Binding ProdPreciounitario, StringFormat='${0:G}'}"
+                                            Text="{Binding ProdPreciounitario, StringFormat='${0:N0}'}"
                                             TextColor="{StaticResource colorRedFF}"
                                             VerticalTextAlignment="Center" />
                                         </StackLayout>
