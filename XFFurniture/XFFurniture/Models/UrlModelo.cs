@@ -13,5 +13,6 @@ namespace XFFurniture.Models
         public static string cliente => $"{UrlBase}Clientes";
         public static string producto => $"{UrlBase}Productoes";
         public static string categoria => $"{UrlBase}Categoriums";
+        public static string formaPago => $"{UrlBase}Mediopagoes";
     }
 }

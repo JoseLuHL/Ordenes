@@ -24,5 +24,16 @@
         <Color x:Key="colorGrayEA">#EAEDF6</Color>
         <Color x:Key="colorRedFF">#FF4D4D</Color>
         <Color x:Key="colorRedD60">#FF4D60</Color>
+        <Color x:Key="close_button_textcolor">#8F8D8F</Color>
+        <Color x:Key="fondo_boton">#0055FF</Color>
+        <Color x:Key="close_button_background">#DDDFE0</Color>
+        <Color x:Key="white">#FFFFFF</Color>
+        <Color x:Key="details_title">#424951</Color>
+        <Color x:Key="description">#A4A6A8</Color>
+        <Color x:Key="ingredient_list">#FAFBF8</Color>
+        <Color x:Key="app_title">#4E3000</Color>
+        <Color x:Key="ingredient_name">#6E6E6C</Color>
+        <Color x:Key="button_color">#966900</Color>
+        <Color x:Key="main_yellow">#FDDB00</Color>
     </Application.Resources>
 </Application>

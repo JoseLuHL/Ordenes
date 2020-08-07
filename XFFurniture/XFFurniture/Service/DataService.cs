@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using QP_Comercio_Electronico.Models;
 using SwipeMenu.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Threading.Tasks;
 using XFFurniture.Models;
 using XFFurniture.Views;
@@ -199,15 +201,30 @@ namespace XFFurniture.Service
             return respuesta;
         }
 
-        public static async Task<ObservableCollection<ClienteModelo>> GetClientesAsync()
+        public static async Task<ObservableCollection<ClienteModelo>> GetClientesAsync(string url)
         {
             var respuesta = new ObservableCollection<ClienteModelo>();
             Http = new HttpClient();
-            var peticion = await Http.GetAsync(UrlModelo.cliente);
+            var peticion = await Http.GetAsync(url);
             if (peticion.IsSuccessStatusCode)
             {
                 var contenido = await peticion.Content.ReadAsStringAsync();
                 var datos = JsonConvert.DeserializeObject<ObservableCollection<ClienteModelo>>(contenido);
+                respuesta = datos;
+            }
+            else
+                respuesta = null;
+            return respuesta;
+        }
+        public static async Task<ClienteModelo> GetClienteAsync(string url)
+        {
+            var respuesta = new ClienteModelo();
+            Http = new HttpClient();
+            var peticion = await Http.GetAsync(url);
+            if (peticion.IsSuccessStatusCode)
+            {
+                var contenido = await peticion.Content.ReadAsStringAsync();
+                var datos = JsonConvert.DeserializeObject<ClienteModelo>(contenido);
                 respuesta = datos;
             }
             else
@@ -239,6 +256,21 @@ namespace XFFurniture.Service
             {
                 var contenido = await peticion.Content.ReadAsStringAsync();
                 var datos = JsonConvert.DeserializeObject<ObservableCollection<ProductoModelo>>(contenido);
+                respuesta = datos;
+            }
+            else
+                respuesta = null;
+            return respuesta;
+        }
+        public static async Task<ObservableCollection<Mediopago>> GetMedioPagoAsync(string urlCategoria)
+        {
+            var respuesta = new ObservableCollection<Mediopago>();
+            Http = new HttpClient();
+            var peticion = await Http.GetAsync(urlCategoria);
+            if (peticion.IsSuccessStatusCode)
+            {
+                var contenido = await peticion.Content.ReadAsStringAsync();
+                var datos = JsonConvert.DeserializeObject<ObservableCollection<Mediopago>>(contenido);
                 respuesta = datos;
             }
             else
@@ -277,6 +309,23 @@ namespace XFFurniture.Service
             return respuesta;
         }
 
+        public static async Task<bool> PostGuardarAsync<T>(T datos, string url)
+        {
+            Http = new HttpClient();
+            var retornar = false;
+            var json = JsonConvert.SerializeObject(datos);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+            var peti = await Http.PostAsync(url, content);
+            if (peti.IsSuccessStatusCode)
+            {
+                retornar = peti.IsSuccessStatusCode;
+                var conte = await peti.Content.ReadAsStringAsync();
+            }
+            else
+                retornar = false;
+
+            return retornar;
+        }
     }
 }

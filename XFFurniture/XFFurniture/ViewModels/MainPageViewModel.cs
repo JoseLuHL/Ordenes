@@ -1,9 +1,12 @@
-﻿using SwipeMenu.Models;
+﻿using AgendaApp;
+using QP_Comercio_Electronico.Models;
+using SwipeMenu.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WorkingWithMaps;
+using WorkingWithMaps.Vistas.Reservas;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using XFFurniture.Interfaces;
@@ -28,13 +31,8 @@ namespace XFFurniture.ViewModels
             SelectCategoryCommand = new Command<TiendaModelo>(async (param) => await ExecuteSelectCategoryCommand(param));
             NavigateToDetailPageCommand = new Command<ProductoModelo>(async (param) => await ExeccuteNavigateToDetailPageCommand(param));
             SelectProductoCarritoCommand = new Command<ProductoModelo>(async (param) => await ExeccuteNavigateToDetailPageCommand1(param));
-            //_ = GetCategories();
             _ = GetTienda();
             _ = GetProducts();
-            //IsBusy = false;
-            //GetTienda();
-            //IsCargando = false;
-            //IsLoad = true;
         }
         public ICommand CateCommand => new Command(execute: async () =>
          {
@@ -48,7 +46,12 @@ namespace XFFurniture.ViewModels
         public ICommand CarritoCommand => new Command(async () =>
         {
             if (TiendaCarrito != null && TiendaCarrito.Count > 0)
-                await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
+            {
+                await TiendasCarritoAsync();
+                //await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
+                await Navigation.PushModalAsync(new TiendaCarritoPage { BindingContext = this });
+
+            }
             else
                 await DisplayAlert("!", "No hay productos en el carro", "Ok");
         });
@@ -92,7 +95,6 @@ namespace XFFurniture.ViewModels
                 {
                     tiendaCarrito_.Add(ProductoDet);
                 }
-                //    await DisplayAlert("", "El producto no se ha agregado", "OK");
 
                 if (CarritoAn != null)
                 {
@@ -105,14 +107,6 @@ namespace XFFurniture.ViewModels
                 TiendaCarrito = tiendaCarrito_;
                 CalcularTotal();
                 TotalCarrito = TiendaCarrito.Count;
-                //totalCarrito = TiendaCarrito.Count;
-                //ProductoDet = null;
-                //if (ProductoDet.Cantidad)
-                //{
-
-                //}
-                //await DisplayAlert("", "PRODUCTO AGREGADO", "OK");
-
             }
             catch (System.Exception ex)
             {
@@ -239,6 +233,15 @@ namespace XFFurniture.ViewModels
                 SetProperty(ref totalCompra, value);
             }
         }
+        private double totalCompraDetalle;
+        public double TotalCompraDetalle
+        {
+            get => totalCompraDetalle;
+            set
+            {
+                SetProperty(ref totalCompraDetalle, value);
+            }
+        }
         private int totalCarrito;
         public int TotalCarrito
         {
@@ -249,7 +252,6 @@ namespace XFFurniture.ViewModels
             }
         }
         private int pagina;
-
         public int Pagina
         {
             get => pagina;
@@ -258,6 +260,181 @@ namespace XFFurniture.ViewModels
                 SetProperty(ref pagina, value);
             }
         }
+
+        //CORRESPONDIENTE A LAS ORDENES Y DETALLE
+        private ObservableCollection<OrdenModelo> ordenes;
+        public ObservableCollection<OrdenModelo> Ordenes
+        {
+            get => ordenes;
+            set
+            {
+                SetProperty(ref ordenes, value);
+            }
+        }
+        public ICommand OrdenesCommand => new Xamarin.Forms.Command(async () =>
+        {
+            try
+            {
+                await GetOrdenesAsync();
+                if (Ordenes.Count < 1)
+                {
+                    await Application.Current.MainPage.DisplayAlert("", "No hay pedidos", "OK");
+                    IsBusy = false;
+                    return;
+                }
+                await Navigation.PushModalAsync(new OrdenesPage { BindingContext = this });
+            }
+            catch (System.Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("", ex.ToString(), "OK");
+            }
+        });
+        public ICommand RefrescarOrdenesComman => new Command(execute: async () => { IsBusy = true; await GetOrdenesAsync(); IsBusy = false; });
+        private OrdenModelo ordenSelect;
+        public OrdenModelo OrdenSelect
+        {
+            get => ordenSelect;
+            set => SetProperty(ref ordenSelect, value);
+        }
+        private ObservableCollection<Ordendetalle> ordenDetalle;
+        public ObservableCollection<Ordendetalle> OrdenDetalle
+        {
+            get => ordenDetalle;
+            set => SetProperty(ref ordenDetalle, value);
+        }
+        public ICommand SelectOrdenCommand => new Command<OrdenModelo>(async (OrdenModelo modelo) =>
+        {
+            OrdenSelect = modelo;
+            OrdenDetalle = modelo.Ordendetalles;
+            modelo = null;
+            await Application.Current.MainPage.Navigation.PushModalAsync(new OrdenDetalle { BindingContext = this });
+        });
+        async Task GetOrdenesAsync()
+        {
+            IsBusy = true;
+            Ordenes = await DataService.GetOrdenModelosAsync($"{UrlModelo.odenes}");
+            IsBusy = false;
+        }
+        //:::::::::::::Fin ordenes y detalle
+
+
+        //-----------------------------------------
+        //FORMA DE PAGO
+        private ObservableCollection<Mediopago> mediopagos;
+        public ObservableCollection<Mediopago> Mediopagos
+        {
+            get => mediopagos;
+            set
+            {
+                SetProperty(ref mediopagos, value);
+            }
+        }
+        async Task GetMedioPagoAsync()
+        {
+            Mediopagos = await DataService.GetMedioPagoAsync(UrlModelo.formaPago);
+        }
+        //::::::::::Fin forma de pago
+
+
+        //PAGAR
+        private string urlPago;
+        public string UrlPago
+        {
+            get => urlPago;
+            set
+            {
+                SetProperty(ref urlPago, value);
+            }
+        }
+
+        public ICommand PagarCommand => new Command(execute: async () =>
+         {
+             await GetMedioPagoAsync();
+             await Navigation.PushModalAsync(new PagoPage { BindingContext = this });
+         });
+        public ICommand PasarelaPagoCommand => new Command<Mediopago>(execute: async (medio) =>
+          {
+              await PasarelaAsync(medio);
+
+          });
+        async Task PasarelaAsync(Mediopago mediopago)
+        {
+            if (mediopago.MepDescripcion == "Pagado")
+            {
+                UrlPago = "http://192.168.1.10:8080/prueba/prueba.php?precio=10000&descripcion=Descripcion";
+                await Navigation.PushModalAsync(new PagosVista { BindingContext = this });
+            }
+
+            await DisplayAlert("", mediopago.MepDescripcion, "OK");
+        }
+        //:::::::::: Fin de pagar
+
+
+        //PAGINA DE TIENDACARRITO
+        private ObservableCollection<ProductoModelo> tiendaCarritoDetalle;
+        public ObservableCollection<ProductoModelo> TiendaCarritoDetalle
+        {
+            get => tiendaCarritoDetalle;
+            set
+            {
+                SetProperty(ref tiendaCarritoDetalle, value);
+                //SetProperty(ref totalCarrito, TiendaCarrito.Count);
+                //TotalCarrito = tiendaCarrito.Count;
+                //totalCarrito = tiendaCarrito.Count;
+            }
+        }
+
+        private ObservableCollection<TiendaModelo> tiendasCarrito;
+        public ObservableCollection<TiendaModelo> TiendasCarrito
+        {
+            get => tiendasCarrito;
+            set
+            {
+                SetProperty(ref tiendasCarrito, value);
+            }
+        }
+        public ICommand TiendasCarritoCommand => new Command<TiendaModelo>(execute: async (tienda) =>
+        {
+            var dat = TiendaCarrito.Where(s => s.ProdIdtiendaNavigation.TienId == tienda.TienId);
+            TiendaCarritoDetalle = new ObservableCollection<ProductoModelo>(dat);
+            CalcularTotalDetalle();
+            await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
+        });
+        async Task TiendasCarritoAsync()
+        {
+            var tien = new ObservableCollection<TiendaModelo>();
+            if (TiendaCarrito != null && TiendaCarrito.Count > 0)
+            {
+                foreach (var item in TiendaCarrito)
+                {
+                    tien.Add(item.ProdIdtiendaNavigation);
+                }
+                TiendasCarrito = new ObservableCollection<TiendaModelo>(tien.GroupBy(s => s.TienId).Select(g => g.First()));
+            }
+        }
+        //::::::::::::: Fin tiendacarrito
+
+        //PARA LA ORDEN O EL PEDIDO
+        private OrdenModelo ordenModelo;
+        public OrdenModelo OrdenModelo
+        {
+            get => ordenModelo;
+            set
+            {
+                SetProperty(ref ordenModelo, value);
+            }
+        }
+        private ObservableCollection<Ordendetalle> ordendetalles;
+        public ObservableCollection<Ordendetalle> Ordendetalles
+        {
+            get => ordendetalles;
+            set
+            {
+                SetProperty(ref ordendetalles, value);
+            }
+        }
+        //::::::::::::: Fin order y detalle
+
 
         void CalcularTotal()
         {
@@ -268,6 +445,16 @@ namespace XFFurniture.ViewModels
                     tot = tot + (item.Cantidad * item.ProdPreciounitario);
                 }
             TotalCompra = tot;
+        }
+        void CalcularTotalDetalle()
+        {
+            double tot = 0;
+            if (TiendaCarritoDetalle != null)
+                foreach (var item in TiendaCarritoDetalle)
+                {
+                    tot = tot + (item.Cantidad * item.ProdPreciounitario);
+                }
+            TotalCompraDetalle = tot;
         }
         async Task GetCategories()
         {
@@ -343,6 +530,7 @@ namespace XFFurniture.ViewModels
         {
             IsBusy = true;
             ProductoDet = param;
+            await Navigation.PopModalAsync();
             await Navigation.PopModalAsync();
             //await Navigation.PopModalAsync();
             if (Pagina != 1)

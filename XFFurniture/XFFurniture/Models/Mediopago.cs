@@ -9,6 +9,7 @@ namespace QP_Comercio_Electronico.Models
     {
         public int MepId { get; set; }
         public string MepDescripcion { get; set; }
+        public string mep_foto { get; set; }
 
         //public virtual ICollection<Ordene> Ordenes { get; set; }
         private ICollection<OrdenModelo> ordenes { get; set; }

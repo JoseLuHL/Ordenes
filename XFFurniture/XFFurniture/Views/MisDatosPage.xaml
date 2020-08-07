@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:vn="clr-namespace:SwipeMenu.ViewModel"
+             mc:Ignorable="d"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="SwipeMenu.Views.MisDatosPage">
+    <ContentPage.BindingContext>
+        <vn:MisDatosViewModel/>
+    </ContentPage.BindingContext>
+    <ScrollView Padding="0,0,0,20">
+        <StackLayout Margin="50" Spacing="0">
+            <Label Text="Identificación"/>
+            <Entry Text="{Binding ClieIdentificacion}"/>
+
+            <Label Text="Nombre *"/>
+            <Entry Text="{Binding ClieNombre}"/>
+
+            <Label Text="Apellidos *"/>
+            <Entry Text="{Binding ClieApellidos}" />
+
+            <Label Text="Clave *"/>
+            <Entry Text="{Binding ClieClave}" />
+
+            <Label Text="Télefono *"/>
+            <Entry Text="{Binding ClieTelefono}" />
+
+            <Label Text="Dirección *"/>
+            <Entry Text="{Binding ClieDireccion}" />
+
+            <Label Text=""/>
+            <Button Command="{Binding UbicacionCommand}" TextColor="White" VerticalOptions="Start" HorizontalOptions="Start" Text="Ubicación GPS" BackgroundColor="{StaticResource fondo_boton}"/>
+            <Label Text="{Binding MensajeUbicacion}" TextColor="{Binding ColorUbicacion}"/>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+            <Label IsVisible="False" Text="Latitud"/>
+            <Entry IsVisible="False" Text="{Binding ClieLatitud}"/>
+
+            <Label Text="Longitud" IsVisible="False"/>
+            <Entry Text="{Binding ClieLongitud}" IsVisible="False"/>
+
+            <Button Command="{Binding GuardarCommand}" TextColor="White" Text="GUARDAR" BackgroundColor="{StaticResource fondo_boton}"/>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

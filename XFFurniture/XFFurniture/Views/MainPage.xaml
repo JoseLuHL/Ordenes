@@ -64,9 +64,7 @@
         <StackLayout>
             
             <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="100" IsVisible="{Binding IsLoad}" IsRunning="{Binding IsLoad}"/>
-            
             <Grid Margin="20,10,0,20" RowDefinitions="auto, auto, 95, auto, auto, *" IsVisible="{Binding IsCargando}" >
-                
                 <StackLayout
                 Grid.Row="0" Margin="0,0,0,0" Spacing="0">
                     <!--<Label FontFamily="FontMontserratBold" FontSize="30" Text="Nombre de la aplicación"/>-->
@@ -74,6 +72,7 @@
                     <StackLayout Orientation="Horizontal" Spacing="20">
                         <ImageButton Command="{Binding TiendasCommand}" Source="tienda"/>
                         <ImageButton Command="{Binding MapaCommand}" Source="mapa"/>
+                        <ImageButton Command="{Binding OrdenesCommand}" Source="star"/>
                     </StackLayout>
                 </StackLayout>
                 <CollectionView x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding TiendasPremiun}" SelectionMode="None">

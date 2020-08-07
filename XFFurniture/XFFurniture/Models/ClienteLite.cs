@@ -1,13 +1,11 @@
-﻿using MvvmHelpers;
-using SQLite;
+﻿using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-
-namespace SwipeMenu.Models
+namespace XFFurniture.Models
 {
-    public class ClienteModelo
+   public class ClienteLite
     {
         [PrimaryKey, AutoIncrement]
         public int ClieId { get; set; }
@@ -23,12 +21,5 @@ namespace SwipeMenu.Models
         public string ClieLongitud { get; set; }
         public string ClieLatitud { get; set; }
         public string ClieAltura { get; set; }
-        //public virtual ICollection<OrdenModelo> Ordenes { get; set; }
-        private string nombreCompleto;
-        public string NombreCompleto
-        {
-            get { return $"{ClieNombre} {ClieApellidos}"; }
-            set { nombreCompleto = value; }
-        }
     }
 }
