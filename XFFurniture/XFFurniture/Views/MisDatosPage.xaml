@@ -39,7 +39,7 @@
             <Label Text="Longitud" IsVisible="False"/>
             <Entry Text="{Binding ClieLongitud}" IsVisible="False"/>
 
-            <Button Command="{Binding GuardarCommand}" TextColor="White" Text="GUARDAR" BackgroundColor="{StaticResource fondo_boton}"/>
+            <Button Command="{Binding GuardarCommand}" IsEnabled="{Binding IsNotBusy}" TextColor="White" Text="GUARDAR" BackgroundColor="{StaticResource fondo_boton}"/>
 
         </StackLayout>
     </ScrollView>

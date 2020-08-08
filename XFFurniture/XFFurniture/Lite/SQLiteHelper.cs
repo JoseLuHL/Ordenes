@@ -20,14 +20,12 @@ namespace XamarinSQLite
         //Insert and Update new record
         public Task<int> SaveItemAsync(ClienteModelo person)
         {
-            if (person.ClieId != 0)
-            {
-                return db.UpdateAsync(person);
-            }
-            else
-            {
-                return db.InsertAsync(person);
-            }
+            return db.InsertAsync(person);
+        } 
+        public Task<int> UpdateItemAsync(ClienteModelo person)
+        {
+            return db.UpdateAsync(person);
+           
         }
 
         //Delete

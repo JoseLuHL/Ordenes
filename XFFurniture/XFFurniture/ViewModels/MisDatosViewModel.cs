@@ -22,17 +22,18 @@ namespace SwipeMenu.ViewModel
             set => SetProperty(ref latitud, value);
         }
         private string longitud;
+        public string Longitud
+        {
+            get => longitud;
+            set => SetProperty(ref longitud, value);
+        }
         private string mensajeUbicacion;
         public string MensajeUbicacion
         {
             get => mensajeUbicacion;
             set => SetProperty(ref mensajeUbicacion, value);
         }
-        public string Longitud
-        {
-            get => longitud;
-            set => SetProperty(ref longitud, value);
-        }
+
         private string colorUbicacion = "Red";
         public string ColorUbicacion
         {
@@ -115,9 +116,17 @@ namespace SwipeMenu.ViewModel
             try
             {
 
-                var guardar = await DataService.PostGuardarAsync<ClienteModelo>(cli,UrlModelo.cliente);
-            var ope = await App.SQLiteDb.SaveItemAsync(cli);
-            await Application.Current.MainPage.DisplayAlert("", ope.ToString(), "OK");
+             var guardar = await DataService.PostGuardarAsync<ClienteModelo>(cli,UrlModelo.cliente);
+                if (guardar)
+                {
+                    var ope = await App.SQLiteDb.SaveItemAsync(cli);
+                    await Application.Current.MainPage.DisplayAlert("", "Los datos se han guardado", "OK");
+                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                }else
+                    await Application.Current.MainPage.DisplayAlert("", "Los datos no se pudieron guardar \n vuelva a intentarlo", "OK");
+
+
+
             }
             catch (Exception ex)
             {
@@ -182,13 +191,14 @@ namespace SwipeMenu.ViewModel
             set { SetProperty(ref clieLongitud, value); }
         }
 
-
-
-
         public ICommand GuardarCommand => new Command(execute: async () =>
        {
-
+           IsBusy = true;
+           IsNotBusy = false;
            await GetCliente();
+           IsBusy = false;
+           IsNotBusy = true;
+
        });
 
         private ClienteModelo cliente;

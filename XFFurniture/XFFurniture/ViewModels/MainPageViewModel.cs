@@ -1,6 +1,7 @@
 ﻿using AgendaApp;
 using QP_Comercio_Electronico.Models;
 using SwipeMenu.Models;
+using SwipeMenu.Service;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace XFFurniture.ViewModels
             IsLoad = true;
             IsCargando = false;
             IsBusy = true;
+            NoIsBusy = true;
             Navigation = navigation;
             DependencyService.Get<IStatusBarStyle>().ChangeTextColor(true);
             PopDetailPageCommand = new Command(async () => await ExecutePopDetailPageCommand());
@@ -33,7 +35,28 @@ namespace XFFurniture.ViewModels
             SelectProductoCarritoCommand = new Command<ProductoModelo>(async (param) => await ExeccuteNavigateToDetailPageCommand1(param));
             _ = GetTienda();
             _ = GetProducts();
+            _ = load();
         }
+
+        async Task load()
+        {
+            var dat = await App.SQLiteDb.GetItemsAsync();
+            UsuarioServicio.Cliente = dat[0];
+            ClienteUsuario = dat[0];
+        }
+
+        private ClienteModelo clienteUsuario;
+
+        public ClienteModelo ClienteUsuario
+        {
+            get => clienteUsuario;
+            set
+            {
+                SetProperty(ref clienteUsuario, value);
+            }
+        }
+
+
         public ICommand CateCommand => new Command(execute: async () =>
          {
              await DisplayAlert("", "Hola", "OK");
@@ -168,6 +191,7 @@ namespace XFFurniture.ViewModels
         public Command SelectProductoCarritoCommand { get; set; }
         public Command SelectCategoryCommand { get; set; }
         public Command PopDetailPageCommand { get; }
+
         private ObservableCollection<ProductoModelo> tiendaCarrito;
         public ObservableCollection<ProductoModelo> TiendaCarrito
         {
@@ -261,6 +285,29 @@ namespace XFFurniture.ViewModels
             }
         }
 
+        private System.DateTime fechaOrden = System.DateTime.Now;
+
+        public System.DateTime FechaOrden 
+        {
+            get => System.DateTime.Now;
+            set
+            {
+                SetProperty(ref fechaOrden, value);
+            }
+        } 
+
+        private string tipoEstimado ="Sin información";
+
+        public string TipoEstimado
+        {
+            get => tipoEstimado;
+            set
+            {
+                SetProperty(ref tipoEstimado, value);
+            }
+        }
+
+
         //CORRESPONDIENTE A LAS ORDENES Y DETALLE
         private ObservableCollection<OrdenModelo> ordenes;
         public ObservableCollection<OrdenModelo> Ordenes
@@ -289,7 +336,10 @@ namespace XFFurniture.ViewModels
                 await Application.Current.MainPage.DisplayAlert("", ex.ToString(), "OK");
             }
         });
-        public ICommand RefrescarOrdenesComman => new Command(execute: async () => { IsBusy = true; await GetOrdenesAsync(); IsBusy = false; });
+        public ICommand RefrescarOrdenesComman => new Command(execute: async () =>
+        {
+            IsBusy = true; await GetOrdenesAsync(); IsBusy = false;
+        });
         private OrdenModelo ordenSelect;
         public OrdenModelo OrdenSelect
         {
@@ -350,10 +400,18 @@ namespace XFFurniture.ViewModels
         public ICommand PagarCommand => new Command(execute: async () =>
          {
              await GetMedioPagoAsync();
+             //await OrdenClienteAsycn();
              await Navigation.PushModalAsync(new PagoPage { BindingContext = this });
          });
         public ICommand PasarelaPagoCommand => new Command<Mediopago>(execute: async (medio) =>
           {
+              if (!await UsuarioServicio.EstadologinAsync())
+              {
+                  await Navigation.PushModalAsync(new SwipeMenu.Views.LoginPagina());
+                  return;
+              }
+
+
               await PasarelaAsync(medio);
 
           });
@@ -364,7 +422,7 @@ namespace XFFurniture.ViewModels
                 UrlPago = "http://192.168.1.10:8080/prueba/prueba.php?precio=10000&descripcion=Descripcion";
                 await Navigation.PushModalAsync(new PagosVista { BindingContext = this });
             }
-
+            await OrdenClienteAsycn(mediopago.MepId);
             await DisplayAlert("", mediopago.MepDescripcion, "OK");
         }
         //:::::::::: Fin de pagar
@@ -433,9 +491,144 @@ namespace XFFurniture.ViewModels
                 SetProperty(ref ordendetalles, value);
             }
         }
+
+        private string descripcion;
+        public string Descripcion
+        {
+            get => descripcion;
+            set
+            {
+                SetProperty(ref descripcion, value);
+            }
+        }
+        private string direccion;
+        public string Direccion
+        {
+            get => direccion;
+            set
+            {
+                SetProperty(ref direccion, value);
+            }
+        }
+
+        async Task OrdenClienteAsycn(int idmediopago)
+        {
+            if (!await UsuarioServicio.EstadologinAsync())
+            {
+                await Navigation.PushModalAsync(new SwipeMenu.Views.LoginPagina());
+                return;
+            }
+
+            try
+            {
+                if (Latitud == null || Latitud == 0 || Longitud == null || Longitud == 0)
+                {
+                    await DisplayAlert("", "No hemos podido obtener su ubicación actual", "OK");
+                    return;
+                }
+
+                var orden = new OrdenModelo();
+                orden.OrdDescripcion = "";
+                //orden.OrdAltura=null,
+                orden.OrdDireccion = "";
+                orden.OrdFecha = System.DateTime.Now;
+                orden.OrdFechaenvio = System.DateTime.Now;
+                orden.OrdIdcliente = UsuarioServicio.Cliente.ClieId;
+                //orden.OrdIdestado = 1;
+                orden.OrdIdformapago = idmediopago;
+                orden.OrdIdtienda = TiendaCarritoDetalle[0].ProdIdtienda;
+                orden.OrdLatitud = Latitud;
+                orden.OrdLongitud = Longitud;
+                orden.OrdNumero = DataService.GenerarCodigoVerificacion();
+                orden.OrdTotalcompra = TotalCompraDetalle;
+                var deta = new ObservableCollection<Ordendetalle>();
+                foreach (var item in TiendaCarritoDetalle)
+                {
+                    deta.Add(new Ordendetalle
+                    {
+                        DetordIdproducto = item.ProdId,
+                        DetordCantidad = item.Cantidad.ToString(),
+                        DetordPrecio = item.ProdPreciounitario.ToString(),
+                        DetordDescuento = item.ProdDescuento.ToString(),
+                        //DetordOrdennumero = orden.OrdNumero
+                    });
+                }
+                orden.Ordendetalles = deta;
+                OrdenModelo = orden;
+                var guardar = await DataService.PostGuardarAsync<OrdenModelo>(OrdenModelo, UrlModelo.odenes);
+                await DisplayAlert("", guardar.ToString(), "OK");
+            }
+            catch (System.Exception ex)
+            {
+                await DisplayAlert("", ex.ToString(), "OK");
+            }
+
+
+        }
         //::::::::::::: Fin order y detalle
 
 
+        //OBTENER LA UBICACION DEL CLIENTE
+
+        private string mensajeUbicacion;
+
+        public string MensajeUbicacion
+        {
+            get => mensajeUbicacion;
+            set
+            {
+                SetProperty(ref mensajeUbicacion, value);
+            }
+        }
+        private string colorUbicacion;
+
+        public string ColorUbicacion
+        {
+            get => colorUbicacion;
+            set
+            {
+                SetProperty(ref colorUbicacion, value);
+            }
+        }
+        private double latitud;
+        public double Latitud
+        {
+            get => latitud;
+            set => SetProperty(ref latitud, value);
+        }
+        private double longitud;
+        public double Longitud
+        {
+            get => longitud;
+            set => SetProperty(ref longitud, value);
+        }
+        public ICommand UbicacionCommand => new Command(async () =>
+        {
+            IsBusy = true;
+            NoIsBusy = false;
+
+            var ubicacion = new UbicacionServicio();
+            var ubi = await ubicacion.OnGetCurrentLocation();
+            if (string.IsNullOrEmpty(ubi))
+            {
+                await Application.Current.MainPage.DisplayAlert("", "No podemos optener su ubicación \n " +
+                    "verifique si esta activado el GPS", "OK");
+                MensajeUbicacion = "Sin ubicacion";
+                ColorUbicacion = "Red";
+                IsBusy = false;
+                NoIsBusy = true;
+                return;
+            }
+            var array = ubi.Split(' ');
+            Latitud = double.Parse(array[0]);
+            Longitud = double.Parse(array[1]);
+            ColorUbicacion = "Green";
+            MensajeUbicacion = "Ubicación obtenida";
+            IsBusy = false;
+            NoIsBusy = true;
+
+        });
+        //::::::::::::::Fin ubicación
         void CalcularTotal()
         {
             double tot = 0;

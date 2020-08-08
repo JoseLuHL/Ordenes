@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using QP_Comercio_Electronico.Models;
 using SwipeMenu.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -16,6 +17,20 @@ namespace XFFurniture.Service
     public class DataService
     {
         static HttpClient Http;
+
+        public static string GenerarCodigoVerificacion()
+        {
+            List<long> numeros10Digitos = new List<long>();
+            long numeroAleatorio = 0;
+            do
+            {
+                numeroAleatorio = Convert.ToInt64(
+                    $"{new Random().Next(10, 49)}{new Random().Next(50, 99)}");
+            } while (numeros10Digitos.Contains(numeroAleatorio));
+            numeros10Digitos.Add(numeroAleatorio);
+            return numeroAleatorio.ToString();
+        }
+
         public static ObservableCollection<Category> GetCategories()
         {
             return new ObservableCollection<Category>()

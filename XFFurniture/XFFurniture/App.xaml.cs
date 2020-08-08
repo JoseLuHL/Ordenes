@@ -31,8 +31,8 @@ namespace XFFurniture
 
             Device.SetFlags(new[] { "Shapes_Experimental" , "Expander_Experimental" });
             //Device.SetFlags(new[] { "Expander_Experimental" });
-            //MainPage = new HamburgerMenu.HamburgerMenu();            
-            MainPage = new NavigationPage(new LoginPagina());
+            MainPage = new HamburgerMenu.HamburgerMenu();
+            //MainPage = new NavigationPage(new LoginPagina());
             //MainPage = new NavigationPage(new MainPage());
         }
         protected override void OnStart()

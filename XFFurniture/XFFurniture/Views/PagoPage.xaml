@@ -6,39 +6,51 @@
              mc:Ignorable="d"
              x:Class="XFFurniture.Views.PagoPage">
     <ContentPage.Content>
-        <StackLayout Margin="0,20,0,0" VerticalOptions="CenterAndExpand">
-            <StackLayout HorizontalOptions="CenterAndExpand">
-                <Label Text="Inormación de mi pedido" HorizontalTextAlignment="Center" FontSize="20"/>
+        <ScrollView Margin="20,0,20,20">
+        <StackLayout Margin="0,20,0,0" >
+                <StackLayout>
+                    <StackLayout BackgroundColor="{StaticResource colorBlue232}" >
+                        <StackLayout Margin="10,20,10,20" Spacing="0">
+                            <Label TextColor="White" FontSize="25" HorizontalTextAlignment="Center"  Text="Total a pagar"/>
+                            <Label TextColor="White" FontSize="25" HorizontalTextAlignment="Center"  Text="{Binding TotalCompraDetalle, StringFormat='${0:N0}' }"/>
+                            <Label TextColor="White"  HorizontalTextAlignment="Center" Text="{Binding ClienteUsuario.NombreCompleto, StringFormat='{0}'}"/>
+                            <Label TextColor="White" HorizontalOptions="Center" HorizontalTextAlignment="Center" Text="{Binding TiendaCarritoDetalle[0].ProdIdtiendaNavigation.TienRazonsocial,StringFormat='Tienda: {0}'}"/>
+                            <!--<Label TextColor="White" Text="Fecha:" HorizontalTextAlignment="Center" />-->
+                            <Label TextColor="White" Text="{Binding FechaOrden,StringFormat='Fecha {0}'}" HorizontalTextAlignment="Center" />
+                            <Label TextColor="White"  HorizontalTextAlignment="Center" Text="Tienpo estimado:" />
+                            <Label TextColor="White" HorizontalTextAlignment="Center" Text="{Binding TipoEstimado}" />
+                        </StackLayout>
+                    </StackLayout>
 
-                <Label  Text="VALOR A PAGAR" />
-                <Label  Text="$35.500" />
+                    <Entry Placeholder="Dirección" Text="{Binding Direccion}" />
+                    <Button Command="{Binding UbicacionCommand}" IsEnabled="{Binding NoIsBusy}" Text="Obtener mi unicación"></Button>
+                    <Label  Text="{Binding MensajeUbicacion}" TextColor="{Binding ColorUbicacion}"/>
+                    <Editor PlaceholderColor="Gray"  Text="{Binding Descripcion}" HeightRequest="50" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" VerticalOptions="FillAndExpand" />
 
-                <Label Text="Tienda" />
-                <Label  Text="Nombre de la tienda" />
-
-                <Label Text="Fecha:" />
-                <Label Text="01/01/2020" />
-
-                <Label Text="Tienpo estimado:" />
-                <Label Text="Aqui va el tiempo" />
-
-                <Entry Placeholder="Dirección"/>
-                <Button Text="Obtener mi unicación"></Button>
-                <Label Text="Ubicacion obtenida" />
-                <Editor PlaceholderColor="Gray" HeightRequest="50" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" Text="{Binding descripcion}" VerticalOptions="FillAndExpand" />
-            </StackLayout>
-
-            <StackLayout>
+                    <StackLayout>
+                        <Label Text="Mi información"></Label>
+                        
+                        <Label Text="Télefono"/>
+                        <Entry Text="{Binding ClienteUsuario.ClieTelefono}"/>
+                    </StackLayout>
+                </StackLayout>
+            
+                <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+            
+                <StackLayout>
                 <Label Text="Elija el medio de pago" HorizontalTextAlignment="Center" FontSize="20"/>
-                <CollectionView Margin="20,0,20,20" BackgroundColor="White" x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding Mediopagos}" SelectionMode="Single">
+                    <CollectionView HeightRequest="200" IsEnabled="{Binding NoIsBusy}" Margin="20,0,20,20" 
+                                    BackgroundColor="White" x:Name="listCategories" 
+                                    ItemsSource="{Binding Mediopagos}"
+                                    SelectionMode="Single">
                     <CollectionView.ItemsLayout >
                         <LinearItemsLayout  ItemSpacing="2" Orientation="Vertical" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <shadows:Shadows CornerRadius="0" BackgroundColor="White" >
-                                    <pancake:PancakeView  Padding="4" BackgroundColor="{Binding backgroundColor}" CornerRadius="17" HeightRequest="50" VerticalOptions="Start" WidthRequest="200">
+                                    <shadows:Shadows CornerRadius="0" BackgroundColor="White" IsEnabled="{Binding NoIsBusy}" >
+                                        <pancake:PancakeView IsEnabled="{Binding NoIsBusy}" Padding="4" BackgroundColor="{Binding backgroundColor}" CornerRadius="17" HeightRequest="50" VerticalOptions="Start" WidthRequest="200">
                                         <Grid BackgroundColor="White" ColumnDefinitions="25, Auto,*,Auto" RowSpacing="0" VerticalOptions="Center">
 
                                             <BoxView BackgroundColor="{StaticResource colorWhite}" CornerRadius="25" HeightRequest="50" WidthRequest="50" />
@@ -70,5 +82,6 @@
                 </CollectionView>
             </StackLayout>
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

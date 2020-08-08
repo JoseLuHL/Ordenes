@@ -38,6 +38,7 @@ namespace SwipeMenu.ViewModel
             if (res != null)
             {
                 res.ClieClave = string.Empty;
+                var ope = await App.SQLiteDb.SaveItemAsync(res);
                 UsuarioServicio.Cliente = res;
             }
             return res != null;
@@ -85,7 +86,8 @@ namespace SwipeMenu.ViewModel
                 Password = string.Empty;
                 //MainPage = new HamburgerMenu.HamburgerMenu();
                 //await Navigation.PushAsync(new MainPage());
-                await Navigation.PushModalAsync(new HamburgerMenu.HamburgerMenu());
+                await Navigation.PopModalAsync();
+                //await Navigation.PushModalAsync(new HamburgerMenu.HamburgerMenu());
                 IsBusy = false;
             });
 
