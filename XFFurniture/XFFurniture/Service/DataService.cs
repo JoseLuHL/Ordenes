@@ -328,6 +328,7 @@ namespace XFFurniture.Service
         {
             Http = new HttpClient();
             var retornar = false;
+            var resp = "";
             var json = JsonConvert.SerializeObject(datos);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -336,9 +337,15 @@ namespace XFFurniture.Service
             {
                 retornar = peti.IsSuccessStatusCode;
                 var conte = await peti.Content.ReadAsStringAsync();
+                resp = JsonConvert.DeserializeObject<string>(conte);
             }
             else
                 retornar = false;
+
+            if (resp == "OK")
+            {
+                retornar = false;
+            }
 
             return retornar;
         }

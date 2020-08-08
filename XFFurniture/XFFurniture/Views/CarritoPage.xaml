@@ -55,7 +55,7 @@
             
             <!--<Entry HorizontalOptions="Center" VerticalTextAlignment="Center" HeightRequest="80"
             PlaceholderColor="Gray" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" Text="{Binding descripcion}"></Entry>-->
-            <Editor PlaceholderColor="Gray" HeightRequest="50" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" Text="{Binding descripcion}" VerticalOptions="FillAndExpand" />
+            <!--<Editor PlaceholderColor="Gray" HeightRequest="50" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" Text="{Binding descripcion}" VerticalOptions="FillAndExpand" />-->
 
 
             <StackLayout>

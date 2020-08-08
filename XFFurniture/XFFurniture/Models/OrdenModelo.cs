@@ -14,6 +14,7 @@ namespace SwipeMenu.Models
         public int? OrdIdtienda { get; set; }
         public string OrdDireccion { get; set; }
         public string OrdAltura { get; set; }
+        public string OrdTelefono { get; set; }
         public double? OrdTotalcompra { get; set; }
         public DateTime? OrdFecha { get; set; }
         public double? OrdLatitud { get; set; }

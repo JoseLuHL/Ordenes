@@ -20,7 +20,6 @@ namespace XFFurniture.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-
         public MainPageViewModel(INavigation navigation)
         {
             IsLoad = true;
@@ -55,7 +54,6 @@ namespace XFFurniture.ViewModels
                 SetProperty(ref clienteUsuario, value);
             }
         }
-
 
         public ICommand CateCommand => new Command(execute: async () =>
          {
@@ -287,16 +285,16 @@ namespace XFFurniture.ViewModels
 
         private System.DateTime fechaOrden = System.DateTime.Now;
 
-        public System.DateTime FechaOrden 
+        public System.DateTime FechaOrden
         {
             get => System.DateTime.Now;
             set
             {
                 SetProperty(ref fechaOrden, value);
             }
-        } 
+        }
 
-        private string tipoEstimado ="Sin información";
+        private string tipoEstimado = "Sin información";
 
         public string TipoEstimado
         {
@@ -306,7 +304,6 @@ namespace XFFurniture.ViewModels
                 SetProperty(ref tipoEstimado, value);
             }
         }
-
 
         //CORRESPONDIENTE A LAS ORDENES Y DETALLE
         private ObservableCollection<OrdenModelo> ordenes;
@@ -400,7 +397,6 @@ namespace XFFurniture.ViewModels
         public ICommand PagarCommand => new Command(execute: async () =>
          {
              await GetMedioPagoAsync();
-             //await OrdenClienteAsycn();
              await Navigation.PushModalAsync(new PagoPage { BindingContext = this });
          });
         public ICommand PasarelaPagoCommand => new Command<Mediopago>(execute: async (medio) =>
@@ -417,13 +413,18 @@ namespace XFFurniture.ViewModels
           });
         async Task PasarelaAsync(Mediopago mediopago)
         {
+            IsBusy = true;
+            NoIsBusy = false;
             if (mediopago.MepDescripcion == "Pagado")
             {
                 UrlPago = "http://192.168.1.10:8080/prueba/prueba.php?precio=10000&descripcion=Descripcion";
                 await Navigation.PushModalAsync(new PagosVista { BindingContext = this });
+                return;
             }
+            IsBusy = false;
+            NoIsBusy = true;
             await OrdenClienteAsycn(mediopago.MepId);
-            await DisplayAlert("", mediopago.MepDescripcion, "OK");
+            //await DisplayAlert("", mediopago.MepDescripcion, "OK");
         }
         //:::::::::: Fin de pagar
 
@@ -525,20 +526,27 @@ namespace XFFurniture.ViewModels
                 {
                     await DisplayAlert("", "No hemos podido obtener su ubicación actual", "OK");
                     return;
+                } 
+                if (string.IsNullOrEmpty(ClienteUsuario.ClieTelefono) || ClienteUsuario.ClieTelefono.Length!=10)
+                {
+                    await DisplayAlert("", "Ingurese un numero de télefono", "OK");
+                    return;
                 }
 
                 var orden = new OrdenModelo();
                 orden.OrdDescripcion = "";
-                //orden.OrdAltura=null,
                 orden.OrdDireccion = "";
                 orden.OrdFecha = System.DateTime.Now;
                 orden.OrdFechaenvio = System.DateTime.Now;
-                orden.OrdIdcliente = UsuarioServicio.Cliente.ClieId;
-                //orden.OrdIdestado = 1;
+                orden.OrdIdcliente = ClienteUsuario.ClieId;
+                orden.OrdTelefono = ClienteUsuario.ClieTelefono;
+                orden.OrdDescripcion = Descripcion;
+                orden.OrdDireccion = Direccion;
                 orden.OrdIdformapago = idmediopago;
                 orden.OrdIdtienda = TiendaCarritoDetalle[0].ProdIdtienda;
                 orden.OrdLatitud = Latitud;
                 orden.OrdLongitud = Longitud;
+                orden.OrdIdestado = 2;
                 orden.OrdNumero = DataService.GenerarCodigoVerificacion();
                 orden.OrdTotalcompra = TotalCompraDetalle;
                 var deta = new ObservableCollection<Ordendetalle>();
@@ -550,23 +558,33 @@ namespace XFFurniture.ViewModels
                         DetordCantidad = item.Cantidad.ToString(),
                         DetordPrecio = item.ProdPreciounitario.ToString(),
                         DetordDescuento = item.ProdDescuento.ToString(),
-                        //DetordOrdennumero = orden.OrdNumero
                     });
                 }
                 orden.Ordendetalles = deta;
                 OrdenModelo = orden;
                 var guardar = await DataService.PostGuardarAsync<OrdenModelo>(OrdenModelo, UrlModelo.odenes);
-                await DisplayAlert("", guardar.ToString(), "OK");
+                if (guardar)
+                {
+                    await DisplayAlert("", "OPERACIÓN COMPLETADA \n NÚMERO DE ORDEN: " + orden.OrdNumero, "OK");
+                    foreach (var item in tiendaCarritoDetalle)
+                    {
+                        TiendaCarrito.Remove(item);
+                    }
+
+                    TiendasCarrito.Remove(tiendaCarritoDetalle[0].ProdIdtiendaNavigation);
+                    TiendaCarritoDetalle = null;
+                    await Navigation.PopModalAsync();
+                    await Navigation.PopModalAsync();
+                    //await Navigation.PopModalAsync();
+                    //await Navigation.PopModalAsync();
+                }
             }
             catch (System.Exception ex)
             {
                 await DisplayAlert("", ex.ToString(), "OK");
             }
-
-
         }
         //::::::::::::: Fin order y detalle
-
 
         //OBTENER LA UBICACION DEL CLIENTE
 
