@@ -15,6 +15,7 @@ using XFFurniture.Models;
 using XFFurniture.Service;
 using XFFurniture.ViewModel;
 using XFFurniture.Views;
+using XFFurniture.Views.Ordenes;
 
 namespace XFFurniture.ViewModels
 {
@@ -37,7 +38,7 @@ namespace XFFurniture.ViewModels
             _ = load();
         }
 
-        async Task load()
+        public async Task load()
         {
             var dat = await App.SQLiteDb.GetItemsAsync();
             UsuarioServicio.Cliente = dat[0];
@@ -87,6 +88,12 @@ namespace XFFurniture.ViewModels
             IsBusy = true;
             await GetTienda();
             await Navigation.PushModalAsync(new PinPage { BindingContext = this });
+            IsBusy = false;
+        });
+        public ICommand MisOrdenesCommand => new Command(async () =>
+        {
+            IsBusy = true;
+            await Navigation.PushModalAsync(new MisOrdenes());
             IsBusy = false;
         });
         public ICommand CategoriasCommand => new Command(async () =>
@@ -401,9 +408,13 @@ namespace XFFurniture.ViewModels
          });
         public ICommand PasarelaPagoCommand => new Command<Mediopago>(execute: async (medio) =>
           {
+              IsBusy = true;
+              NoIsBusy = false;
               if (!await UsuarioServicio.EstadologinAsync())
               {
                   await Navigation.PushModalAsync(new SwipeMenu.Views.LoginPagina());
+                  IsBusy = false;
+                  NoIsBusy = true;
                   return;
               }
 
@@ -419,11 +430,15 @@ namespace XFFurniture.ViewModels
             {
                 UrlPago = "http://192.168.1.10:8080/prueba/prueba.php?precio=10000&descripcion=Descripcion";
                 await Navigation.PushModalAsync(new PagosVista { BindingContext = this });
+                IsBusy = false;
+                NoIsBusy = true;
                 return;
             }
+
+            await OrdenClienteAsycn(mediopago.MepId);
+
             IsBusy = false;
             NoIsBusy = true;
-            await OrdenClienteAsycn(mediopago.MepId);
             //await DisplayAlert("", mediopago.MepDescripcion, "OK");
         }
         //:::::::::: Fin de pagar
@@ -522,16 +537,20 @@ namespace XFFurniture.ViewModels
 
             try
             {
-                if (Latitud == null || Latitud == 0 || Longitud == null || Longitud == 0)
+                if (Latitud == 0 || Longitud == 0)
                 {
                     await DisplayAlert("", "No hemos podido obtener su ubicación actual", "OK");
                     return;
-                } 
-                if (string.IsNullOrEmpty(ClienteUsuario.ClieTelefono) || ClienteUsuario.ClieTelefono.Length!=10)
+                }
+                if (string.IsNullOrEmpty(ClienteUsuario.ClieTelefono) || ClienteUsuario.ClieTelefono.Length != 10)
                 {
                     await DisplayAlert("", "Ingurese un numero de télefono", "OK");
                     return;
                 }
+
+                var confirmar = await DisplayAlert("", "¿Esta seguro de guargar la orden?", "OK", "CANCELAR");
+                if (!confirmar)
+                    return;
 
                 var orden = new OrdenModelo();
                 orden.OrdDescripcion = "";
@@ -573,6 +592,8 @@ namespace XFFurniture.ViewModels
 
                     TiendasCarrito.Remove(tiendaCarritoDetalle[0].ProdIdtiendaNavigation);
                     TiendaCarritoDetalle = null;
+                    CalcularTotal();
+                    CalcularTotalDetalle();
                     await Navigation.PopModalAsync();
                     await Navigation.PopModalAsync();
                     //await Navigation.PopModalAsync();
@@ -695,7 +716,7 @@ namespace XFFurniture.ViewModels
             //    urlProducto = "";
 
             Productos = await DataService.GetProductoAsync(urlProducto);
-            Products = new ObservableCollection<Product>(DataService.GetProducts());
+            //Products = new ObservableCollection<Product>(DataService.GetProducts());
             IsBusy = false;
         }
         async Task ExecuteSelectCategoryCommand(TiendaModelo model)

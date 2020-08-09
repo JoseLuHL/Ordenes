@@ -5,13 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 using XFFurniture.Models;
-using XFFurniture.Views;
-
+using System.Drawing;
 namespace XFFurniture.Service
 {
     public class DataService
@@ -61,128 +59,6 @@ namespace XFFurniture.Service
                 },
             };
         }
-        public static ObservableCollection<Product> GetProducts()
-        {
-            return new ObservableCollection<Product>()
-            {
-                new Product()
-                {
-                    description = "Armchair 1",
-                    rating = 4.5,
-                    review = 463,
-                    oldPrice = 8152,
-                    newPrice = 6114,
-                    favorite = true,
-                    discount = 25,
-                    image = "chair1",
-                    colors = new List<Color>()
-                    {
-                        new Color(){ color = "#9AADB0", selected = true },
-                        new Color(){ color = "#54889A" },
-                        new Color(){ color = "#3B3B3B" }
-                    },
-                    overview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    createdBy = "Xamarin Forms"
-                },
-                new Product()
-                {
-                    description = "Armchair 2",
-                    rating = 4.5,
-                    review = 263,
-                    oldPrice = 0,
-                    newPrice = 2515,
-                    favorite = false,
-                    discount = 0,
-                    image = "chair2",
-                    colors = new List<Color>()
-                    {
-                        new Color(){ color = "#9AADB0" },
-                        new Color(){ color = "#54889A", selected = true },
-                        new Color(){ color = "#3B3B3B" }
-                    },
-                    overview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    createdBy = "Xamarin Forms"
-                },
-                new Product()
-                {
-                    description = "Armchair 3",
-                    rating = 3.8,
-                    review = 158,
-                    oldPrice = 0,
-                    newPrice = 1580,
-                    favorite = false,
-                    discount = 0,
-                    image = "chair3",
-                    colors = new List<Color>()
-                    {
-                        new Color(){ color = "#9AADB0" },
-                        new Color(){ color = "#54889A" },
-                        new Color(){ color = "#3B3B3B", selected = true }
-                    },
-                    overview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    createdBy = "Xamarin Forms"
-                },
-                new Product()
-                {
-                    description = "Armchair 4",
-                    rating = 4.8,
-                    review = 525,
-                    oldPrice = 0,
-                    newPrice = 2199,
-                    favorite = true,
-                    discount = 0,
-                    image = "chair4",
-                    colors = new List<Color>()
-                    {
-                        new Color(){ color = "#9AADB0" },
-                        new Color(){ color = "#54889A", selected = true },
-                        new Color(){ color = "#3B3B3B" }
-                    },
-                    overview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    createdBy = "Xamarin Forms"
-                },
-                new Product()
-                {
-                    description = "Armchair 5",
-                    rating = 4,
-                    review = 718,
-                    oldPrice = 1589,
-                    newPrice = 3650,
-                    favorite = true,
-                    discount = 15,
-                    image = "chair",
-                    colors = new List<Color>()
-                    {
-                        new Color(){ color = "#9AADB0" },
-                        new Color(){ color = "#54889A" },
-                        new Color(){ color = "#3B3B3B", selected = true }
-                    },
-                    overview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    createdBy = "Xamarin Forms"
-                },
-                new Product()
-                {
-                    description = "Flamingo 2 Seater Sofa in Blue colour",
-                    rating = 5,
-                    review = 890,
-                    oldPrice = 0,
-                    newPrice = 6599,
-                    favorite = true,
-                    discount = 0,
-                    image = "sofa",
-                    colors = new List<Color>()
-                    {
-                        new Color(){ color = "#9AADB0" },
-                        new Color(){ color = "#54889A", selected = true },
-                        new Color(){ color = "#C5BAA4" },
-                        new Color(){ color = "#EFCBAF" },
-                        new Color(){ color = "#3B3B3B" }
-                    },
-                    overview = "Homez offers Furniture at affordable prices with the best quality and durability with modern designs. Our aim is to meet the necessity of home decor and for the ones who are looking for premium and trending seating solutions.\n\nBucket Style Sofas have rounded or contoured back. The earliest bucket sofas had high sides and were named for their resemblance to buckets.\n\nFurniture bought on Homez.com is shipped for free. So go ahead and buy with confidence.",
-                    createdBy = "Xamarin Forms"
-                },
-            };
-        }
 
         public static async Task<ObservableCollection<TiendaModelo>> GetTiendaModelosAsync()
         {
@@ -214,6 +90,51 @@ namespace XFFurniture.Service
             else
                 respuesta = null;
             return respuesta;
+        }
+
+        public static async Task<ObservableCollection<T>> GetsAsync<T>(string url)
+        {
+            Http = new HttpClient();
+            var retornar = new ObservableCollection<T>();
+            var conte = await Http.GetAsync(url);
+            try
+            {
+                if (conte.IsSuccessStatusCode)
+                {
+                    var resp = await conte.Content.ReadAsStringAsync();
+                    retornar = JsonConvert.DeserializeObject<ObservableCollection<T>>(resp);
+                }
+                //else
+                //    Error = conte.IsSuccessStatusCode.ToString();
+            }
+            catch (Exception ex)
+            {
+                //Error = ex.Message;
+                await Application.Current.MainPage.DisplayAlert("", ex.Message, "OK");
+            }
+            return retornar;
+        }
+        public static async Task<T> GetAsync<T>(string url)
+        {
+            Http = new HttpClient();
+            var retornar = new ObservableCollection<T>();
+            var conte = await Http.GetAsync(url);
+            try
+            {
+                if (conte.IsSuccessStatusCode)
+                {
+                    var resp = await conte.Content.ReadAsStringAsync();
+                    var retornar1 = JsonConvert.DeserializeObject<T>(resp);
+                    retornar.Add(retornar1);
+                }
+                //else
+                //    Error = conte.IsSuccessStatusCode.ToString();
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("", ex.Message, "OK");
+            }
+            return retornar[0];
         }
 
         public static async Task<ObservableCollection<ClienteModelo>> GetClientesAsync(string url)
@@ -337,14 +258,42 @@ namespace XFFurniture.Service
             {
                 retornar = peti.IsSuccessStatusCode;
                 var conte = await peti.Content.ReadAsStringAsync();
-                resp = JsonConvert.DeserializeObject<string>(conte);
+                resp = conte;
+                //resp = JsonConvert.DeserializeObject<string>(conte);
             }
             else
                 retornar = false;
 
             if (resp == "OK")
             {
+                retornar = true;
+            }
+
+            return retornar;
+        }
+        
+        public static async Task<bool> PutActualizarAsync<T>(T datos, string url)
+        {
+            Http = new HttpClient();
+            var retornar = false;
+            var resp = "";
+            var json = JsonConvert.SerializeObject(datos);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var peti = await Http.PostAsync(url, content);
+            if (peti.IsSuccessStatusCode)
+            {
+                retornar = peti.IsSuccessStatusCode;
+                var conte = await peti.Content.ReadAsStringAsync();
+                resp = conte;
+                //resp = JsonConvert.DeserializeObject<string>(conte);
+            }
+            else
                 retornar = false;
+
+            if (resp == "OK")
+            {
+                retornar = true;
             }
 
             return retornar;

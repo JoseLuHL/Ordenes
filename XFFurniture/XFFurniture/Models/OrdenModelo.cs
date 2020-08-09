@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using XFFurniture.Models;
 
 namespace SwipeMenu.Models
 {
@@ -22,6 +23,7 @@ namespace SwipeMenu.Models
         public DateTime? OrdFechaenvio { get; set; }
         public virtual ClienteModelo OrdIdclienteNavigation { get; set; }
         public  ObservableCollection<Ordendetalle> Ordendetalles { get; set; }
+        public virtual TiendaModelo  OrdIdtiendaNavigation { get; set; }
         public int? OrdIdestado { get; set; }
         public string OrdDescripcion { get; set; }
         public int? OrdIdformapago { get; set; }

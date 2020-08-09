@@ -11,7 +11,7 @@
     NavigationPage.HasNavigationBar="True"
     mc:Ignorable="d">
     
-    <NavigationPage.TitleView >
+    <NavigationPage.TitleView>
         <StackLayout HorizontalOptions="End"
           Orientation="Horizontal"
           >
@@ -73,6 +73,7 @@
                         <ImageButton Command="{Binding TiendasCommand}" Source="tienda"/>
                         <ImageButton Command="{Binding MapaCommand}" Source="mapa"/>
                         <ImageButton Command="{Binding OrdenesCommand}" Source="star"/>
+                        <ImageButton Command="{Binding MisOrdenesCommand}" Source="star"/>
                     </StackLayout>
                 </StackLayout>
                 <CollectionView x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding TiendasPremiun}" SelectionMode="None">

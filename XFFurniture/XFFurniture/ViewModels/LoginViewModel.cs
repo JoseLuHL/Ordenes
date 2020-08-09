@@ -71,12 +71,14 @@ namespace SwipeMenu.ViewModel
         public ICommand AuthenticateCommand => new Command(execute: async () =>
             {
                 IsBusy = true;
+                NoIsBusy = false;
                 AreCredentialsInvalid = !await UserAuthenticated(Username, Password);
                 if (AreCredentialsInvalid==true)
                 {
                     AreCredentialsInvalid = true;
                     _areCredentialsInvalid = true;
                     IsBusy = false;
+                    NoIsBusy = true;
                     return;
                 }
 
@@ -84,11 +86,9 @@ namespace SwipeMenu.ViewModel
                 _password = string.Empty;
                 Username = string.Empty;
                 Password = string.Empty;
-                //MainPage = new HamburgerMenu.HamburgerMenu();
-                //await Navigation.PushAsync(new MainPage());
                 await Navigation.PopModalAsync();
-                //await Navigation.PushModalAsync(new HamburgerMenu.HamburgerMenu());
                 IsBusy = false;
+                NoIsBusy = true;
             });
 
         public bool AreCredentialsInvalid

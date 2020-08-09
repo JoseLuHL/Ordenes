@@ -21,6 +21,7 @@ namespace SwipeMenu.Views
             InitializeComponent();
             BindingContext = new LoginViewModel(Navigation);
         }
+
         protected async override void OnAppearing()
         {
             if (await UsuarioServicio.EstadologinAsync())

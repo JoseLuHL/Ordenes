@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XFFurniture.ViewModels;
 
-namespace XFFurniture.Views
+namespace XFFurniture.Views.Ordenes
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PagoPage : ContentPage
+    public partial class MisOrdenes : ContentPage
     {
-        public PagoPage()
+        public MisOrdenes()
         {
             InitializeComponent();
+            BindingContext = new MisReservasViewModel(Navigation);
         }
     }
 }
