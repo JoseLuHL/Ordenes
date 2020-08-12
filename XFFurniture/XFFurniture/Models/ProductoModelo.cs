@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -9,11 +11,11 @@ namespace SwipeMenu.Models
 {
     public class ProductoModelo : BaseViewModel
     {
-        public ProductoModelo()
-        {
-            this.colors = new List<XFFurniture.Models.Color>();
-        }
-
+        //public ProductoModelo()
+        //{
+        //    this.colors = new List<XFFurniture.Models.Color>();
+        //}
+        [PrimaryKey]
         public int ProdId { get; set; }
         public string ProdCodigo { get; set; }
         public string ProdNombre { get; set; }
@@ -40,26 +42,30 @@ namespace SwipeMenu.Models
         public int? ProdStok { get; set; }
         public int? ProdStokmax { get; set; }
         public string ProdFecha { get; set; }
+        [Ignore]
         public List<XFFurniture.Models.Color> colors { get; set; }
         public double? ProdCalificacion { get; set; }
         public int ProdCountventas { get; set; }
         public bool? ProdFavorito { get; set; }
 
-        public virtual Categoria ProdCategoriaNavigation { get; set; }
+        //[Ignore]
+        //public  Categoria ProdCategoriaNavigation { get; set; }
         //public virtual ICollection<Ordendetalle> Ordendetalles { get; set; }
-        private ICollection<Ordendetalle> ordendetalles { get; set; }
-        public virtual ICollection<Ordendetalle> Ordendetalles
-        {
-            get { return null; }
-            set { ordendetalles = value; }
-        }
+        //[Ignore]
+        //private ICollection<Ordendetalle> ordendetalles { get; set; }
+        //[Ignore]
+        //public virtual ICollection<Ordendetalle> Ordendetalles
+        //{
+        //    get { return null; }
+        //    set { ordendetalles = value; }
+        //}
 
         public int? ProdIdcategoria { get; set; }
         public double? ProdDescuento { get; set; }
         public int? ProdIdtienda { get; set; }
-
-        public virtual TiendaModelo ProdIdtiendaNavigation { get; set; }
-
-        public virtual Subcategorium ProdIdcategoriaNavigation { get; set; }
+        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]
+        public TiendaModelo ProdIdtiendaNavigation { get; set; }
+        [Ignore]
+        public  Subcategorium ProdIdcategoriaNavigation { get; set; }
     }
 }

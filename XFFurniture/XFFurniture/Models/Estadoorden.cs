@@ -1,4 +1,5 @@
-﻿using SwipeMenu.Models;
+﻿using SQLite;
+using SwipeMenu.Models;
 using System;
 using System.Collections.Generic;
 
@@ -7,8 +8,8 @@ namespace QP_Comercio_Electronico.Models
 {
     public partial class Estadoorden
     {
-        
 
+        [PrimaryKey, AutoIncrement]
         public int EsorId { get; set; }
         public string EsorIdDescripcion { get; set; }
 

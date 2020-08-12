@@ -40,6 +40,10 @@ namespace XFFurniture.ViewModels
 
         public async Task load()
         {
+            TiendaCarrito = await App.SQLiteDb.GetProductoAsync();
+            TiendasCarrito = await App.SQLiteDb.GetTiendaAsync();
+            CalcularTotal();
+
             var dat = await App.SQLiteDb.GetItemsAsync();
             UsuarioServicio.Cliente = dat[0];
             ClienteUsuario = dat[0];
@@ -70,7 +74,6 @@ namespace XFFurniture.ViewModels
             if (TiendaCarrito != null && TiendaCarrito.Count > 0)
             {
                 await TiendasCarritoAsync();
-                //await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
                 await Navigation.PushModalAsync(new TiendaCarritoPage { BindingContext = this });
 
             }
@@ -135,14 +138,36 @@ namespace XFFurniture.ViewModels
                 TiendaCarrito = tiendaCarrito_;
                 CalcularTotal();
                 TotalCarrito = TiendaCarrito.Count;
+                await Task.Delay(400);
+                await GuardarCarritoLocal(tiendaCarrito_);
+                tiendaCarrito_ = null;
             }
             catch (System.Exception ex)
             {
 
-                await DisplayAlert("", ex.ToString(), "OK");
+                await DisplayAlert("", ex.Message, "OK");
             }
 
         });
+
+        async Task GuardarCarritoLocal(ObservableCollection<ProductoModelo> producto)
+        {
+            await App.SQLiteDb.EliminarproductoAsync();
+            await App.SQLiteDb.EliminarTiendaAsync();
+            foreach (var item in producto)
+            {
+                await App.SQLiteDb.GuardarAsync<ProductoModelo>(item);
+                try
+                {
+                    await App.SQLiteDb.GuardarAsync<TiendaModelo>(item.ProdIdtiendaNavigation);
+
+                }
+                catch (System.Exception)
+                {
+                }
+            }
+        }
+
         public ICommand QuitarCarrito => new Command(async () =>
         {
             try
@@ -180,15 +205,14 @@ namespace XFFurniture.ViewModels
                 TiendaCarrito = tiendaCarrito_;
                 CalcularTotal();
                 TotalCarrito = TiendaCarrito.Count;
-                //totalCarrito = TiendaCarrito.Count;
-                //ProductoDet = null;
-                //await DisplayAlert("", "", "OK");
+                await GuardarCarritoLocal(tiendaCarrito_);
+                tiendaCarrito_ = null;
 
             }
             catch (System.Exception ex)
             {
 
-                await DisplayAlert("", ex.ToString(), "OK");
+                await DisplayAlert("", ex.Message, "OK");
             }
 
         });
@@ -469,19 +493,24 @@ namespace XFFurniture.ViewModels
         }
         public ICommand TiendasCarritoCommand => new Command<TiendaModelo>(execute: async (tienda) =>
         {
-            var dat = TiendaCarrito.Where(s => s.ProdIdtiendaNavigation.TienId == tienda.TienId);
+            var dat = TiendaCarrito.Where(s => s.ProdIdtienda == tienda.TienId);
             TiendaCarritoDetalle = new ObservableCollection<ProductoModelo>(dat);
             CalcularTotalDetalle();
             await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
+
         });
         async Task TiendasCarritoAsync()
         {
-            var tien = new ObservableCollection<TiendaModelo>();
+            var tiend = TiendasCarrito.GroupBy(s => s.TienId).Select(g => g.First()).ToList();
+            var tien = new ObservableCollection<TiendaModelo>(tiend);
             if (TiendaCarrito != null && TiendaCarrito.Count > 0)
             {
                 foreach (var item in TiendaCarrito)
                 {
-                    tien.Add(item.ProdIdtiendaNavigation);
+                    if (item.ProdIdtiendaNavigation != null)
+                    {
+                        tien.Add(item.ProdIdtiendaNavigation);
+                    }
                 }
                 TiendasCarrito = new ObservableCollection<TiendaModelo>(tien.GroupBy(s => s.TienId).Select(g => g.First()));
             }

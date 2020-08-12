@@ -1,4 +1,5 @@
-﻿using SwipeMenu.Models;
+﻿using SQLite;
+using SwipeMenu.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,7 @@ namespace XFFurniture.Models
 {
   public  class Detalletiendacategorium
     {
+        [PrimaryKey, AutoIncrement]
         public int DetordId { get; set; }
         public int? DetordIdproducto { get; set; }
         public int? DetordOrdennumero { get; set; }

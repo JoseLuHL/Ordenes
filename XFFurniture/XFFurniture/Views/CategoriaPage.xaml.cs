@@ -23,24 +23,24 @@ namespace XFFurniture.Views
         protected override bool OnBackButtonPressed()
         {
             var subcate = new ObservableCollection<Subcategorium>();
-            foreach (var item in MainPageViewModel.Categorias)
-            {
-                foreach (var item2 in item.Subcategoria)
-                {
-                    if (item.Todos)
-                    {
-                        item2.Activo = true;
-                        subcate.Add(item2);
-                    }
-                    else
-                        subcate.Add(new Subcategorium
-                        {
-                            SubcatId = item2.SubcatId,
-                            SubcatDescripcion = item2.SubcatDescripcion,
-                            SubcatFoto = item2.SubcatFoto
-                        });
-                }
-            }
+            //foreach (var item in MainPageViewModel.Categorias)
+            //{
+            //    foreach (var item2 in item.Subcategoria)
+            //    {
+            //        if (item.Todos)
+            //        {
+            //            item2.Activo = true;
+            //            subcate.Add(item2);
+            //        }
+            //        else
+            //            subcate.Add(new Subcategorium
+            //            {
+            //                SubcatId = item2.SubcatId,
+            //                SubcatDescripcion = item2.SubcatDescripcion,
+            //                SubcatFoto = item2.SubcatFoto
+            //            });
+            //    }
+            //}
 
             MainPageViewModel.SubCategorias = subcate;
             var g = MainPageViewModel.SubCategorias;

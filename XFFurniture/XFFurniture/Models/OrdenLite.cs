@@ -1,18 +1,14 @@
-﻿using QP_Comercio_Electronico.Models;
-using SQLite;
-using SQLiteNetExtensions.Attributes;
+﻿using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using XFFurniture.Models;
 
-namespace SwipeMenu.Models
+namespace XFFurniture.Models
 {
-   public class OrdenModelo
+   public class OrdenLite
     {
-        [PrimaryKey]
+
+        [PrimaryKey, AutoIncrement]
         public int OrdId { get; set; }
         public string OrdNumero { get; set; }
         public int? OrdIdcliente { get; set; }
@@ -25,17 +21,9 @@ namespace SwipeMenu.Models
         public double? OrdLatitud { get; set; }
         public double? OrdLongitud { get; set; }
         public DateTime? OrdFechaenvio { get; set; }
-        public virtual ClienteModelo OrdIdclienteNavigation { get; set; }
 
-        public ObservableCollection<Ordendetalle> Ordendetalles { get; set; }
-  
-        public virtual TiendaModelo  OrdIdtiendaNavigation { get; set; }
         public int? OrdIdestado { get; set; }
         public string OrdDescripcion { get; set; }
         public int? OrdIdformapago { get; set; }
-
-        public virtual Estadoorden OrdIdestadoNavigation { get; set; }
-        public virtual Mediopago OrdIdformapagoNavigation { get; set; }
-
     }
 }

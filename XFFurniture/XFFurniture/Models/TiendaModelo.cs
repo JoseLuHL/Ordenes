@@ -1,4 +1,6 @@
-﻿using SwipeMenu.Models;
+﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
+using SwipeMenu.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +10,7 @@ namespace XFFurniture.Models
 {
     public class TiendaModelo : BaseViewModel
     {
+        [PrimaryKey]
         public int TienId { get; set; }
         public string TienNit { get; set; }
         public string TienTipoidentificacion { get; set; }
@@ -20,15 +23,16 @@ namespace XFFurniture.Models
         public double TienLongitud { get; set; }
         public string TienAltura { get; set; }
         public bool? TienPremium { get; set; }
-
+        [ManyToOne(CascadeOperations = CascadeOperation.All)]
         public virtual ICollection<Detalletiendacategorium> Detalletiendacategoria { get; set; }
         private ICollection<OrdenModelo> ordenes { get; set; }
+        [Ignore]
         public virtual ICollection<OrdenModelo> Ordenes
         {
             get { return ordenes; }
             set { ordenes = value; }
         }
-        public virtual ICollection<ProductoModelo> Productos { get; set; }
+        //public virtual ICollection<ProductoModelo> Productos { get; set; }
 
         private string _backgroundColor;
         public string backgroundColor

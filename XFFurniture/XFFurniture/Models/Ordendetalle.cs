@@ -1,11 +1,14 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SwipeMenu.Models
 {
    public class Ordendetalle
     {
+        [PrimaryKey, AutoIncrement]
         public int DetordId { get; set; }
         public int? DetordIdproducto { get; set; }
         public int? DetordOrdennumero { get; set; }
