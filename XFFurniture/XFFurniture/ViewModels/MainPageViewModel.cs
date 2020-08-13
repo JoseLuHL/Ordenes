@@ -4,6 +4,7 @@ using SwipeMenu.Models;
 using SwipeMenu.Service;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WorkingWithMaps;
@@ -15,6 +16,7 @@ using XFFurniture.Models;
 using XFFurniture.Service;
 using XFFurniture.ViewModel;
 using XFFurniture.Views;
+using XFFurniture.Views.Carrito_de_compra;
 using XFFurniture.Views.Ordenes;
 
 namespace XFFurniture.ViewModels
@@ -69,6 +71,58 @@ namespace XFFurniture.ViewModels
         {
             await GetProducts();
         });
+
+        public async Task BuscarProductoChanged()
+        {
+
+            IsBusy = true;
+            NoIsBusy = false;
+            if (string.IsNullOrEmpty(BuscarProducto))
+            {
+                Productos = ProductosBuscar;
+                IsBusy = false;
+                return;
+            }
+            var b = QuitarAsento(BuscarProducto);
+            var encontrados = ProductosBuscar.Where(p => QuitarAsento(p.ProdNombre).Contains(b) || QuitarAsento(p.ProdDescripcion).Contains(b)).ToList();
+            Productos = new ObservableCollection<ProductoModelo>(encontrados);
+            IsBusy = false;
+            NoIsBusy = true;
+
+        }
+
+        private string QuitarAsento(string inputString)
+        {
+
+            Regex a = new Regex("[á|à|ä|â]", RegexOptions.Compiled);
+            Regex e = new Regex("[é|è|ë|ê]", RegexOptions.Compiled);
+            Regex i = new Regex("[í|ì|ï|î]", RegexOptions.Compiled);
+            Regex o = new Regex("[ó|ò|ö|ô]", RegexOptions.Compiled);
+            Regex u = new Regex("[ú|ù|ü|û]", RegexOptions.Compiled);
+            Regex n = new Regex("[ñ|Ñ]", RegexOptions.Compiled);
+            inputString = a.Replace(inputString, "a");
+            inputString = e.Replace(inputString, "e");
+            inputString = i.Replace(inputString, "i");
+            inputString = o.Replace(inputString, "o");
+            inputString = u.Replace(inputString, "u");
+            inputString = n.Replace(inputString, "n");
+            return inputString.ToLower().Trim().Replace(" ", "");
+        }
+        // public  ICommand BuscarProductoCommand => new Command(async () =>
+        //{
+        //    IsBusy = true;
+        //    if (string.IsNullOrEmpty(BuscarProducto))
+        //    {
+        //        Productos = ProductosBuscar;
+        //        IsBusy = false;
+        //        return;
+        //    }
+
+        //    var encontrados = ProductosBuscar.Where(p => p.ProdNombre.ToLower().Contains(BuscarProducto.ToLower()) || p.ProdDescripcion.ToLower().Contains(BuscarProducto.ToLower())).ToList();
+        //    Productos = new ObservableCollection<ProductoModelo>(encontrados);
+        //    IsBusy = false;
+
+        //});
         public ICommand CarritoCommand => new Command(async () =>
         {
             if (TiendaCarrito != null && TiendaCarrito.Count > 0)
@@ -93,6 +147,16 @@ namespace XFFurniture.ViewModels
             await Navigation.PushModalAsync(new PinPage { BindingContext = this });
             IsBusy = false;
         });
+
+        public ICommand ProductosComprarCommand => new Command(async () =>
+        {
+            IsBusy = true;
+            await GetTienda();
+            await Navigation.PushModalAsync(new ProductoPage { BindingContext = this });
+            IsBusy = false;
+        });
+
+
         public ICommand MisOrdenesCommand => new Command(async () =>
         {
             IsBusy = true;
@@ -138,7 +202,7 @@ namespace XFFurniture.ViewModels
                 TiendaCarrito = tiendaCarrito_;
                 CalcularTotal();
                 TotalCarrito = TiendaCarrito.Count;
-                await Task.Delay(400);
+                await Task.Delay(1000);
                 await GuardarCarritoLocal(tiendaCarrito_);
                 tiendaCarrito_ = null;
             }
@@ -150,8 +214,10 @@ namespace XFFurniture.ViewModels
 
         });
 
-        async Task GuardarCarritoLocal(ObservableCollection<ProductoModelo> producto)
+        public async Task GuardarCarritoLocal(ObservableCollection<ProductoModelo> producto)
         {
+            IsBusy = true;
+            NoIsBusy = false;
             await App.SQLiteDb.EliminarproductoAsync();
             await App.SQLiteDb.EliminarTiendaAsync();
             foreach (var item in producto)
@@ -164,8 +230,12 @@ namespace XFFurniture.ViewModels
                 }
                 catch (System.Exception)
                 {
+                    IsBusy = false;
+                    NoIsBusy = true;
                 }
             }
+            IsBusy = false;
+            NoIsBusy = true;
         }
 
         public ICommand QuitarCarrito => new Command(async () =>
@@ -205,6 +275,7 @@ namespace XFFurniture.ViewModels
                 TiendaCarrito = tiendaCarrito_;
                 CalcularTotal();
                 TotalCarrito = TiendaCarrito.Count;
+                await Task.Delay(1000);
                 await GuardarCarritoLocal(tiendaCarrito_);
                 tiendaCarrito_ = null;
 
@@ -220,6 +291,17 @@ namespace XFFurniture.ViewModels
         public Command SelectProductoCarritoCommand { get; set; }
         public Command SelectCategoryCommand { get; set; }
         public Command PopDetailPageCommand { get; }
+        private string buscarProducto;
+
+        public string BuscarProducto
+        {
+            get => buscarProducto;
+            set
+            {
+                SetProperty(ref buscarProducto, value);
+            }
+        }
+
 
         private ObservableCollection<ProductoModelo> tiendaCarrito;
         public ObservableCollection<ProductoModelo> TiendaCarrito
@@ -270,6 +352,12 @@ namespace XFFurniture.ViewModels
         {
             get => productos;
             set => SetProperty(ref productos, value);
+        }
+        private ObservableCollection<ProductoModelo> productosBuscar;
+        public ObservableCollection<ProductoModelo> ProductosBuscar
+        {
+            get => productosBuscar;
+            set => SetProperty(ref productosBuscar, value);
         }
         private ProductoModelo productoDet;
         public ProductoModelo ProductoDet
@@ -743,8 +831,8 @@ namespace XFFurniture.ViewModels
             string urlProducto = UrlModelo.producto;
             //if (tienda != null)
             //    urlProducto = "";
-
             Productos = await DataService.GetProductoAsync(urlProducto);
+            ProductosBuscar = Productos;
             //Products = new ObservableCollection<Product>(DataService.GetProducts());
             IsBusy = false;
         }
@@ -783,9 +871,17 @@ namespace XFFurniture.ViewModels
         {
             Pagina = 1;
             IsBusy = true;
+            NoIsBusy = false;
+            var bus = TiendaCarrito.FirstOrDefault(s => s.ProdId == param.ProdId);
+            if (bus != null)
+            {
+                param.Cantidad = bus.Cantidad;
+            }
+
             ProductoDet = param;
             await Navigation.PushModalAsync(new DetailPage { BindingContext = this });
             IsBusy = false;
+            NoIsBusy = true;
         }
         private async Task ExeccuteNavigateToDetailPageCommand1(ProductoModelo param)
         {
@@ -803,6 +899,7 @@ namespace XFFurniture.ViewModels
         private async Task ExecutePopDetailPageCommand()
         {
             Pagina = 0;
+            await GuardarCarritoLocal(TiendaCarrito);
             await Navigation.PopModalAsync();
         }
 

@@ -15,7 +15,8 @@ namespace SwipeMenu.Models
         //{
         //    this.colors = new List<XFFurniture.Models.Color>();
         //}
-        [PrimaryKey]
+        [PrimaryKey,AutoIncrement]
+        public int Id { get; set; }
         public int ProdId { get; set; }
         public string ProdCodigo { get; set; }
         public string ProdNombre { get; set; }
@@ -48,7 +49,7 @@ namespace SwipeMenu.Models
         public int ProdCountventas { get; set; }
         public bool? ProdFavorito { get; set; }
 
-        //[Ignore]
+        //[ManyToOne(CascadeOperations = CascadeOperation.All)]
         //public  Categoria ProdCategoriaNavigation { get; set; }
         //public virtual ICollection<Ordendetalle> Ordendetalles { get; set; }
         //[Ignore]
@@ -63,7 +64,7 @@ namespace SwipeMenu.Models
         public int? ProdIdcategoria { get; set; }
         public double? ProdDescuento { get; set; }
         public int? ProdIdtienda { get; set; }
-        [OneToMany(CascadeOperations = CascadeOperation.CascadeRead)]
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
         public TiendaModelo ProdIdtiendaNavigation { get; set; }
         [Ignore]
         public  Subcategorium ProdIdcategoriaNavigation { get; set; }

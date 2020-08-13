@@ -1,4 +1,5 @@
 ﻿using SwipeMenu.Models;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XFFurniture.Models;
@@ -17,7 +18,7 @@ namespace XFFurniture.Views
         }
 
         protected override bool OnBackButtonPressed()
-        {
+        {            
             MainPageViewModel.Pagina = 0;
             return base.OnBackButtonPressed();
         }

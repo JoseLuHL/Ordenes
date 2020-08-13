@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" xmlns:shadows="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
+             mc:Ignorable="d"
+             x:Class="XFFurniture.Views.Carrito_de_compra.ProductoPage">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Grid Margin="10,10,0,20" RowDefinitions="auto, auto, auto, auto, auto, *"  >
+                    <SearchBar Text="{Binding BuscarProducto}" Placeholder="¿Que estas buscando?" SearchCommand="{Binding BuscarProductoCommand}" TextChanged="SearchBar_TextChanged" />
+                    <ActivityIndicator Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+
+                    <Label Grid.Row="2" FontFamily="FontMontserratBold" FontSize="{OnPlatform Android='12', iOS='12'}"
+                TextColor="{StaticResource colorRedFF}"
+                Text="Categoría">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CategoriasCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                    <Polygon Grid.Row="2" Margin="{OnPlatform Android='40,-5,0,0',
+                                    iOS='30,-5,0,0'}" Fill="{StaticResource colorRedFF}" HorizontalOptions="Start" Points="10,10 20,15 10,20" />
+                    <Label
+                Grid.Row="2"
+                Margin="0,0,35,0"
+                FontFamily="FontMontserratMedium"
+                FontSize="{OnPlatform Android='12',
+                                      iOS='12'}"
+                HorizontalOptions="End"
+                Text="Mostrar todo"
+                TextColor="{StaticResource colorRedFF}"
+                VerticalTextAlignment="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowAllCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Polygon
+                Grid.Row="2"
+                Margin="{OnPlatform Android='0,-5,20,0',
+                                    iOS='0,0,20,0'}"
+                Fill="{StaticResource colorRedFF}"
+                HorizontalOptions="End"
+                Points="10,10 20,15 10,20"
+                StrokeThickness="1" />
+
+                    <CollectionView
+                x:Name="listProducts"
+                Grid.Row="5"
+                Margin="0,15,20,0"
+                ItemsSource="{Binding Productos}"
+                VerticalScrollBarVisibility="Never">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout
+                        HorizontalItemSpacing="15"
+                        Orientation="Vertical"
+                        Span="2"
+                        VerticalItemSpacing="15" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <pancake:PancakeView
+                                Padding="0,0,0,10"
+                                BackgroundColor="{StaticResource colorGrayF6}"
+                                CornerRadius="12"
+                                HasShadow="False">
+                                        <Grid RowDefinitions="auto, auto, auto, auto, auto" RowSpacing="0">
+                                            <Image
+                                        Margin="0,15,20,0"
+                                        Aspect="AspectFit"
+                                        HeightRequest="18"
+                                        HorizontalOptions="End"
+                                        Source="heart_outline"
+                                        VerticalOptions="Start"
+                                        WidthRequest="18">
+                                                <Image.Triggers>
+                                                    <DataTrigger
+                                                Binding="{Binding ProdFavorito}"
+                                                TargetType="Image"
+                                                Value="True">
+                                                        <Setter Property="Source" Value="heart" />
+                                                    </DataTrigger>
+                                                </Image.Triggers>
+                                            </Image>
+                                            <pancake:PancakeView
+                                        Padding="2,4"
+                                        BackgroundColor="{StaticResource colorRedFF}"
+                                        CornerRadius="12,0,0,20"
+                                        HasShadow="False"
+                                        HeightRequest="20"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Start"
+                                        WidthRequest="30">
+                                                <Label HorizontalOptions="Center">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span
+                                                        FontFamily="FontMontserratSemiBold"
+                                                        FontSize="8"
+                                                        Text="{Binding ProdDescuento, StringFormat='{0:N0}%'}"
+                                                        TextColor="{StaticResource colorWhite}" />
+                                                            <Span
+                                                        FontFamily="FontMontserratSemiBold"
+                                                        FontSize="8"
+                                                        Text="&#10;DES"
+                                                        TextColor="{StaticResource colorWhite}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <pancake:PancakeView.Triggers>
+                                                    <DataTrigger
+                                                Binding="{Binding discount}"
+                                                TargetType="pancake:PancakeView"
+                                                Value="0">
+                                                        <Setter Property="IsVisible" Value="False" />
+                                                    </DataTrigger>
+                                                </pancake:PancakeView.Triggers>
+                                            </pancake:PancakeView>
+                                            <Image
+                                        Grid.Row="0"
+                                        Margin="0,25,0,0"
+                                        Aspect="AspectFit"
+                                        HeightRequest="120"
+                                        Source="{Binding ProdFoto}" />
+                                            <Label
+                                        Grid.Row="1"
+                                        Margin="10,0"
+                                        FontFamily="FontMontserratSemiBold"
+                                        FontSize="16"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding ProdNombre}" />
+                                            <StackLayout
+                                        Grid.Row="2"
+                                        HorizontalOptions="Center"
+                                        Orientation="Horizontal"
+                                        Spacing="2">
+                                                <Image
+                                            Aspect="AspectFit"
+                                            HeightRequest="8"
+                                            HorizontalOptions="Start"
+                                            Source="star"
+                                            WidthRequest="8" />
+                                                <Label
+                                            FontSize="8"
+                                            Text="{Binding ProdRanking, StringFormat='{0:N1}  |'}"
+                                            TextColor="{StaticResource colorGray95}"
+                                            VerticalTextAlignment="Center" />
+                                                <Label
+                                            FontSize="8"
+                                            Text="{Binding ProdStok, StringFormat=' {0} Review'}"
+                                            TextColor="{StaticResource colorGray95}"
+                                            VerticalTextAlignment="Center" />
+                                            </StackLayout>
+                                            <BoxView
+                                        Grid.Row="3"
+                                        Margin="0,10,0,5"
+                                        BackgroundColor="{StaticResource colorGrayEA}"
+                                        HeightRequest="1"
+                                        HorizontalOptions="FillAndExpand" />
+                                            <StackLayout
+                                        Grid.Row="4"
+                                        HorizontalOptions="Center"
+                                        Orientation="Horizontal">
+                                                <Label
+                                            FontSize="10"
+                                            Text="{Binding ProdPrecioanterior, StringFormat='${0:N0}'}"
+                                            TextColor="{StaticResource colorGray95}"
+                                            TextDecorations="Strikethrough"
+                                            VerticalTextAlignment="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger
+                                                    Binding="{Binding ProdPrecioanterior}"
+                                                    TargetType="Label"
+                                                    Value="0">
+                                                            <Setter Property="IsVisible" Value="False" />
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                                <Label
+                                            FontFamily="FontMontserratMedium"
+                                            FontSize="16"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding ProdPreciounitario, StringFormat='${0:N0}'}"
+                                            TextColor="{StaticResource colorRedFF}"
+                                            VerticalTextAlignment="Center" />
+                                            </StackLayout>
+                                        </Grid>
+                                        <pancake:PancakeView.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                        Command="{Binding Path=BindingContext.NavigateToDetailPageCommand, Source={x:Reference listProducts}}"
+                                        CommandParameter="{Binding .}"
+                                        NumberOfTapsRequired="1" />
+                                        </pancake:PancakeView.GestureRecognizers>
+                                    </pancake:PancakeView>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+
+    </ContentPage.Content>
+</ContentPage>
