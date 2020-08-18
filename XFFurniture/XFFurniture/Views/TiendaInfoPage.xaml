@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XFFurniture.Views.TiendaInfoPage">
+    <ContentPage.Content>
+        <StackLayout Margin="40" Spacing="0">
+            <Label Text="{Binding TiendaSelect.TienRazonsocial}" FontSize="25" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"/>
+            <Image Source="{Binding TiendaSelect.TienFoto}"/>
+
+            <Grid Margin="0,20,0,0" ColumnSpacing="1" >
+                <StackLayout HorizontalOptions="Center">
+                    <Label Text="&#xf082;"
+                               FontSize="23" 
+                               HorizontalOptions="Center" 
+                               TextColor="Black"
+                               FontFamily="{StaticResource FontAwesomeBrands}"/>
+                    <Label FontSize="9" Text="Facebook"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center" Grid.Column="1">
+                    <Label Text="&#xf099;"
+                               FontSize="23" 
+                               HorizontalOptions="Center" 
+                               TextColor="Black"
+                               FontFamily="{StaticResource FontAwesomeBrands}"/>
+                    <Label FontSize="9" Text="Twitter"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center" Grid.Column="2">
+                    <Label Text="&#xf16d;"
+                               FontSize="23" 
+                               HorizontalOptions="Center" 
+                               TextColor="Black"
+                               FontFamily="{StaticResource FontAwesomeBrands}"/>
+                    <Label FontSize="9" Text="Instagram"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center" Grid.Column="3">
+                    <Label Text="&#xf167;"
+                               FontSize="23" 
+                               HorizontalOptions="Center" 
+                               TextColor="Black"
+                               FontFamily="{StaticResource FontAwesomeBrands}"/>
+                    <Label  FontSize="9" Text="Youtube"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center" Grid.Column="4">
+                    <Label Text="&#xf232;"
+                               FontSize="23" 
+                               HorizontalOptions="Center" 
+                               TextColor="Black"
+                               FontFamily="{StaticResource FontAwesomeBrands}"/>
+                    <Label FontSize="9" Text="Whatsapp"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center" Grid.Column="5">
+                    <Label Text="&#xf2a0;"
+                               FontSize="23" 
+                               HorizontalOptions="Center" 
+                               TextColor="Black"
+                               FontFamily="{StaticResource FontAwesomeSolid}"/>
+                    <Label FontSize="9" Text="Llamar"/>
+                </StackLayout>
+
+            </Grid>
+
+            <StackLayout Margin="0,20,0,0" HorizontalOptions="Center" >
+                <Label Text="&#xf3c5;"
+                               FontSize="50" 
+                               HorizontalOptions="Center" 
+                               TextColor="Black"
+                               FontFamily="{StaticResource FontAwesomeSolid}"/>
+                <Label HorizontalOptions="Center" FontSize="9" Text="Mapa"/>
+            </StackLayout>
+
+            <StackLayout Margin="0,20,0,0" HorizontalOptions="Center" >
+
+                <Label HorizontalOptions="Center" FontSize="13" Text="{Binding TiendaSelect.TienDireccion}"/>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

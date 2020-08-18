@@ -6,6 +6,7 @@ namespace XFFurniture.Models
 {
    public static class UrlModelo
     {
+        //public static string UrlBase => "https://pedidos2020.azurewebsites.net/api/";
         public static string UrlBase => "http://192.168.1.10/pedidos/api/";
         public static string tiendas => $"{UrlBase}Tiendums";
         public static string odenes => $"{UrlBase}Ordenes";

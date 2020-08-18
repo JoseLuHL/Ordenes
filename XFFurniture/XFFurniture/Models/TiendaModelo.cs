@@ -21,6 +21,10 @@ namespace XFFurniture.Models
         public string TienCorreo { get; set; }
         public double TienLatitud { get; set; }
         public double TienLongitud { get; set; }
+        public string TienFacebook { get; set; }
+        public string TienInstagram { get; set; }
+        public string TienYoutube { get; set; }
+        public string TienFoto { get; set; }
         public string TienAltura { get; set; }
         public bool? TienPremium { get; set; }
         [ManyToOne(CascadeOperations = CascadeOperation.All)]
@@ -34,7 +38,7 @@ namespace XFFurniture.Models
         }
         //public virtual ICollection<ProductoModelo> Productos { get; set; }
 
-        private string _backgroundColor;
+        private string _backgroundColor= "#EAEDF6";
         public string backgroundColor
         {
             get { return _backgroundColor; }

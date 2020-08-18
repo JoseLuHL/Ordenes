@@ -7,8 +7,8 @@
              x:Class="XFFurniture.Views.CategoriaPage">
     <ContentPage.Content>
         <StackLayout Spacing="0" Margin="40">
-
-    <!--<Button Text="Click" Command="{Binding CateCommand}"/>-->
+            
+            <!--<Button Text="Click" Command="{Binding CateCommand}"/>-->
             <CollectionView x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding Categorias}" SelectionMode="None">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
@@ -60,7 +60,7 @@
                                                 Text="{Binding numberItems, StringFormat='{0} items'}"
                                                 VerticalOptions="Start" />
                                                 </StackLayout>
-                                            <!--<Button Text="Click" Command="{Binding CateCommand}"/>-->
+                                                <!--<Button Text="Click" Command="{Binding CateCommand}"/>-->
                                             </Grid>
                                             <!--<pancake:PancakeView.GestureRecognizers>
                                             <TapGestureRecognizer

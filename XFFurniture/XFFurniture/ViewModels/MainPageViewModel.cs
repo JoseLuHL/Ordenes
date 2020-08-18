@@ -2,6 +2,7 @@
 using QP_Comercio_Electronico.Models;
 using SwipeMenu.Models;
 using SwipeMenu.Service;
+using SwipeMenu.Views;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -18,6 +19,7 @@ using XFFurniture.ViewModel;
 using XFFurniture.Views;
 using XFFurniture.Views.Carrito_de_compra;
 using XFFurniture.Views.Ordenes;
+using static HamburgerMenu.HamburgerMenu;
 
 namespace XFFurniture.ViewModels
 {
@@ -25,6 +27,7 @@ namespace XFFurniture.ViewModels
     {
         public MainPageViewModel(INavigation navigation)
         {
+
             IsLoad = true;
             IsCargando = false;
             IsBusy = true;
@@ -38,10 +41,15 @@ namespace XFFurniture.ViewModels
             _ = GetTienda();
             _ = GetProducts();
             _ = load();
+            _ = GetCategories();
+            LoadMenu();
+            //UnselectGroupItems();
+            //SelectedItem = MenuApp[0];
         }
 
         public async Task load()
         {
+
             TiendaCarrito = await App.SQLiteDb.GetProductoAsync();
             TiendasCarrito = await App.SQLiteDb.GetTiendaAsync();
             CalcularTotal();
@@ -49,7 +57,56 @@ namespace XFFurniture.ViewModels
             var dat = await App.SQLiteDb.GetItemsAsync();
             UsuarioServicio.Cliente = dat[0];
             ClienteUsuario = dat[0];
+
+
+
         }
+
+        private void LoadMenu()
+        {
+            ObservableCollection<MenuApp> menu_ = new ObservableCollection<MenuApp>();
+            menu_.Add(new Models.MenuApp { Page = new MainPage { BindingContext = this }, MenuTitle = "Inicio", MenuDetail = "Mi perfil", icon = "&#xf54e;" });
+            menu_.Add(new Models.MenuApp { Page = new TiendasPage { BindingContext = this }, MenuTitle = "Tiendas", MenuDetail = "Mi perfil", icon = "user.png" });
+            menu_.Add(new Models.MenuApp { Page = new PinPage { BindingContext = this }, MenuTitle = "Mapa", MenuDetail = "Mensajes", icon = "message.png" });
+            menu_.Add(new Models.MenuApp { Page = new CategoriaPage { BindingContext = this }, MenuTitle = "Categorias", MenuDetail = "Contactos", icon = "contacts.png" });
+            menu_.Add(new Models.MenuApp { Page = new MisOrdenes { BindingContext = this }, MenuTitle = "Mis pedidos", MenuDetail = "Configuración", icon = "settings.png" });
+            MenuApp = menu_;
+
+        }
+        private ObservableCollection<MenuApp> menuapp;
+
+        public ObservableCollection<MenuApp> MenuApp
+        {
+            get => menuapp;
+            set { SetProperty(ref menuapp, value); }
+        }
+
+        #region SELECCIONAR DEL MENU
+        private ObservableCollection<MenuApp> bookInfoCollection;
+        private object selectedItem;
+
+        public ObservableCollection<MenuApp> BookInfoCollection
+        {
+            get { return bookInfoCollection; }
+            set
+            {
+                this.bookInfoCollection = value;
+                SetProperty(ref bookInfoCollection, value);
+            }
+        }
+
+        public object SelectedItem
+        {
+            get { return this.selectedItem; }
+            set
+            {
+                this.selectedItem = value;
+                SetProperty(ref selectedItem, value);
+            }
+        }
+
+
+        #endregion
 
         private ClienteModelo clienteUsuario;
 
@@ -108,7 +165,7 @@ namespace XFFurniture.ViewModels
             inputString = n.Replace(inputString, "n");
             return inputString.ToLower().Trim().Replace(" ", "");
         }
-        // public  ICommand BuscarProductoCommand => new Command(async () =>
+        //  public ICommand BuscarProductoCommand => new Command(async () =>
         //{
         //    IsBusy = true;
         //    if (string.IsNullOrEmpty(BuscarProducto))
@@ -129,7 +186,6 @@ namespace XFFurniture.ViewModels
             {
                 await TiendasCarritoAsync();
                 await Navigation.PushModalAsync(new TiendaCarritoPage { BindingContext = this });
-
             }
             else
                 await DisplayAlert("!", "No hay productos en el carro", "Ok");
@@ -139,6 +195,10 @@ namespace XFFurniture.ViewModels
             await GetCategories();
             await GetTienda();
             await Navigation.PushModalAsync(new TiendasPage { BindingContext = this });
+        }); 
+        public ICommand TiendaInfoCommand => new Command(async () =>
+        {
+            await Navigation.PushModalAsync(new TiendaInfoPage { BindingContext = this });
         });
         public ICommand MapaCommand => new Command(async () =>
         {
@@ -150,6 +210,9 @@ namespace XFFurniture.ViewModels
 
         public ICommand ProductosComprarCommand => new Command(async () =>
         {
+            //if (Productos != null && Productos.Count <= 0)
+            //    return;
+
             IsBusy = true;
             await GetTienda();
             await Navigation.PushModalAsync(new ProductoPage { BindingContext = this });
@@ -165,8 +228,13 @@ namespace XFFurniture.ViewModels
         });
         public ICommand CategoriasCommand => new Command(async () =>
         {
-            await GetCategories();
+            //await GetCategories();
             await Navigation.PushModalAsync(new CategoriaPage { BindingContext = this });
+        });
+        public ICommand OpcionMenuCommand => new Command<Page>(async (pagina) =>
+        {
+            //await GetCategories();
+            await Navigation.PushModalAsync(pagina);
         });
         public ICommand AnadirCarrito => new Command(async () =>
         {
@@ -836,8 +904,17 @@ namespace XFFurniture.ViewModels
             //Products = new ObservableCollection<Product>(DataService.GetProducts());
             IsBusy = false;
         }
+        private TiendaModelo tiendaSelect;
+
+        public TiendaModelo TiendaSelect
+        {
+            get => tiendaSelect;
+            set { SetProperty(ref tiendaSelect, value); }
+        }
+
         async Task ExecuteSelectCategoryCommand(TiendaModelo model)
         {
+            TiendaSelect = model;
             var index = Tiendas
                .ToList()
                .FindIndex(p => p.TienRazonsocial == model.TienRazonsocial);
@@ -850,6 +927,7 @@ namespace XFFurniture.ViewModels
                 Tiendas[index].textColor = "#FFFFFF";
                 Tiendas[index].backgroundColor = "#F4C03E";
             }
+
             await GetProductosTienda(model.TienId);
         }
         void UnselectGroupItems()
@@ -865,6 +943,8 @@ namespace XFFurniture.ViewModels
         {
             IsBusy = true;
             Productos = await DataService.GetProductoAsync($"{UrlModelo.producto}/tienda/{id}");
+            //await Navigation.PushAsync(new ProductoPage { BindingContext = this });
+            ProductosComprarCommand.Execute(false);
             IsBusy = false;
         }
         private async Task ExeccuteNavigateToDetailPageCommand(ProductoModelo param)

@@ -16,7 +16,7 @@ namespace XFFurniture
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainPageViewModel(Navigation);
+            //BindingContext = new MainPageViewModel(Navigation);
             x++;
         }
 
