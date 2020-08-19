@@ -245,10 +245,10 @@ namespace XFFurniture.Service
             return respuesta;
         }
 
-        public static async Task<bool> PostGuardarAsync<T>(T datos, string url)
+        public static async Task<string> PostGuardarAsync<T>(T datos, string url)
         {
             Http = new HttpClient();
-            var retornar = false;
+            var retornar = "";
             var resp = "";
             var json = JsonConvert.SerializeObject(datos);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -256,19 +256,14 @@ namespace XFFurniture.Service
             var peti = await Http.PostAsync(url, content);
             if (peti.IsSuccessStatusCode)
             {
-                retornar = peti.IsSuccessStatusCode;
+                retornar = peti.IsSuccessStatusCode.ToString();
                 var conte = await peti.Content.ReadAsStringAsync();
                 resp = conte;
+                retornar = conte;
                 //resp = JsonConvert.DeserializeObject<string>(conte);
             }
             else
-                retornar = false;
-
-            if (resp == "OK")
-            {
-                retornar = true;
-            }
-
+                retornar = "";
             return retornar;
         }
         

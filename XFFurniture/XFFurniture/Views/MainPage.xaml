@@ -86,8 +86,7 @@
     </NavigationPage.TitleView>
     
     <StackLayout >
-        <StackLayout>
-            
+        <StackLayout IsVisible="{Binding NoIsBusy}" >
             <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="100" IsVisible="{Binding IsLoad}" IsRunning="{Binding IsLoad}"/>
             <Grid Margin="20,10,0,20" RowDefinitions="Auto, auto, Auto, auto, auto, *" IsVisible="{Binding IsCargando}">
                 <Label Text="Tiendas" HorizontalOptions="Center" FontFamily="FontMontserratMedium" FontSize="40" />
@@ -434,5 +433,9 @@
                 </CollectionView>-->
             </Grid>
         </StackLayout>
+        <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                           IsRunning="{Binding IsBusy}" 
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="CenterAndExpand"/>
     </StackLayout>
 </ContentPage>

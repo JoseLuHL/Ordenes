@@ -8,7 +8,7 @@
     <ContentPage.Content>
         <StackLayout>
 
-            <StackLayout Spacing="0" Margin="20,30,20,20" Grid.Row="1">
+            <StackLayout Spacing="0" Margin="20,30,20,20" Grid.Row="1" IsVisible="{Binding NoIsBusy}">
             <Label HorizontalTextAlignment="Center" Text="Aqui van las tiendas de las que ha comprado" />
 
                 <CollectionView Margin="0,25,0,0" x:Name="listCategories"  HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding TiendasCarrito}" SelectionMode="None">
@@ -40,7 +40,7 @@
                                             Grid.Column="0"
                                             HeightRequest="34"
                                             HorizontalOptions="Center"
-                                            Source="armchair.png"
+                                            Source="{Binding TienFoto}"
                                             VerticalOptions="CenterAndExpand"
                                             WidthRequest="34" />
                                             <StackLayout
@@ -82,6 +82,10 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </StackLayout>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                           IsRunning="{Binding IsBusy}" 
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

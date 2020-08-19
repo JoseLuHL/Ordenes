@@ -1,11 +1,13 @@
 ﻿
 
+using SwipeMenu.Views;
 using System.Collections.Generic;
 using WorkingWithMaps;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XFFurniture;
 using XFFurniture.Models;
+using XFFurniture.Service;
 using XFFurniture.ViewModels;
 using XFFurniture.Views;
 
@@ -17,14 +19,14 @@ namespace HamburgerMenu
         public HamburgerMenu()
         {
             InitializeComponent();
-            
+
             MyMenu();
 
         }
 
         protected override void OnAppearing()
         {
-            
+
             base.OnAppearing();
         }
 
@@ -50,8 +52,25 @@ namespace HamburgerMenu
             var menu = e.SelectedItem as MenuApp;
             if (menu != null)
             {
-                IsPresented = false;
+                if (menu.MenuTitle == "Perfil")
+                {
+                    if (!await UsuarioServicio.EstadologinAsync())
+                    {
+                        //Detail = new NavigationPage(new LoginPagina());
+                        await Navigation.PushModalAsync(new LoginPagina());
+                        IsPresented = false;
+                        return;
+                    }
+                    else
+                    {
+                        await Navigation.PushModalAsync(new MisDatosPage());
+                        IsPresented = false;
+                        return;
+                    }
+                }
+
                 Detail = new NavigationPage(menu.Page);
+                IsPresented = false;
                 //Detail = new NavigationPage(new CategoriaPage { BindingContext=MainPageViewModel });
                 //MainPageViewModel.OpcionMenuCommand.Execute(menu.Page);
 

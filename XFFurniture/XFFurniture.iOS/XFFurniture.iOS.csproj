@@ -65,6 +65,9 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>XFFurniture.iOS.Application</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Interfaces\StatusBarStyle.cs" />
     <Compile Include="Main.cs" />
@@ -150,42 +153,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\cart%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cart%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\armchair%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\armchair.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\armchair%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\lamp%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\lamp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\lamp%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\tvstand%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\tvstand.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\tvstand%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\chair%403x.png" />
   </ItemGroup>
   <ItemGroup>
@@ -193,42 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\chair%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair4.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair4%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair4%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair1%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair1%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair2%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair2%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair3%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\chair3%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\heart%403x.png" />
@@ -261,33 +192,6 @@
     <BundleResource Include="Resources\chair5%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\chair5.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\chair5%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\sofa%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\sofa.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\sofa%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cart_white%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cart_white.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cart_white%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\tienda.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\mapa.png" />
   </ItemGroup>
 </Project>

@@ -24,11 +24,19 @@ namespace SwipeMenu.Views
 
         protected async override void OnAppearing()
         {
-            if (await UsuarioServicio.EstadologinAsync())
+            try
             {
-                await Navigation.PopModalAsync();
+                if (await UsuarioServicio.EstadologinAsync())
+                {
+                    await Navigation.PopModalAsync();
+                }
+                base.OnAppearing();
             }
-            base.OnAppearing();
+            catch (Exception ex)
+            {
+               await DisplayAlert("Login", ex.ToString(), "OK");
+            }
+           
         }
     }
 }

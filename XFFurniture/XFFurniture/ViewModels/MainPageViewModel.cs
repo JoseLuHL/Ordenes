@@ -58,8 +58,6 @@ namespace XFFurniture.ViewModels
             UsuarioServicio.Cliente = dat[0];
             ClienteUsuario = dat[0];
 
-
-
         }
 
         private void LoadMenu()
@@ -69,7 +67,8 @@ namespace XFFurniture.ViewModels
             menu_.Add(new Models.MenuApp { Page = new TiendasPage { BindingContext = this }, MenuTitle = "Tiendas", MenuDetail = "Mi perfil", icon = "user.png" });
             menu_.Add(new Models.MenuApp { Page = new PinPage { BindingContext = this }, MenuTitle = "Mapa", MenuDetail = "Mensajes", icon = "message.png" });
             menu_.Add(new Models.MenuApp { Page = new CategoriaPage { BindingContext = this }, MenuTitle = "Categorias", MenuDetail = "Contactos", icon = "contacts.png" });
-            menu_.Add(new Models.MenuApp { Page = new MisOrdenes { BindingContext = this }, MenuTitle = "Mis pedidos", MenuDetail = "Configuración", icon = "settings.png" });
+            menu_.Add(new Models.MenuApp { Page = new MisOrdenes (), MenuTitle = "Mis pedidos", MenuDetail = "Configuración", icon = "settings.png" });
+            menu_.Add(new Models.MenuApp { Page = new MisDatosPage(), MenuTitle = "Perfil", MenuDetail = "Mis Datos", icon = "settings.png" });
             MenuApp = menu_;
 
         }
@@ -184,8 +183,12 @@ namespace XFFurniture.ViewModels
         {
             if (TiendaCarrito != null && TiendaCarrito.Count > 0)
             {
+                IsBusy = true;
+                NoIsBusy = false;
                 await TiendasCarritoAsync();
                 await Navigation.PushModalAsync(new TiendaCarritoPage { BindingContext = this });
+                IsBusy = false;
+                NoIsBusy = true;
             }
             else
                 await DisplayAlert("!", "No hay productos en el carro", "Ok");
@@ -195,10 +198,12 @@ namespace XFFurniture.ViewModels
             await GetCategories();
             await GetTienda();
             await Navigation.PushModalAsync(new TiendasPage { BindingContext = this });
-        }); 
+        });
         public ICommand TiendaInfoCommand => new Command(async () =>
         {
+            IsBusy = true;
             await Navigation.PushModalAsync(new TiendaInfoPage { BindingContext = this });
+            IsBusy = false;
         });
         public ICommand MapaCommand => new Command(async () =>
         {
@@ -229,12 +234,16 @@ namespace XFFurniture.ViewModels
         public ICommand CategoriasCommand => new Command(async () =>
         {
             //await GetCategories();
+            IsBusy = true;
             await Navigation.PushModalAsync(new CategoriaPage { BindingContext = this });
+            IsBusy = false;
         });
         public ICommand OpcionMenuCommand => new Command<Page>(async (pagina) =>
         {
             //await GetCategories();
+            IsBusy = true;
             await Navigation.PushModalAsync(pagina);
+            IsBusy = false;
         });
         public ICommand AnadirCarrito => new Command(async () =>
         {
@@ -245,13 +254,9 @@ namespace XFFurniture.ViewModels
                 CarritoAn = TiendaCarrito;
                 if (TiendaCarrito != null)
                 {
-                    var buscar = TiendaCarrito.Where(s => s.ProdId == ProductoDet.ProdId).ToList();
-                    if (buscar.Count > 0)
-                    {
-                        CarritoAn.Remove(buscar[0]);
-                        tiendaCarrito_.Add(ProductoDet);
-                    }
-                    else
+                    var buscar = TiendaCarrito.FirstOrDefault(s => s.ProdId == ProductoDet.ProdId);
+
+                    if (buscar == null)
                         tiendaCarrito_.Add(ProductoDet);
                 }
                 else
@@ -316,16 +321,11 @@ namespace XFFurniture.ViewModels
 
                 if (TiendaCarrito != null)
                 {
-                    var buscar = TiendaCarrito.Where(s => s.ProdId == ProductoDet.ProdId).ToList();
-                    if (buscar.Count > 0)
+                    var buscar = TiendaCarrito.FirstOrDefault(s => s.ProdId == ProductoDet.ProdId);
+                    if (buscar != null)
                     {
                         ProductoDet.Cantidad--;
-                        CarritoAn.Remove(buscar[0]);
-                        if (ProductoDet.Cantidad > 0)
-                        {
-                            tiendaCarrito_.Add(ProductoDet);
-                        }
-                        else
+                        if (ProductoDet.Cantidad <= 0)
                             ProductoDet.Cantidad = 0;
                     }
                 }
@@ -379,7 +379,7 @@ namespace XFFurniture.ViewModels
             {
                 SetProperty(ref tiendaCarrito, value);
                 //SetProperty(ref totalCarrito, TiendaCarrito.Count);
-                TotalCarrito = tiendaCarrito.Count;
+                //TotalCarrito = tiendaCarrito.Count;
                 //totalCarrito = tiendaCarrito.Count;
             }
         }
@@ -583,8 +583,11 @@ namespace XFFurniture.ViewModels
 
         public ICommand PagarCommand => new Command(execute: async () =>
          {
+             IsBusy = true;
              await GetMedioPagoAsync();
              await Navigation.PushModalAsync(new PagoPage { BindingContext = this });
+             IsBusy = false;
+
          });
         public ICommand PasarelaPagoCommand => new Command<Mediopago>(execute: async (medio) =>
           {
@@ -604,8 +607,8 @@ namespace XFFurniture.ViewModels
           });
         async Task PasarelaAsync(Mediopago mediopago)
         {
-            IsBusy = true;
-            NoIsBusy = false;
+
+            //NoIsBusy = false;
             if (mediopago.MepDescripcion == "Pagado")
             {
                 UrlPago = "http://192.168.1.10:8080/prueba/prueba.php?precio=10000&descripcion=Descripcion";
@@ -618,7 +621,7 @@ namespace XFFurniture.ViewModels
             await OrdenClienteAsycn(mediopago.MepId);
 
             IsBusy = false;
-            NoIsBusy = true;
+            //NoIsBusy = true;
             //await DisplayAlert("", mediopago.MepDescripcion, "OK");
         }
         //:::::::::: Fin de pagar
@@ -649,11 +652,14 @@ namespace XFFurniture.ViewModels
         }
         public ICommand TiendasCarritoCommand => new Command<TiendaModelo>(execute: async (tienda) =>
         {
+            IsBusy = true;
+            NoIsBusy = false;
+            await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
             var dat = TiendaCarrito.Where(s => s.ProdIdtienda == tienda.TienId);
             TiendaCarritoDetalle = new ObservableCollection<ProductoModelo>(dat);
             CalcularTotalDetalle();
-            await Navigation.PushModalAsync(new CarritoPage { BindingContext = this });
-
+            NoIsBusy = true;
+            IsBusy = false;
         });
         async Task TiendasCarritoAsync()
         {
@@ -724,15 +730,26 @@ namespace XFFurniture.ViewModels
             {
                 if (Latitud == 0 || Longitud == 0)
                 {
-                    await DisplayAlert("", "No hemos podido obtener su ubicación actual", "OK");
-                    return;
+                    //UbicacionCommand.Execute(false);
+                    if (Latitud == 0 || Longitud == 0)
+                    {
+                        await DisplayAlert("", "No hemos podido obtener su ubicación actual", "OK");
+                        return;
+                    }
+
                 }
-                if (string.IsNullOrEmpty(ClienteUsuario.ClieTelefono) || ClienteUsuario.ClieTelefono.Length != 10)
+                if (string.IsNullOrEmpty(ClienteUsuario.ClieTelefono.Trim()) || ClienteUsuario.ClieTelefono.Trim().Length != 10)
                 {
                     await DisplayAlert("", "Ingurese un numero de télefono", "OK");
                     return;
                 }
+                if (ClienteUsuario.ClieId <= 0)
+                {
+                    await DisplayAlert("", "No se ha podido obtener al usuario", "OK");
+                    return;
+                }
 
+                IsBusy = true;
                 var confirmar = await DisplayAlert("", "¿Esta seguro de guargar la orden?", "OK", "CANCELAR");
                 if (!confirmar)
                     return;
@@ -767,30 +784,69 @@ namespace XFFurniture.ViewModels
                 orden.Ordendetalles = deta;
                 OrdenModelo = orden;
                 var guardar = await DataService.PostGuardarAsync<OrdenModelo>(OrdenModelo, UrlModelo.odenes);
-                if (guardar)
+                if (!string.IsNullOrEmpty(guardar))
                 {
-                    await DisplayAlert("", "OPERACIÓN COMPLETADA \n NÚMERO DE ORDEN: " + orden.OrdNumero, "OK");
-                    foreach (var item in tiendaCarritoDetalle)
-                    {
-                        TiendaCarrito.Remove(item);
-                    }
-
-                    TiendasCarrito.Remove(tiendaCarritoDetalle[0].ProdIdtiendaNavigation);
-                    TiendaCarritoDetalle = null;
+                    CalcularTotal();
+                    EliminarOrden();
                     CalcularTotal();
                     CalcularTotalDetalle();
+                    await DisplayAlert("", "OPERACIÓN COMPLETADA \n NÚMERO DE ORDEN: " + orden.OrdNumero, "OK");
                     await Navigation.PopModalAsync();
                     await Navigation.PopModalAsync();
-                    //await Navigation.PopModalAsync();
-                    //await Navigation.PopModalAsync();
+                    await Navigation.PopModalAsync();
+                    if (Pagina == 1)
+                    {
+                        await Navigation.PopModalAsync();
+                        await Navigation.PopModalAsync();
+                    }
+
+                    IsBusy = false;
                 }
+                IsBusy = false;
             }
             catch (System.Exception ex)
             {
-                await DisplayAlert("", ex.ToString(), "OK");
+                await DisplayAlert("", ex.Message, "OK");
             }
         }
         //::::::::::::: Fin order y detalle
+
+        public ICommand EliminarDetalleCommand => new Command(async () =>
+          {
+              IsBusy = true;
+              var confirmar = await DisplayAlert("", "¿Esta seguro de eliminar la orden?", "OK", "CANCELAR");
+              if (!confirmar)
+              {
+                  IsBusy = false;
+                  return;
+              }
+              EliminarOrden();
+              IsBusy = false;
+              await Navigation.PopModalAsync();
+          });
+
+        public async void EliminarOrden()
+        {
+            try
+            {
+                foreach (var item in tiendaCarritoDetalle)
+                {
+                    TiendaCarrito.Remove(item);
+                    await App.SQLiteDb.EliminarAsync<ProductoModelo>(item);
+                }
+                var ti = TiendasCarrito.FirstOrDefault(s => s.TienId == tiendaCarritoDetalle[0].ProdIdtienda);
+                TiendasCarrito.Remove(ti);
+                await App.SQLiteDb.EliminarAsync<TiendaModelo>(ti);
+                TiendaCarritoDetalle = null;
+                CalcularTotal();
+            }
+            catch (System.Exception ex)
+            {
+                await DisplayAlert("Eli..", ex.ToString(), "OK");
+            }
+
+
+        }
 
         //OBTENER LA UBICACION DEL CLIENTE
 
@@ -857,11 +913,17 @@ namespace XFFurniture.ViewModels
         {
             double tot = 0;
             if (TiendaCarrito != null)
+            {
                 foreach (var item in TiendaCarrito)
                 {
                     tot = tot + (item.Cantidad * item.ProdPreciounitario);
                 }
-            TotalCompra = tot;
+                TotalCompra = tot;
+            }
+            else
+                TotalCompra = 0;
+
+
         }
         void CalcularTotalDetalle()
         {

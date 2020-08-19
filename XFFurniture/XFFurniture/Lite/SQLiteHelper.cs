@@ -88,7 +88,8 @@ namespace XamarinSQLite
         public Task<int> EliminarproductoAsync()
         {
             return db.DeleteAllAsync<ProductoModelo>();
-        }
+        } 
+
 
         //Read All Items
         public Task<List<ClienteModelo>> GetItemsAsync()

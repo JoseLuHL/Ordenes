@@ -8,20 +8,29 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
-                <Grid ColumnDefinitions="Auto,Auto" Margin="60,0,60,0" >
-                    <StackLayout>
+                <Grid ColumnDefinitions="*,*,Auto,Auto" Margin="10,0,20,0" >
+                    <Label Grid.ColumnSpan="2" 
+                           HorizontalOptions="Center" 
+                           HorizontalTextAlignment="Center" 
+                           FontSize="Body" 
+                           FontAttributes="Italic" 
+                           Margin="0,15,0,0" 
+                           Text="{Binding TiendaSelect.TienRazonsocial}"/>
+                   
+                    <StackLayout Margin="0,8,0,0" Grid.Column="3">
                         <Label Text="&#xf288;" 
                                FontSize="23" 
                                HorizontalOptions="Center" 
                                TextColor="Black" 
                                FontFamily="{StaticResource FontAwesomeBrands}"/>
+                        
                         <Label HorizontalOptions="Center" Text="Categoria"/> 
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding CategoriasCommand}"/>
                         </StackLayout.GestureRecognizers>
                     </StackLayout>
 
-                    <StackLayout Grid.Column="2">
+                    <StackLayout Margin="0,8,0,0" Grid.Column="2">
                         <Label Text="&#xf503;"
                                FontSize="23" 
                                HorizontalOptions="Center" 
@@ -33,48 +42,12 @@
                             <TapGestureRecognizer Command="{Binding TiendaInfoCommand}"/>
                         </StackLayout.GestureRecognizers>
                     </StackLayout>
-                    
                 </Grid>
-
                
                 
-                <Grid Margin="10,10,0,20" RowDefinitions="auto, auto, auto, auto, auto, *"  >
+                <Grid Margin="10,0,0,20" RowDefinitions="auto, auto, auto, auto, auto, *"  >
                     <SearchBar Text="{Binding BuscarProducto}" Placeholder="¿Que estas buscando?" SearchCommand="{Binding BuscarProductoCommand}" TextChanged="SearchBar_TextChanged" />
                     <ActivityIndicator Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
-
-                    <!--<Label Grid.Row="2" FontFamily="FontMontserratBold" FontSize="{OnPlatform Android='12', iOS='12'}"
-                TextColor="{StaticResource colorRedFF}"
-                Text="Categoría">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding CategoriasCommand}"/>
-                        </Label.GestureRecognizers>
-                    </Label>-->
-
-                    <!--<Polygon Grid.Row="2" Margin="{OnPlatform Android='40,-5,0,0',
-                                    iOS='30,-5,0,0'}" Fill="{StaticResource colorRedFF}" HorizontalOptions="Start" Points="10,10 20,15 10,20" />-->
-                    <!--<Label
-                Grid.Row="2"
-                Margin="0,0,35,0"
-                FontFamily="FontMontserratMedium"
-                FontSize="{OnPlatform Android='12',
-                                      iOS='12'}"
-                HorizontalOptions="End"
-                Text="Mostrar todo"
-                TextColor="{StaticResource colorRedFF}"
-                VerticalTextAlignment="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ShowAllCommand}"/>
-                        </Label.GestureRecognizers>
-                    </Label>-->
-                    <!--<Polygon
-                Grid.Row="2"
-                Margin="{OnPlatform Android='0,-5,20,0',
-                                    iOS='0,0,20,0'}"
-                Fill="{StaticResource colorRedFF}"
-                HorizontalOptions="End"
-                Points="10,10 20,15 10,20"
-                StrokeThickness="1" />-->
-
                     <CollectionView
                 x:Name="listProducts"
                 Grid.Row="4"

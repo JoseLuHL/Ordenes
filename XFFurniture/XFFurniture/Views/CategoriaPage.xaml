@@ -7,7 +7,7 @@
              x:Class="XFFurniture.Views.CategoriaPage">
     <ContentPage.Content>
         <StackLayout Spacing="0" Margin="40">
-            
+            <StackLayout  IsVisible="{Binding NoIsBusy}" >                
             <!--<Button Text="Click" Command="{Binding CateCommand}"/>-->
             <CollectionView x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding Categorias}" SelectionMode="None">
                 <CollectionView.ItemsLayout>
@@ -202,6 +202,11 @@
                 </CollectionView>
             </Grid>-->
 
+        </StackLayout>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                           IsRunning="{Binding IsBusy}" 
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>
         </StackLayout>
     </ContentPage.Content>
 

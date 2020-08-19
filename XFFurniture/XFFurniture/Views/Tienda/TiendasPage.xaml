@@ -8,7 +8,9 @@
              x:Class="XFFurniture.Views.TiendasPage">
    
     <ContentPage.Content>
-        <Grid>
+        <StackLayout>
+
+            <Grid IsVisible="{Binding NoIsBusy}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -164,6 +166,10 @@
             </StackLayout>
 
         </Grid>
-        
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                           IsRunning="{Binding IsBusy}" 
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

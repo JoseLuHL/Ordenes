@@ -28,7 +28,6 @@ namespace XFFurniture
         public App()
         {
             InitializeComponent();
-
             Device.SetFlags(new[] { "Shapes_Experimental" , "Expander_Experimental" });
             //Device.SetFlags(new[] { "Expander_Experimental" });
             MainPage = new HamburgerMenu.HamburgerMenu();

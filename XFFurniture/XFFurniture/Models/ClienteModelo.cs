@@ -1,7 +1,10 @@
 ﻿using MvvmHelpers;
+using QP_Comercio_Electronico.Models;
 using SQLite;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 
@@ -10,6 +13,7 @@ namespace SwipeMenu.Models
     public class ClienteModelo
     {
         [PrimaryKey, AutoIncrement]
+        public  int id { get; set; }
         public int ClieId { get; set; }
         public string ClieIdtipoidentificacion { get; set; }
         public string ClieIdentificacion { get; set; }
@@ -25,10 +29,22 @@ namespace SwipeMenu.Models
         public string ClieAltura { get; set; }
         //public virtual ICollection<OrdenModelo> Ordenes { get; set; }
         private string nombreCompleto;
-        public string NombreCompleto
+        public virtual string NombreCompleto
         {
             get { return $"{ClieNombre} {ClieApellidos}"; }
             set { nombreCompleto = value; }
         }
+
+        //[OneToMany(CascadeOperations = CascadeOperation.All)]
+        //public virtual ObservableCollection<Cuentascliente> Cuentasclientes { get; set; }
+        ////public virtual ICollection<Ordene> Ordenes { get; set; }
+        //private ObservableCollection<OrdenModelo> ordenes { get; set; }
+
+        //[ManyToOne(CascadeOperations = CascadeOperation.All)]
+        //public virtual ObservableCollection<OrdenModelo> Ordenes
+        //{
+        //    get { return null; }
+        //    set { ordenes = value; }
+        //}
     }
 }

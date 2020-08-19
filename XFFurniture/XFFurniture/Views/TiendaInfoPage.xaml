@@ -7,7 +7,7 @@
             <Label Text="{Binding TiendaSelect.TienRazonsocial}" FontSize="25" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"/>
             <Image Source="{Binding TiendaSelect.TienFoto}"/>
 
-            <Grid Margin="0,20,0,0" ColumnSpacing="1" >
+            <Grid Margin="0,20,0,0" ColumnSpacing="1">
                 <StackLayout HorizontalOptions="Center">
                     <Label Text="&#xf082;"
                                FontSize="23" 

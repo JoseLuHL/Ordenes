@@ -1,6 +1,6 @@
-﻿using MvvmHelpers;
-using SwipeMenu.Models;
+﻿using SwipeMenu.Models;
 using SwipeMenu.Service;
+using SwipeMenu.Views;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -8,7 +8,7 @@ using Xamarin.Forms;
 using XFFurniture;
 using XFFurniture.Models;
 using XFFurniture.Service;
-
+using XFFurniture.ViewModel;
 
 namespace SwipeMenu.ViewModel
 {
@@ -103,29 +103,41 @@ namespace SwipeMenu.ViewModel
             //    await Application.Current.MainPage.DisplayAlert("", "Ingrese sus telefono", "OK");
             //    return;
             //}
+            var confirmar = await DisplayAlert("", "¿Esta seguro de guargar la orden?", "OK", "CANCELAR");
+            if (!confirmar)
+                return;
 
-            cli.ClieIdentificacion = ClieIdentificacion;
-            cli.ClieNombre = ClieNombre;
-            cli.ClieTelefono = ClieTelefono;
-            cli.ClieApellidos = ClieApellidos;
-            cli.ClieDireccion = ClieDireccion;
-            cli.ClieClave = ClieClave;
-            cli.ClieLongitud = ClieLongitud;
-            cli.ClieLatitud = ClieLatitud;
+            cli.ClieIdentificacion = ClieIdentificacion.Trim();
+            cli.ClieNombre = ClieNombre.Trim();
+            cli.ClieTelefono = ClieTelefono.Trim();
+            cli.ClieApellidos = ClieApellidos.Trim();
+            cli.ClieDireccion = ClieDireccion.Trim();
+            cli.ClieClave = ClieClave.Trim();
+            if (!string.IsNullOrEmpty(ClieLongitud))
+            {
+                cli.ClieLongitud = ClieLongitud;
+                cli.ClieLatitud = ClieLatitud;
+            }
+            
 
             try
             {
 
-             var guardar = await DataService.PostGuardarAsync<ClienteModelo>(cli,UrlModelo.cliente);
-                if (guardar)
+                var guardar = await DataService.PostGuardarAsync<ClienteModelo>(cli, UrlModelo.cliente);
+                if (!string.IsNullOrEmpty(guardar))
                 {
+                    var d = guardar.Replace("}","").Replace("{","").Split(':');
+                    var da = d[1];
+                    cli.ClieId = int.Parse(da);
                     var ope = await App.SQLiteDb.SaveItemAsync(cli);
+                    Cliente = cli;
+                    UsuarioServicio.Cliente = cli;
                     await Application.Current.MainPage.DisplayAlert("", "Los datos se han guardado", "OK");
                     await Application.Current.MainPage.Navigation.PopModalAsync();
-                }else
+                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                }
+                else
                     await Application.Current.MainPage.DisplayAlert("", "Los datos no se pudieron guardar \n vuelva a intentarlo", "OK");
-
-
 
             }
             catch (Exception ex)
@@ -194,12 +206,22 @@ namespace SwipeMenu.ViewModel
         public ICommand GuardarCommand => new Command(execute: async () =>
        {
            IsBusy = true;
-           IsNotBusy = false;
+           //IsNotBusy = false;
            await GetCliente();
            IsBusy = false;
-           IsNotBusy = true;
+           //IsNotBusy = true;
 
-       });
+       }); public ICommand CerrarSessionCommand => new Command(execute: async () =>
+     {
+         IsBusy = true;
+         //IsNotBusy = false;
+         await App.SQLiteDb.DeleteItemAsync();
+         await Navigation.PopModalAsync();
+         await Navigation.PushModalAsync(new LoginPagina());
+         IsBusy = false;
+         //IsNotBusy = true;
+
+     });
 
         private ClienteModelo cliente;
 
@@ -212,16 +234,45 @@ namespace SwipeMenu.ViewModel
             }
         }
 
-
-        public MisDatosViewModel()
+        async Task Task()
         {
+            try
+            {
+                var dat = await App.SQLiteDb.GetItemsAsync();
+                if (dat == null || dat.Count <= 0)
+                    return;
+
+                UsuarioServicio.Cliente = dat[0];
+                Cliente = dat[0];
+                if (dat[0] != null)
+                {
+                    ClieIdentificacion = dat[0].ClieIdentificacion;
+                    ClieNombre = dat[0].ClieNombre;
+                    ClieApellidos = dat[0].ClieApellidos;
+                    ClieClave = dat[0].ClieClave;
+                    ClieTelefono = dat[0].ClieTelefono;
+                    ClieDireccion = dat[0].ClieDireccion;
+                    Latitud = dat[0].ClieLatitud;
+                    Longitud = dat[0].ClieLongitud;
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Mis datos", ex.Message, "OK");
+            }
+
+        }
+
+        public MisDatosViewModel(INavigation navigation)
+        {
+
+            Navigation = navigation;
             //Navigation = navigation;
-            Cliente = UsuarioServicio.Cliente;
+            _ = Task();
+            //_ = UsuarioServicio.EstadologinAsync();
+            //Cliente = UsuarioServicio.Cliente;
             ColorUbicacion = "Red";
             MensajeUbicacion = "Sin ubicacion";
         }
-
-
-
     }
 }

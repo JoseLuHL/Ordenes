@@ -8,11 +8,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:shadows="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
-    BackgroundColor="{StaticResource colorBlack27}"
+    BackgroundColor="{StaticResource colorWhite}"
     NavigationPage.HasNavigationBar="False"
     mc:Ignorable="d">
+    <ContentPage.Content>
 
-    <Grid>
+        <!--<ActivityIndicator IsVisible="{Binding IsBusy}" 
+                           IsRunning="{Binding IsBusy}" 
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>-->
+        
+        <Grid  >
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="{OnPlatform Android='90', iOS='140'}" />
@@ -25,7 +31,7 @@
                 FontSize="20"
                 HorizontalOptions="Start"
                 Text="{x:Static fonticons:FontIcons.Close}"
-                TextColor="{StaticResource colorWhite}"
+                TextColor="{StaticResource colorBlue232}"
                 VerticalOptions="End">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding PopDetailPageCommand}" NumberOfTapsRequired="1" />
@@ -38,7 +44,7 @@
                 FontSize="24"
                 HorizontalOptions="End"
                 Text="{x:Static fonticons:FontIcons.HeartOutline}"
-                TextColor="{StaticResource colorWhite}"
+                TextColor="{StaticResource colorBlue232}"
                 VerticalOptions="End" />
             <pancake:PancakeView
                 Grid.Row="1"
@@ -74,7 +80,7 @@
                                                                      Opacity=0.2,
                                                                      Color={StaticResource colorBlack27}}">
                                         <BoxView
-                                            BackgroundColor="{StaticResource colorWhite}"
+                                            BackgroundColor="{StaticResource colorBlue232}"
                                             CornerRadius="14"
                                             HeightRequest="28"
                                             HorizontalOptions="Center"
@@ -105,8 +111,8 @@
                         Grid.Column="1"
                         Margin="0,12,0,0"
                         FontFamily="FontMontserratSemiBold"
-                        FontSize="{OnPlatform Android='14',
-                                              iOS='18'}"
+                        FontSize="{OnPlatform Android='23',
+                                              iOS='20'}"
                         HorizontalOptions="End"
                         Text="{Binding ProductoDet.ProdPreciounitario, StringFormat='$ {0:N0}'}"
                         TextColor="{StaticResource colorRedFF}" />
@@ -202,8 +208,8 @@
                                        iOS='320'}"
             HorizontalOptions="Center"
             Source="{Binding ProductoDet.ProdFoto}"
-            TranslationY="28"
-            VerticalOptions="Start" />
+            TranslationY="50"
+            VerticalOptions="StartAndExpand" />
         <pancake:PancakeView
             Padding="0"
             BackgroundColor="{StaticResource colorRedD60}"
@@ -212,10 +218,10 @@
             HeightRequest="{OnPlatform Android='48',
                                        iOS='60'}"
             VerticalOptions="End">
-            <Grid ColumnDefinitions=".4*, .6*">
+            <Grid ColumnDefinitions=".3*, .7*">
                 <Grid
-                    Padding="20,10"
-                    ColumnDefinitions="auto, auto"
+                    Padding="5,5"
+                    ColumnDefinitions="auto"
                     HorizontalOptions="Center">
                     <Image
                         Grid.Column="0"
@@ -235,19 +241,19 @@
                             FontFamily="FontMontserratSemiBold"
                             FontSize="18"
                             Text="{Binding ProductoDet.Cantidad, StringFormat=' {0} Item', Mode=TwoWay}"
-                            TextColor="{StaticResource colorWhite}" />
-                        <Label
+                            TextColor="{StaticResource colorWhite}"/>
+                            <Label
                             FontSize="10"
-                            Text="adicional"
-                            TextColor="{StaticResource colorWhite}" />
-                        <StackLayout.GestureRecognizers>
+                            Text="Ver varrito"
+                            TextColor="{StaticResource colorWhite}"/>
+                        </StackLayout>
+                        <Grid.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding CarritoCommand}"/>
-                        </StackLayout.GestureRecognizers>
-                    </StackLayout>
+                        </Grid.GestureRecognizers>
                 </Grid>
                 <Grid
                     Grid.Column="1"
-                    Padding="20,10"
+                    Padding="5,5"
                     BackgroundColor="{StaticResource colorBlue232}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -288,5 +294,7 @@
                 </Grid>
             </Grid>
         </pancake:PancakeView>
+        
     </Grid>
+    </ContentPage.Content>
 </ContentPage>

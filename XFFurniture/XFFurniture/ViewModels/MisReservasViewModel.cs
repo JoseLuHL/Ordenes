@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -119,7 +118,7 @@ namespace XFFurniture.ViewModels
 
             if (OrdenModelos.Count <= 0)
             {
-                await DisplayAlert("", "Aun no hay ordenes", "OK");
+                //await DisplayAlert("", "Aun no hay ordenes", "OK");
                 await Navigation.PopModalAsync();
             }
         }

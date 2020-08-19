@@ -78,6 +78,10 @@ namespace XFFurniture.ViewModel
             set
             {
                 SetProperty(ref _isBusy, value);
+                if (_isBusy)
+                    NoIsBusy = false;
+                else
+                    NoIsBusy = true;
             }
         }
         private bool _noisBusy;

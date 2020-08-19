@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace XFFurniture.Service
 {
@@ -11,11 +12,18 @@ namespace XFFurniture.Service
         public static async Task<bool> EstadologinAsync()
         {
             var rep = false;
-            var usu = await App.SQLiteDb.GetItemsAsync();
-            if (usu != null && usu.Count > 0)
+            try
             {
-                Cliente = usu[0];
-                rep = true;
+                var usu = await App.SQLiteDb.GetItemsAsync();
+                if (usu != null && usu.Count > 0)
+                {
+                    Cliente = usu[0];
+                    rep = true;
+                }
+            }
+            catch (Exception ex)
+            {
+              await Application.Current.MainPage.DisplayAlert("Usu Servicio", ex.ToString(), "OK");
             }
             return rep;
         }

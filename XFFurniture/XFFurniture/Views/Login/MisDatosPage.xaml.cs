@@ -7,25 +7,41 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XFFurniture;
+using XFFurniture.Service;
 
 namespace SwipeMenu.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MisDatosPage : ContentPage
     {
-        //MisDatosViewModel Tienda => ((MisDatosViewModel)BindingContext);
+        MisDatosViewModel misdatos => ((MisDatosViewModel)BindingContext);
         //XFFurniture.Models.TiendaModelo Tienda => ((XFFurniture.Models.TiendaModelo)BindingContext);
         public MisDatosPage()
         {
             InitializeComponent();
-            //BindingContext = new MisDatosViewModel(Navigation);
+            BindingContext = new MisDatosViewModel(Navigation);
         }
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             //if (Tienda.Tienda.TienLatitud!=null && Tienda.Tienda.TienLongitud!=null)
             //{
             //    miubicacion.IsChecked = true;
             //}
+
+
+            //if (dat[0] == null)
+            //{
+            //misdatos.ClieIdentificacion = dat[0].ClieIdentificacion;
+            //    ClieNombre = Cliente.ClieNombre;
+            //    ClieApellidos = Cliente.ClieApellidos;
+            //    ClieClave = Cliente.ClieClave;
+            //    ClieTelefono = Cliente.ClieTelefono;
+            //    ClieDireccion = Cliente.ClieDireccion;
+            //    Latitud = Cliente.ClieLatitud;
+            //    Longitud = Cliente.ClieLongitud;
+            //}
+
             base.OnAppearing();
         }
     }

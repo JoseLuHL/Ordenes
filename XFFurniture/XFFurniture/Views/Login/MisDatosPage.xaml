@@ -4,15 +4,17 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:vn="clr-namespace:SwipeMenu.ViewModel"
              mc:Ignorable="d"
-             NavigationPage.HasNavigationBar="False"
              x:Class="SwipeMenu.Views.MisDatosPage">
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <vn:MisDatosViewModel/>
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
     <ScrollView Padding="0,0,0,20">
-        <StackLayout Margin="50" Spacing="0">
-            <StackLayout IsVisible="{Binding IsNotBusy}">
-                <Label Text="Identificación"/>
+        <StackLayout Margin="50,20,50,20" Spacing="0">
+            
+            <StackLayout IsVisible="{Binding IsNotBusy}" >
+                <Button Text="Cerrar sesión" Command="{Binding CerrarSessionCommand}"/>
+                <!--NavigationPage.HasNavigationBar="False"-->
+                <Label Text="Usuario"/>
                 <Entry Text="{Binding ClieIdentificacion}"/>
 
                 <Label Text="Nombre *"/>

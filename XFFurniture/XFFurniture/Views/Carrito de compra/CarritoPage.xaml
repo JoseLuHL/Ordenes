@@ -7,89 +7,95 @@
              x:Class="XFFurniture.Views.CarritoPage">
     <ContentPage.Content>
         <StackLayout >
-
-            <StackLayout BackgroundColor="{StaticResource colorBlue232}" >
-                <StackLayout Margin="0,20,30,0">
-                    <Label TextColor="White" FontSize="25" HorizontalTextAlignment="Center"  Text="Total a pagar"/>
-                    <Label TextColor="White" FontSize="25" HorizontalTextAlignment="Center"  Text="{Binding TotalCompraDetalle, StringFormat='${0:N0}' }"/>
-                    <Label TextColor="White" FontSize="12" HorizontalTextAlignment="Center"  Text="{Binding TiendaCarritoDetalle[0].ProdIdtiendaNavigation.TienRazonsocial}"/>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                           IsRunning="{Binding IsBusy}" 
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>
+            
+            <StackLayout IsVisible="{Binding NoIsBusy}">
+                <StackLayout BackgroundColor="{StaticResource colorBlue232}" >
+                    <StackLayout Margin="0,20,30,0">
+                        <Label TextColor="White" FontSize="25" HorizontalTextAlignment="Center"  Text="Total a pagar"/>
+                        <Label TextColor="White" FontSize="25" HorizontalTextAlignment="Center"  Text="{Binding TotalCompraDetalle, StringFormat='${0:N0}' }"/>
+                        <Label TextColor="White" FontSize="12" HorizontalTextAlignment="Center"  Text="{Binding TiendaCarritoDetalle[0].ProdIdtiendaNavigation.TienRazonsocial}"/>
+                    </StackLayout>
                 </StackLayout>
-            </StackLayout>
 
-            <CollectionView Margin="20,0,20,0" BackgroundColor="White" x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding TiendaCarritoDetalle}" SelectionMode="Single">
-                <CollectionView.ItemsLayout >
-                    <LinearItemsLayout  ItemSpacing="0" Orientation="Vertical" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                <CollectionView Margin="20,0,20,0" BackgroundColor="White" x:Name="listCategories" Grid.Row="2" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding TiendaCarritoDetalle}" SelectionMode="Single">
+                    <CollectionView.ItemsLayout >
+                        <LinearItemsLayout  ItemSpacing="0" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
 
-                        <Grid>
-                            <shadows:Shadows CornerRadius="0" BackgroundColor="White" >
-                                <pancake:PancakeView  Padding="4" BackgroundColor="{Binding backgroundColor}" CornerRadius="17" HeightRequest="50" VerticalOptions="Start" WidthRequest="200">
-                                    <Grid BackgroundColor="White" ColumnDefinitions="25, Auto,*,Auto" RowSpacing="0" VerticalOptions="Center">
-                                        <BoxView BackgroundColor="{StaticResource colorWhite}" CornerRadius="25" HeightRequest="50" WidthRequest="50" />
-                                        <Label Margin="10,0,0,0" Text="{Binding Cantidad}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
-                                        <Image Grid.Column="1" HeightRequest="34"  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Source="{Binding ProdFoto}" WidthRequest="34" />
-                                        <StackLayout Grid.Row="0"  Grid.Column="2"  Margin="2,0,0,0" Spacing="0" VerticalOptions="Center">
-                                            <Label FontFamily="FontMontserratMedium" FontSize="11" VerticalOptions="Center" Text="{Binding ProdNombre}" TextColor="{Binding textColor}"/>
-                                        </StackLayout>
-                                        <Label FontAttributes="Bold" Margin="0,0,15,0" Grid.Column="3" VerticalOptions="Center"  Text="{Binding ProdPreciounitario, StringFormat='${0:N0}'}"/>
-                                    </Grid>
-                                    <pancake:PancakeView.GestureRecognizers>
-                                        <TapGestureRecognizer
+                            <Grid>
+                                <shadows:Shadows CornerRadius="0" BackgroundColor="White" >
+                                    <pancake:PancakeView  Padding="4" BackgroundColor="{Binding backgroundColor}" CornerRadius="17" HeightRequest="50" VerticalOptions="Start" WidthRequest="200">
+                                        <Grid BackgroundColor="White" ColumnDefinitions="25, Auto,*,Auto" RowSpacing="0" VerticalOptions="Center">
+                                            <BoxView BackgroundColor="{StaticResource colorWhite}" CornerRadius="25" HeightRequest="50" WidthRequest="50" />
+                                            <Label Margin="10,0,0,0" Text="{Binding Cantidad}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Image Grid.Column="1" HeightRequest="34"  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Source="{Binding ProdFoto}" WidthRequest="34" />
+                                            <StackLayout Grid.Row="0"  Grid.Column="2"  Margin="2,0,0,0" Spacing="0" VerticalOptions="Center">
+                                                <Label FontFamily="FontMontserratMedium" FontSize="11" VerticalOptions="Center" Text="{Binding ProdNombre}" TextColor="{Binding textColor}"/>
+                                            </StackLayout>
+                                            <Label FontAttributes="Bold" Margin="0,0,15,0" Grid.Column="3" VerticalOptions="Center"  Text="{Binding ProdPreciounitario, StringFormat='${0:N0}'}"/>
+                                        </Grid>
+                                        <pancake:PancakeView.GestureRecognizers>
+                                            <TapGestureRecognizer
                                                 Command="{Binding Path=BindingContext.SelectProductoCarritoCommand, Source={x:Reference listCategories}}"
                                                 CommandParameter="{Binding .}"/>
-                                    </pancake:PancakeView.GestureRecognizers>
-                                </pancake:PancakeView>
-                                <shadows:Shadows.Triggers>
-                                    <DataTrigger Binding="{Binding selected}" TargetType="shadows:Shadows" Value="False">
-                                        <Setter Property="Shades" Value="{shadows:SingleShade BlurRadius=0, Offset='0,0', Opacity=0}" />
-                                    </DataTrigger>
-                                </shadows:Shadows.Triggers>
-                            </shadows:Shadows>
-                        </Grid>
+                                        </pancake:PancakeView.GestureRecognizers>
+                                    </pancake:PancakeView>
+                                    <shadows:Shadows.Triggers>
+                                        <DataTrigger Binding="{Binding selected}" TargetType="shadows:Shadows" Value="False">
+                                            <Setter Property="Shades" Value="{shadows:SingleShade BlurRadius=0, Offset='0,0', Opacity=0}" />
+                                        </DataTrigger>
+                                    </shadows:Shadows.Triggers>
+                                </shadows:Shadows>
+                            </Grid>
 
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            
-            <!--<Entry HorizontalOptions="Center" VerticalTextAlignment="Center" HeightRequest="80"
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!--<Entry HorizontalOptions="Center" VerticalTextAlignment="Center" HeightRequest="80"
             PlaceholderColor="Gray" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" Text="{Binding descripcion}"></Entry>-->
-            <!--<Editor PlaceholderColor="Gray" HeightRequest="50" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" Text="{Binding descripcion}" VerticalOptions="FillAndExpand" />-->
+                <!--<Editor PlaceholderColor="Gray" HeightRequest="50" FontSize="12" Placeholder="Aqui puede agregar una descripción a tener en cuenta" Text="{Binding descripcion}" VerticalOptions="FillAndExpand" />-->
 
 
-            <StackLayout>
-                <pancake:PancakeView BackgroundColor="{StaticResource colorRedD60}" CornerRadius="20,20,0,0" HasShadow="False" HeightRequest="{OnPlatform Android='90',iOS='100'}"  VerticalOptions="End">
-                    <Grid ColumnDefinitions=".4*, .6*">
-                        <Grid Padding="20,10" ColumnDefinitions="auto, auto" HorizontalOptions="Center">
+                <StackLayout>
+                    <pancake:PancakeView BackgroundColor="{StaticResource colorRedD60}" CornerRadius="20,20,0,0" HasShadow="False" HeightRequest="{OnPlatform Android='90',iOS='100'}"  VerticalOptions="End">
+                        <Grid ColumnDefinitions=".4*, .6*">
+                            <Grid Padding="20,10" ColumnDefinitions="auto, auto" HorizontalOptions="Center">
 
-                            <StackLayout Margin="0,-5,0,0" Grid.Column="1" HorizontalOptions="Start" Spacing="0" VerticalOptions="Center">
+                                <StackLayout Margin="0,-5,0,0" Grid.Column="1" HorizontalOptions="Start" Spacing="0" VerticalOptions="Center">
 
-                                <Label FontFamily="FontMontserratSemiBold" FontSize="12" Text="ABANDONAR" TextColor="{StaticResource colorWhite}" />
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding PopDetailPageCommand}"/>
-                                </StackLayout.GestureRecognizers>
-                            </StackLayout>
-                        </Grid>
-                        <Grid
+                                    <Label FontFamily="FontMontserratSemiBold" FontSize="12" Text="ELIMINA" TextColor="{StaticResource colorWhite}" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding EliminarDetalleCommand}"/>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                            </Grid>
+                            <Grid
                     Grid.Column="1"
                     Padding="20,10"
                     BackgroundColor="{StaticResource colorBlue232}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" FontFamily="FontMontserratSemiBold" FontSize="12" HorizontalTextAlignment="Center"  Text="PAGAR"  TextColor="{StaticResource colorWhite}" VerticalTextAlignment="Center" >
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding PagarCommand}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" FontFamily="FontMontserratSemiBold" FontSize="12" HorizontalTextAlignment="Center"  Text="PAGAR"  TextColor="{StaticResource colorWhite}" VerticalTextAlignment="Center" >
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding PagarCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
 
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </pancake:PancakeView>
+                    </pancake:PancakeView>
+
+                </StackLayout>
 
             </StackLayout>
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
