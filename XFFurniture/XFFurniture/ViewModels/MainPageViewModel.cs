@@ -1002,7 +1002,7 @@ namespace XFFurniture.ViewModels
 
                 Tiendas[index].selected = true;
                 Tiendas[index].textColor = "#FFFFFF";
-                Tiendas[index].backgroundColor = "#F4C03E";
+                Tiendas[index].backgroundColor = "#232A3A";
             }
             await GetProductosTienda(model.TienId);
             IsBusy = false;
@@ -1014,6 +1014,7 @@ namespace XFFurniture.ViewModels
                 item.selected = false;
                 item.textColor = "#000000";
                 item.backgroundColor = "#EAEDF6";
+                //item.backgroundColor = "#EAEDF6";
             });
         }
         async Task GetProductosTienda(int id)

@@ -16,7 +16,7 @@ namespace WorkingWithMaps
         public PinPage()
         {
             InitializeComponent();
-            
+
             //Pin boardwalkPin = new Pin
             //{
             //    Position = new Position(5.687629, -76.659698),
@@ -55,7 +55,7 @@ namespace WorkingWithMaps
             //}
             //else
 
-                Cargar();
+            Cargar();
 
             base.OnAppearing();
         }
@@ -65,23 +65,26 @@ namespace WorkingWithMaps
             map.IsShowingUser = true;
             Pin boardwalkPin = new Pin();
             Pin listPin = new Pin();
-            if (tiendas.Tiendas.Count>0)
-            foreach (var item in tiendas.Tiendas)
-            {
-                listPin = new Pin
+            if (tiendas.Tiendas.Count > 0)
+                foreach (var item in tiendas.Tiendas)
                 {
-                    Position = new Position(double.Parse(item.TienLatitud.ToString()), double.Parse(item.TienLongitud.ToString())),
-                    BindingContext = item,
-                    AutomationId = item.TienId.ToString(),
-                    Label = item.TienRazonsocial,
-                    Address = item.TienDireccion,
-                    Type = PinType.Place
-                };
+                    if (item.TienLatitud != 0 && item.TienLongitud != 0)
+                    {
+                        listPin = new Pin
+                        {
+                            Position = new Position(item.TienLatitud, item.TienLongitud),
+                            BindingContext = item,
+                            AutomationId = item.TienId.ToString(),
+                            Label = item.TienRazonsocial,
+                            Address = item.TienDireccion,
+                            Type = PinType.Place
+                        };
 
-                //listPin.MarkerClicked += OnMarkerClickedAsync;
-                listPin.InfoWindowClicked += OnInfoWindowClickedAsync;
-                map.Pins.Add(listPin);
-            }
+                        //listPin.MarkerClicked += OnMarkerClickedAsync;
+                        listPin.InfoWindowClicked += OnInfoWindowClickedAsync;
+                        map.Pins.Add(listPin);
+                    }
+                }
 
 
             //boardwalkPin.MarkerClicked += OnMarkerClickedAsync;
@@ -121,7 +124,7 @@ namespace WorkingWithMaps
 
         async void OnInfoWindowClickedAsync(object sender, PinClickedEventArgs e)
         {
-            
+
             var property = ((Pin)sender).BindingContext as TiendaModelo;
             string pinName = ((Pin)sender).Label;
             tiendas.SelectCategoryCommand.Execute(property);
