@@ -7,16 +7,17 @@
              x:Class="XFFurniture.Views.Carrito_de_compra.ProductoPage">
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout>
-                <Grid ColumnDefinitions="*,*,Auto,Auto" Margin="10,0,20,0" >
-                    <Label Grid.ColumnSpan="2" 
+            <StackLayout Spacing="0">
+                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" Margin="10,0,20,0" RowSpacing="0" >
+                    <Label Grid.ColumnSpan="4"
+                           Grid.Row="1"
                            HorizontalOptions="Center" 
                            HorizontalTextAlignment="Center" 
                            FontSize="Body" 
                            FontAttributes="Italic" 
-                           Margin="0,15,0,0" 
+                           Margin="0,0,0,0" 
                            Text="{Binding TiendaSelect.TienRazonsocial}"/>
-                   
+                    
                     <StackLayout Margin="0,8,0,0" Grid.Column="3">
                         <Label Text="&#xf288;" 
                                FontSize="23" 
@@ -49,11 +50,11 @@
                     <SearchBar Text="{Binding BuscarProducto}" Placeholder="¿Que estas buscando?" SearchCommand="{Binding BuscarProductoCommand}" TextChanged="SearchBar_TextChanged" />
                     <ActivityIndicator Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
                     <CollectionView
-                x:Name="listProducts"
-                Grid.Row="4"
-                Margin="0,0,0,0"
-                ItemsSource="{Binding Productos}"
-                VerticalScrollBarVisibility="Never">
+                    x:Name="listProducts"
+                    Grid.Row="4"
+                    Margin="0,0,0,0"
+                    ItemsSource="{Binding Productos}"
+                    VerticalScrollBarVisibility="Never">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout
                         HorizontalItemSpacing="15"

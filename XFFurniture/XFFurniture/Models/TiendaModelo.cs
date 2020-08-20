@@ -10,7 +10,8 @@ namespace XFFurniture.Models
 {
     public class TiendaModelo : BaseViewModel
     {
-        [PrimaryKey]
+        [PrimaryKey,AutoIncrement]
+        public int Id { get; set; }
         public int TienId { get; set; }
         public string TienNit { get; set; }
         public string TienTipoidentificacion { get; set; }
@@ -19,8 +20,8 @@ namespace XFFurniture.Models
         public string TienBarrio { get; set; }
         public string TienTelefono { get; set; }
         public string TienCorreo { get; set; }
-        public double TienLatitud { get; set; }
-        public double TienLongitud { get; set; }
+        public double? TienLatitud { get; set; }
+        public double? TienLongitud { get; set; }
         public string TienFacebook { get; set; }
         public string TienInstagram { get; set; }
         public string TienYoutube { get; set; }

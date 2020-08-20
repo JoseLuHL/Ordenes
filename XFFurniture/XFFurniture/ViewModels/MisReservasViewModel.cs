@@ -22,6 +22,7 @@ namespace XFFurniture.ViewModels
             NoIsBusy = false;
             Navigation = navigation;
             _ = LoadAsync();
+
             //_ = MisOrdenes();
         }
 
@@ -92,8 +93,11 @@ namespace XFFurniture.ViewModels
             }
             else
             {
+               //await Navigation.PopModalAsync();
                 await Navigation.PushModalAsync(new LoginPagina());
             }
+            IsBusy = false;
+            NoIsBusy = true;
         }
         private string id;
 

@@ -9,24 +9,22 @@
     xmlns:shadows="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
     Title="Nombre de la App"
     NavigationPage.HasNavigationBar="True"
-    mc:Ignorable="d">
-    
-    <NavigationPage.TitleView>
-        <StackLayout 
-          Orientation="Horizontal">
-            <!--<Label Text="Nombre app" TextColor="White" HorizontalOptions="Start" VerticalOptions="Center"/>-->
-            <Grid
-                Grid.Row="0" 
-                ColumnDefinitions="Auto, auto, auto"
-                ColumnSpacing="20">
+    mc:Ignorable="d"
+    IconImageSource="heart.png">
 
+        <NavigationPage.TitleView>
+        
+        <Grid
+                Grid.Row="0" 
+                ColumnDefinitions="Auto, auto, auto,*,*,Auto"
+                ColumnSpacing="20">
                 <StackLayout HorizontalOptions="Start" VerticalOptions="End" Spacing="0">
                     
                     <Label Text="&#xf54e;"
-                   FontSize="23" TextColor="White"
-       FontFamily="{StaticResource FontAwesomeSolid}"/>                 
-                    
-                    <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Tiendas" FontSize="9" TextColor="{StaticResource colorWhite}"/>
+                   FontSize="23" TextColor="{StaticResource colorBlack27}"
+       FontFamily="{StaticResource FontAwesomeSolid}"/>
+
+                <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Tiendas" FontSize="9" TextColor="{StaticResource colorBlack27}"/>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding TiendasCommand}"/>
                     </StackLayout.GestureRecognizers>
@@ -34,9 +32,9 @@
 
                 <StackLayout HorizontalOptions="Start" VerticalOptions="End" Spacing="0" Grid.Column="1">
                     <Label Text="&#xf3c5;"
-                   FontSize="25" TextColor="White"
+                   FontSize="25" TextColor="{StaticResource colorBlack27}"
        FontFamily="{StaticResource FontAwesomeSolid}"/>
-                    <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Mapa" FontSize="9" TextColor="{StaticResource colorWhite}"/>
+                <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Mapa" FontSize="9" TextColor="{StaticResource colorBlack27}"/>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding MapaCommand}"/>
                     </StackLayout.GestureRecognizers>
@@ -44,37 +42,38 @@
 
                 <StackLayout HorizontalOptions="Start" VerticalOptions="End" Spacing="0" Grid.Column="3" Grid.ColumnSpan="1">
                     <Label Text="&#xf291;"
-                   FontSize="25" TextColor="White"
+                   FontSize="25" TextColor="{StaticResource colorBlack27}"
        FontFamily="{StaticResource FontAwesomeSolid}"/>
-                    <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Ordenes" FontSize="9" TextColor="{StaticResource colorWhite}"/>
+                <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Ordenes" FontSize="9" TextColor="{StaticResource colorBlack27}"/>
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding OrdenesCommand}"/>
+                        <TapGestureRecognizer Command="{Binding MisOrdenesCommand}"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
 
                 <StackLayout HorizontalOptions="Start" VerticalOptions="End" Spacing="0" Grid.Column="2">
                     <Label Text="&#xf002;"
-                   FontSize="25" TextColor="White"
+                   FontSize="25" TextColor="{StaticResource colorBlack27}"
        FontFamily="{StaticResource FontAwesomeSolid}"/>
-                    
-                    
-                    <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Buscar" FontSize="9" TextColor="{StaticResource colorWhite}"/>
+
+
+                <Label HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Buscar" FontSize="9" TextColor="{StaticResource colorBlack27}"/>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ProductosComprarCommand}"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
 
-                <StackLayout Grid.Column="4" Spacing="0" HorizontalOptions="EndAndExpand" VerticalOptions="End" Grid.ColumnSpan="2">
-                    <Label Text="&#xf07a;"
-                   FontSize="25" TextColor="White"
-       FontFamily="{StaticResource FontAwesomeSolid}"/>
-
+                <StackLayout Grid.Column="5" Spacing="0" Margin="0,0,15,0" HorizontalOptions="EndAndExpand" VerticalOptions="End" Grid.ColumnSpan="1">
+                    
+                    <Label Text="&#xf07a;" 
+                           FontSize="25" 
+                           TextColor="{StaticResource colorBlack27}" 
+                           FontFamily="{StaticResource FontAwesomeSolid}"/>
                     <Label 
                          FontSize="9" 
                          FontAttributes="Bold" 
                          FontFamily="FontMontserratMedium"
                          HorizontalOptions="Center"
-                         TextColor="White"
+                         TextColor="{StaticResource colorBlack27}"
                          HorizontalTextAlignment="Center"
                          Text="{Binding TotalCompra, StringFormat='${0:N0}'}"/>
                     <StackLayout.GestureRecognizers>
@@ -82,10 +81,10 @@
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
             </Grid>
-        </StackLayout>
     </NavigationPage.TitleView>
     
-    <StackLayout >
+    <ScrollView >
+        <StackLayout>
         <StackLayout IsVisible="{Binding NoIsBusy}" >
             <ActivityIndicator HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="100" IsVisible="{Binding IsLoad}" IsRunning="{Binding IsLoad}"/>
             <Grid Margin="20,10,0,20" RowDefinitions="Auto, auto, Auto, auto, auto, *" IsVisible="{Binding IsCargando}">
@@ -183,7 +182,7 @@
                         <DataTemplate>
                             <Grid>
                                 <shadows:Shadows CornerRadius="38" Shades="{shadows:SingleShade BlurRadius=10, Offset='0,3', Opacity=0.5, Color={StaticResource colorYellow99F4}}">
-                                    <pancake:PancakeView Margin="0,5,5,5" Padding="8" BackgroundColor="{Binding backgroundColor}" CornerRadius="34" HeightRequest="50" VerticalOptions="Start" WidthRequest="200">
+                                    <pancake:PancakeView Margin="0,5,5,5" Padding="8" BackgroundColor="{Binding backgroundColor}" CornerRadius="34" VerticalOptions="Start">
                                         <Grid
                                         ColumnDefinitions="auto, *"
                                         RowSpacing="0"
@@ -437,5 +436,6 @@
                            IsRunning="{Binding IsBusy}" 
                            VerticalOptions="CenterAndExpand"
                            HorizontalOptions="CenterAndExpand"/>
-    </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

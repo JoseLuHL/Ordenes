@@ -10,6 +10,7 @@ using XFFurniture.Models;
 using XFFurniture.Service;
 using XFFurniture.ViewModels;
 using XFFurniture.Views;
+using XFFurniture.Views.Ordenes;
 
 namespace HamburgerMenu
 {
@@ -67,6 +68,14 @@ namespace HamburgerMenu
                         IsPresented = false;
                         return;
                     }
+                }
+
+                if (menu.MenuTitle == "Mis pedidos")
+                {
+                    MainPageViewModel.MisOrdenesCommand.Execute(true);
+
+                    IsPresented = false;
+                    return;
                 }
 
                 Detail = new NavigationPage(menu.Page);

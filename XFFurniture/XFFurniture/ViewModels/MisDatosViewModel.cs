@@ -40,6 +40,19 @@ namespace SwipeMenu.ViewModel
             get => colorUbicacion;
             set => SetProperty(ref colorUbicacion, value);
         }
+        private bool islogueo;
+
+        public bool IsLogueo
+        {
+            get => islogueo;
+            set
+            {
+                SetProperty(ref islogueo, value);
+                if (Cliente != null)
+                    IsLogueo = true;
+            }
+        }
+
         public ICommand UbicacionCommand => new Command(async () =>
         {
             IsBusy = true;
@@ -88,22 +101,26 @@ namespace SwipeMenu.ViewModel
                 await Application.Current.MainPage.DisplayAlert("", "Ingrese una clave", "OK");
                 return;
             }
+
             if (string.IsNullOrEmpty(ClieDireccion))
             {
                 await Application.Current.MainPage.DisplayAlert("", "Ingrese una dirección", "OK");
                 return;
             }
+
             if (string.IsNullOrEmpty(ClieTelefono))
             {
                 await Application.Current.MainPage.DisplayAlert("", "Ingrese sus telefono", "OK");
                 return;
             }
+
             //if (string.IsNullOrEmpty(ClieLatitud))
             //{
             //    await Application.Current.MainPage.DisplayAlert("", "Ingrese sus telefono", "OK");
             //    return;
             //}
-            var confirmar = await DisplayAlert("", "¿Esta seguro de guargar la orden?", "OK", "CANCELAR");
+
+            var confirmar = await DisplayAlert("", "¿Esta seguro de guargar los datos?", "OK", "CANCELAR");
             if (!confirmar)
                 return;
 
@@ -116,9 +133,10 @@ namespace SwipeMenu.ViewModel
             if (!string.IsNullOrEmpty(ClieLongitud))
             {
                 cli.ClieLongitud = ClieLongitud;
-                cli.ClieLatitud = ClieLatitud;
+                cli.ClieLatitud = ClieLatitud; 
+                IsBusy = false;
             }
-            
+
 
             try
             {
@@ -126,7 +144,7 @@ namespace SwipeMenu.ViewModel
                 var guardar = await DataService.PostGuardarAsync<ClienteModelo>(cli, UrlModelo.cliente);
                 if (!string.IsNullOrEmpty(guardar))
                 {
-                    var d = guardar.Replace("}","").Replace("{","").Split(':');
+                    var d = guardar.Replace("}", "").Replace("{", "").Split(':');
                     var da = d[1];
                     cli.ClieId = int.Parse(da);
                     var ope = await App.SQLiteDb.SaveItemAsync(cli);
@@ -246,6 +264,7 @@ namespace SwipeMenu.ViewModel
                 Cliente = dat[0];
                 if (dat[0] != null)
                 {
+                    IsLogueo = true;
                     ClieIdentificacion = dat[0].ClieIdentificacion;
                     ClieNombre = dat[0].ClieNombre;
                     ClieApellidos = dat[0].ClieApellidos;

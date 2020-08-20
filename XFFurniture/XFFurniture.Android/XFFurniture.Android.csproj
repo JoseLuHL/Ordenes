@@ -63,6 +63,9 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Plugin.Permissions">
+      <Version>6.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Sharpnado.Shadows">
       <Version>1.0.2</Version>
     </PackageReference>

@@ -3,27 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="WorkingWithMaps.PinPage"
-             Title="Pins demo">
+             Title="Mapa">
     <StackLayout>
 
-            <maps:Map x:Name="map"  IsShowingUser="True"  MapType="Hybrid"   >
-                <x:Arguments >
-                    <maps:MapSpan>
-                        <x:Arguments >
-                            <maps:Position>
-                                <x:Arguments>
-                                    <x:Double>5.6845709</x:Double>
-                                    <x:Double>-76.6540463</x:Double>
-                                </x:Arguments>
-                            </maps:Position>
-                            <x:Double>0.01</x:Double>
-                            <x:Double>0.01</x:Double>
-                        </x:Arguments>
-                    </maps:MapSpan>
-                </x:Arguments>
-            </maps:Map>
-
-            <!--<Frame Opacity="0.7" Grid.Row="0">
+        <maps:Map x:Name="map"  IsShowingUser="True"  MapType="Hybrid" IsVisible="{Binding NoIsBusy}">
+            <x:Arguments >
+                <maps:MapSpan>
+                    <x:Arguments >
+                        <maps:Position>
+                            <x:Arguments>
+                                <x:Double>5.6845709</x:Double>
+                                <x:Double>-76.6540463</x:Double>
+                            </x:Arguments>
+                        </maps:Position>
+                        <x:Double>0.01</x:Double>
+                        <x:Double>0.01</x:Double>
+                    </x:Arguments>
+                </maps:MapSpan>
+            </x:Arguments>
+        </maps:Map>
+        <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                           IsRunning="{Binding IsBusy}" 
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="CenterAndExpand"/>
+        <!--<Frame Opacity="0.7" Grid.Row="0">
                 <StackLayout>
                     <Label FontAttributes="Bold" FontSize="25" Text="Nombre de la tienda"/>
                     <Entry/>
@@ -32,9 +35,9 @@
                     <Picker/>
                 </StackLayout>
             </Frame>-->
-            <!--<Button Text="Add more pins"
+        <!--<Button Text="Add more pins"
                 Clicked="OnButtonClicked"
                 />-->
-        
+
     </StackLayout>
 </ContentPage>

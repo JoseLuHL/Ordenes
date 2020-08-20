@@ -8,15 +8,11 @@
              x:Class="XFFurniture.Views.TiendasPage">
    
     <ContentPage.Content>
-        <StackLayout>
+        <ScrollView>
 
-            <Grid IsVisible="{Binding NoIsBusy}" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <StackLayout Margin="30" HeightRequest="100" >
-                <CollectionView x:Name="listCategorias" HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding Categorias}" SelectionMode="None">
+            <StackLayout IsVisible="{Binding NoIsBusy}" >
+                <StackLayout Margin="30">
+                    <CollectionView x:Name="listCategorias" HorizontalScrollBarVisibility="Never" HeightRequest="100" ItemsSource="{Binding Categorias}" SelectionMode="None">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="5" Orientation="Horizontal" />
                     </CollectionView.ItemsLayout>
@@ -29,7 +25,6 @@
                                     Padding="8"
                                     BackgroundColor="{Binding backgroundColor}"
                                     CornerRadius="34"
-                                    HeightRequest="40"
                                     VerticalOptions="Start"
                                     >
                                         <Grid
@@ -38,9 +33,7 @@
                                         VerticalOptions="Center">
                                             <BoxView
                                             BackgroundColor="{StaticResource colorWhite}"
-                                            CornerRadius="25"
-                                            HeightRequest="50"
-                                            WidthRequest="50" />
+                                            CornerRadius="25" />
                                             <Image
                                             Grid.Column="0"
                                             HeightRequest="34"
@@ -91,7 +84,7 @@
             </StackLayout>
 
 
-            <StackLayout Spacing="0" Margin="20,0,20,20" Grid.Row="1">
+            <StackLayout Spacing="0" Margin="20,0,20,20">
                 <CollectionView x:Name="listCategories"  HorizontalScrollBarVisibility="Never"  ItemsSource="{Binding Tiendas}" SelectionMode="None">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
@@ -121,7 +114,7 @@
                                             Grid.Column="0"
                                             HeightRequest="34"
                                             HorizontalOptions="Center"
-                                            Source="armchair.png"
+                                            Source="{Binding TienFoto}"
                                             VerticalOptions="CenterAndExpand"
                                             WidthRequest="34" />
                                             <StackLayout
@@ -164,12 +157,12 @@
                 </CollectionView>
 
             </StackLayout>
-
-        </Grid>
-            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                <ActivityIndicator IsVisible="{Binding IsBusy}" 
                            IsRunning="{Binding IsBusy}" 
                            VerticalOptions="CenterAndExpand" 
                            HorizontalOptions="CenterAndExpand"/>
-        </StackLayout>
+            </StackLayout>
+           
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

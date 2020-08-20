@@ -60,11 +60,11 @@ namespace XFFurniture.Service
             };
         }
 
-        public static async Task<ObservableCollection<TiendaModelo>> GetTiendaModelosAsync()
+        public static async Task<ObservableCollection<TiendaModelo>> GetTiendaModelosAsync(string url)
         {
             var respuesta = new ObservableCollection<TiendaModelo>();
             Http = new HttpClient();
-            var peticion = await Http.GetAsync(UrlModelo.tiendas);
+            var peticion = await Http.GetAsync(url);
             if (peticion.IsSuccessStatusCode)
             {
                 var contenido = await peticion.Content.ReadAsStringAsync();

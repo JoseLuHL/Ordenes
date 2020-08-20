@@ -70,7 +70,7 @@ namespace WorkingWithMaps
             {
                 listPin = new Pin
                 {
-                    Position = new Position(item.TienLatitud, item.TienLongitud),
+                    Position = new Position(double.Parse(item.TienLatitud.ToString()), double.Parse(item.TienLongitud.ToString())),
                     BindingContext = item,
                     AutomationId = item.TienId.ToString(),
                     Label = item.TienRazonsocial,
@@ -121,6 +121,7 @@ namespace WorkingWithMaps
 
         async void OnInfoWindowClickedAsync(object sender, PinClickedEventArgs e)
         {
+            
             var property = ((Pin)sender).BindingContext as TiendaModelo;
             string pinName = ((Pin)sender).Label;
             tiendas.SelectCategoryCommand.Execute(property);

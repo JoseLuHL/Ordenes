@@ -29,7 +29,7 @@
                        IsVisible="{Binding AreCredentialsInvalid}" 
                        TextColor="Red" />
                 </StackLayout>
-                <Button Grid.Row="2" Text="Authenticate" TextColor="White" BackgroundColor="{StaticResource fondo_boton}" Command="{Binding AuthenticateCommand}" />
+                <Button Grid.Row="2" Text="Iniciar sesión" TextColor="White" BackgroundColor="{StaticResource fondo_boton}" Command="{Binding AuthenticateCommand}" />
                 <Label Grid.Row="4" Text="¿Aun no estas registrado?" TextColor="Blue" FontSize="Large">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding PaginaRegistrarCommand}"/>

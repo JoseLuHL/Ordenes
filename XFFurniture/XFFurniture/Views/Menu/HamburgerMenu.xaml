@@ -2,11 +2,18 @@
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
                   x:Class="HamburgerMenu.HamburgerMenu"
-             BackgroundColor="White">
-    <MasterDetailPage.Master>
+                  BackgroundColor="{StaticResource colorBlack}"
+                  MasterBehavior="Popover"
+                  Icon="heart.png"
+            IconImageSource="heart.png"
+                  >
+    
+    <MasterDetailPage.Master >
         <ContentPage
+            Icon="heart.png"
+            IconImageSource="heart.png"
+            BackgroundColor="{StaticResource colorBlack}"
             Title="Menú"
-            BackgroundColor="#232A3A"
             Padding="0,56,0,0">
             <StackLayout>
             <!--<Label Text="" TextColor="White"/>-->

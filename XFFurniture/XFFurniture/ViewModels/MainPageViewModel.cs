@@ -49,7 +49,6 @@ namespace XFFurniture.ViewModels
 
         public async Task load()
         {
-
             TiendaCarrito = await App.SQLiteDb.GetProductoAsync();
             TiendasCarrito = await App.SQLiteDb.GetTiendaAsync();
             CalcularTotal();
@@ -67,7 +66,7 @@ namespace XFFurniture.ViewModels
             menu_.Add(new Models.MenuApp { Page = new TiendasPage { BindingContext = this }, MenuTitle = "Tiendas", MenuDetail = "Mi perfil", icon = "user.png" });
             menu_.Add(new Models.MenuApp { Page = new PinPage { BindingContext = this }, MenuTitle = "Mapa", MenuDetail = "Mensajes", icon = "message.png" });
             menu_.Add(new Models.MenuApp { Page = new CategoriaPage { BindingContext = this }, MenuTitle = "Categorias", MenuDetail = "Contactos", icon = "contacts.png" });
-            menu_.Add(new Models.MenuApp { Page = new MisOrdenes (), MenuTitle = "Mis pedidos", MenuDetail = "Configuración", icon = "settings.png" });
+            menu_.Add(new Models.MenuApp { Page = new MisOrdenes(), MenuTitle = "Mis pedidos", MenuDetail = "Configuración", icon = "settings.png" });
             menu_.Add(new Models.MenuApp { Page = new MisDatosPage(), MenuTitle = "Perfil", MenuDetail = "Mis Datos", icon = "settings.png" });
             MenuApp = menu_;
 
@@ -164,21 +163,7 @@ namespace XFFurniture.ViewModels
             inputString = n.Replace(inputString, "n");
             return inputString.ToLower().Trim().Replace(" ", "");
         }
-        //  public ICommand BuscarProductoCommand => new Command(async () =>
-        //{
-        //    IsBusy = true;
-        //    if (string.IsNullOrEmpty(BuscarProducto))
-        //    {
-        //        Productos = ProductosBuscar;
-        //        IsBusy = false;
-        //        return;
-        //    }
 
-        //    var encontrados = ProductosBuscar.Where(p => p.ProdNombre.ToLower().Contains(BuscarProducto.ToLower()) || p.ProdDescripcion.ToLower().Contains(BuscarProducto.ToLower())).ToList();
-        //    Productos = new ObservableCollection<ProductoModelo>(encontrados);
-        //    IsBusy = false;
-
-        //});
         public ICommand CarritoCommand => new Command(async () =>
         {
             if (TiendaCarrito != null && TiendaCarrito.Count > 0)
@@ -215,18 +200,19 @@ namespace XFFurniture.ViewModels
 
         public ICommand ProductosComprarCommand => new Command(async () =>
         {
-            //if (Productos != null && Productos.Count <= 0)
-            //    return;
-
             IsBusy = true;
             await GetTienda();
             await Navigation.PushModalAsync(new ProductoPage { BindingContext = this });
             IsBusy = false;
         });
 
-
         public ICommand MisOrdenesCommand => new Command(async () =>
         {
+            if (!await UsuarioServicio.EstadologinAsync())
+            {
+                await Navigation.PushModalAsync(new LoginPagina());
+                return;
+            }
             IsBusy = true;
             await Navigation.PushModalAsync(new MisOrdenes());
             IsBusy = false;
@@ -249,18 +235,31 @@ namespace XFFurniture.ViewModels
         {
             try
             {
+                TiendaCarrito.ForEach(e => e.Id = 0);
                 var tiendaCarrito_ = new ObservableCollection<ProductoModelo>();
                 var CarritoAn = new ObservableCollection<ProductoModelo>();
                 CarritoAn = TiendaCarrito;
                 if (TiendaCarrito != null)
                 {
-                    var buscar = TiendaCarrito.FirstOrDefault(s => s.ProdId == ProductoDet.ProdId);
+                    var buscar = TiendaCarrito.Where(s => s.ProdId == ProductoDet.ProdId).ToList();
 
-                    if (buscar == null)
+                    if (buscar != null)
+                    {
+                        foreach (var item in buscar)
+                            CarritoAn.Remove(item);
+
+                        ProductoDet.Cantidad++;
                         tiendaCarrito_.Add(ProductoDet);
+                    }
+                    else
+                    {
+                        ProductoDet.Cantidad++;
+                        tiendaCarrito_.Add(ProductoDet);
+                    }
                 }
                 else
                 {
+                    ProductoDet.Cantidad++;
                     tiendaCarrito_.Add(ProductoDet);
                 }
 
@@ -271,41 +270,41 @@ namespace XFFurniture.ViewModels
                         tiendaCarrito_.Add(item);
                     }
                 }
-                ProductoDet.Cantidad++;
+
                 TiendaCarrito = tiendaCarrito_;
                 CalcularTotal();
-                TotalCarrito = TiendaCarrito.Count;
+                //TotalCarrito = TiendaCarrito.Count;
                 await Task.Delay(1000);
                 await GuardarCarritoLocal(tiendaCarrito_);
-                tiendaCarrito_ = null;
+                //tiendaCarrito_ = null;
             }
             catch (System.Exception ex)
             {
-
                 await DisplayAlert("", ex.Message, "OK");
             }
-
         });
 
         public async Task GuardarCarritoLocal(ObservableCollection<ProductoModelo> producto)
         {
             IsBusy = true;
             NoIsBusy = false;
-            await App.SQLiteDb.EliminarproductoAsync();
-            await App.SQLiteDb.EliminarTiendaAsync();
-            foreach (var item in producto)
+            try
             {
-                await App.SQLiteDb.GuardarAsync<ProductoModelo>(item);
-                try
-                {
+                var p = await App.SQLiteDb.EliminarproductoAsync();
+                var t = await App.SQLiteDb.EliminarTiendaAsync();
+
+                var tiend = producto.GroupBy(s => s.ProdIdtienda).Select(g => g.First()).ToList();
+                foreach (var item in producto)
+                    await App.SQLiteDb.GuardarAsync<ProductoModelo>(item);
+                foreach (var item in tiend)
                     await App.SQLiteDb.GuardarAsync<TiendaModelo>(item.ProdIdtiendaNavigation);
 
-                }
-                catch (System.Exception)
-                {
-                    IsBusy = false;
-                    NoIsBusy = true;
-                }
+            }
+            catch (System.Exception ex)
+            {
+                await DisplayAlert("Guardar local", ex.ToString(), "OK");
+                IsBusy = false;
+                NoIsBusy = true;
             }
             IsBusy = false;
             NoIsBusy = true;
@@ -315,18 +314,26 @@ namespace XFFurniture.ViewModels
         {
             try
             {
+                TiendaCarrito.ForEach(e => e.Id = 0);
                 var tiendaCarrito_ = new ObservableCollection<ProductoModelo>();
                 var CarritoAn = new ObservableCollection<ProductoModelo>();
                 CarritoAn = TiendaCarrito;
 
                 if (TiendaCarrito != null)
                 {
-                    var buscar = TiendaCarrito.FirstOrDefault(s => s.ProdId == ProductoDet.ProdId);
+                    var buscar = TiendaCarrito.Where(s => s.ProdId == ProductoDet.ProdId).ToList();
+
                     if (buscar != null)
                     {
                         ProductoDet.Cantidad--;
+                        foreach (var item in buscar)
+                            CarritoAn.Remove(item);
+
+                        tiendaCarrito_.Add(ProductoDet);
                         if (ProductoDet.Cantidad <= 0)
+                        {
                             ProductoDet.Cantidad = 0;
+                        }
                     }
                 }
 
@@ -345,7 +352,7 @@ namespace XFFurniture.ViewModels
                 TotalCarrito = TiendaCarrito.Count;
                 await Task.Delay(1000);
                 await GuardarCarritoLocal(tiendaCarrito_);
-                tiendaCarrito_ = null;
+                //tiendaCarrito_ = null;
 
             }
             catch (System.Exception ex)
@@ -799,7 +806,7 @@ namespace XFFurniture.ViewModels
                         await Navigation.PopModalAsync();
                         await Navigation.PopModalAsync();
                     }
-
+                    CalcularTotal();
                     IsBusy = false;
                 }
                 IsBusy = false;
@@ -832,12 +839,15 @@ namespace XFFurniture.ViewModels
                 foreach (var item in tiendaCarritoDetalle)
                 {
                     TiendaCarrito.Remove(item);
-                    await App.SQLiteDb.EliminarAsync<ProductoModelo>(item);
+                    //await App.SQLiteDb.EliminarAsync<ProductoModelo>(item);
                 }
+
                 var ti = TiendasCarrito.FirstOrDefault(s => s.TienId == tiendaCarritoDetalle[0].ProdIdtienda);
                 TiendasCarrito.Remove(ti);
-                await App.SQLiteDb.EliminarAsync<TiendaModelo>(ti);
+                //await App.SQLiteDb.EliminarAsync<TiendaModelo>(ti);
+                await GuardarCarritoLocal(TiendaCarrito);
                 TiendaCarritoDetalle = null;
+
                 CalcularTotal();
             }
             catch (System.Exception ex)
@@ -914,16 +924,20 @@ namespace XFFurniture.ViewModels
             double tot = 0;
             if (TiendaCarrito != null)
             {
-                foreach (var item in TiendaCarrito)
+                if (TiendaCarrito.Count > 0)
                 {
-                    tot = tot + (item.Cantidad * item.ProdPreciounitario);
+
+                    foreach (var item in TiendaCarrito)
+                    {
+                        tot = tot + (item.Cantidad * item.ProdPreciounitario);
+                    }
+                    TotalCompra = tot;
                 }
-                TotalCompra = tot;
+                else
+                    TotalCompra = 0;
             }
             else
                 TotalCompra = 0;
-
-
         }
         void CalcularTotalDetalle()
         {
@@ -949,7 +963,7 @@ namespace XFFurniture.ViewModels
             IsBusy = true;
             if (Tiendas == null)
             {
-                Tiendas = await DataService.GetTiendaModelosAsync();
+                Tiendas = await DataService.GetsAsync<TiendaModelo>(UrlModelo.tiendas);
                 TiendasPremiun = new ObservableCollection<TiendaModelo>(Tiendas.Where(s => s.TienPremium == true).ToList());
             }
             IsBusy = false;
@@ -976,6 +990,7 @@ namespace XFFurniture.ViewModels
 
         async Task ExecuteSelectCategoryCommand(TiendaModelo model)
         {
+            IsBusy = true;
             TiendaSelect = model;
             var index = Tiendas
                .ToList()
@@ -989,8 +1004,8 @@ namespace XFFurniture.ViewModels
                 Tiendas[index].textColor = "#FFFFFF";
                 Tiendas[index].backgroundColor = "#F4C03E";
             }
-
             await GetProductosTienda(model.TienId);
+            IsBusy = false;
         }
         void UnselectGroupItems()
         {
@@ -1011,19 +1026,26 @@ namespace XFFurniture.ViewModels
         }
         private async Task ExeccuteNavigateToDetailPageCommand(ProductoModelo param)
         {
-            Pagina = 1;
-            IsBusy = true;
-            NoIsBusy = false;
-            var bus = TiendaCarrito.FirstOrDefault(s => s.ProdId == param.ProdId);
-            if (bus != null)
+            try
             {
-                param.Cantidad = bus.Cantidad;
-            }
+                Pagina = 1;
+                IsBusy = true;
+                NoIsBusy = false;
+                var bus = TiendaCarrito.FirstOrDefault(s => s.ProdId == param.ProdId);
+                if (bus != null)
+                {
+                    param.Cantidad = bus.Cantidad;
+                }
 
-            ProductoDet = param;
-            await Navigation.PushModalAsync(new DetailPage { BindingContext = this });
-            IsBusy = false;
-            NoIsBusy = true;
+                ProductoDet = param;
+                await Navigation.PushModalAsync(new DetailPage { BindingContext = this });
+                IsBusy = false;
+                NoIsBusy = true;
+            }
+            catch (System.Exception ex)
+            {
+                await DisplayAlert("Detail Main", ex.Message, "OK");
+            }
         }
         private async Task ExeccuteNavigateToDetailPageCommand1(ProductoModelo param)
         {
