@@ -27,7 +27,9 @@ namespace XFFurniture.ViewModels
     {
         public MainPageViewModel(INavigation navigation)
         {
-
+            //try
+            //{
+            
             IsLoad = true;
             IsCargando = false;
             IsBusy = true;
@@ -43,7 +45,12 @@ namespace XFFurniture.ViewModels
             _ = load();
             _ = GetCategories();
             LoadMenu();
-            //UnselectGroupItems();
+                //UnselectGroupItems();
+            //}
+            //catch (System.Exception ex)
+            //{
+            //    _ = DisplayAlert("main", ex.ToString(), "OK");
+            //}
             //SelectedItem = MenuApp[0];
         }
 
@@ -56,7 +63,6 @@ namespace XFFurniture.ViewModels
             var dat = await App.SQLiteDb.GetItemsAsync();
             UsuarioServicio.Cliente = dat[0];
             ClienteUsuario = dat[0];
-
         }
 
         private void LoadMenu()
@@ -958,7 +964,7 @@ namespace XFFurniture.ViewModels
                 Categorias = await DataService.GetCategoriaAsync(UrlModelo.categoria);
             IsBusy = false;
         }
-        async Task GetTienda()
+      public  async Task GetTienda()
         {
             IsBusy = true;
             if (Tiendas == null)

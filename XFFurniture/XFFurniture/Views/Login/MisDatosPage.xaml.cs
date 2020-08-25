@@ -24,6 +24,7 @@ namespace SwipeMenu.Views
         }
         protected async override void OnAppearing()
         {
+           //await misdatos.Task();
             //if (Tienda.Tienda.TienLatitud!=null && Tienda.Tienda.TienLongitud!=null)
             //{
             //    miubicacion.IsChecked = true;

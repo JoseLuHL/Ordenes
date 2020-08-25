@@ -22,6 +22,7 @@ namespace XFFurniture
 
         protected async override void OnAppearing()
         {
+            
             if (x == 1)
             {
                 MainPageViewModel.IsLoad = true;
@@ -34,6 +35,18 @@ namespace XFFurniture
                 MainPageViewModel.IsLoad = false;
                 MainPageViewModel.IsCargando = true;
             }
+
+            if (MainPageViewModel.TiendasPremiun.Count < 1)
+            {
+                var confirmar = await DisplayAlert("", "No se han cargado las tiendas\n ¿Desea volver a intentarlo?", "OK", "CANCELAR");
+                if (confirmar)
+                {
+                    await MainPageViewModel.GetTienda();
+                    if (MainPageViewModel.TiendasPremiun.Count < 1)
+                        await DisplayAlert("", "Lo sentimos algo fallo", "OK");
+                }
+            }
+
             x++;
             DependencyService.Get<IStatusBarStyle>().ChangeTextColor();
         }

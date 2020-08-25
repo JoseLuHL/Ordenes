@@ -18,10 +18,19 @@ namespace XFFurniture.ViewModels
     {
         public MisReservasViewModel(INavigation navigation)
         {
-            IsBusy = true;
-            NoIsBusy = false;
-            Navigation = navigation;
-            _ = LoadAsync();
+            try
+            {
+                IsBusy = true;
+                NoIsBusy = false;
+                Navigation = navigation;
+                _ = LoadAsync();
+            }
+            catch (Exception es)
+            {
+
+                _ = DisplayAlert("Mis res", es.ToString(), "OK");
+            }
+           
 
             //_ = MisOrdenes();
         }

@@ -48,8 +48,7 @@ namespace SwipeMenu.ViewModel
             set
             {
                 SetProperty(ref islogueo, value);
-                if (Cliente != null)
-                    IsLogueo = true;
+                
             }
         }
 
@@ -148,14 +147,14 @@ namespace SwipeMenu.ViewModel
                     var da = d[1];
                     cli.ClieId = int.Parse(da);
                     var ope = await App.SQLiteDb.SaveItemAsync(cli);
-                    Cliente = cli;
                     UsuarioServicio.Cliente = cli;
-                    await Application.Current.MainPage.DisplayAlert("", "Los datos se han guardado", "OK");
-                    await Application.Current.MainPage.Navigation.PopModalAsync();
-                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                    Cliente = cli;
+                    await DisplayAlert("", "Los datos se han guardado", "OK");
+                    await Navigation.PopModalAsync();
+                    await Navigation.PopModalAsync();
                 }
                 else
-                    await Application.Current.MainPage.DisplayAlert("", "Los datos no se pudieron guardar \n vuelva a intentarlo", "OK");
+                    await DisplayAlert("", "Los datos no se pudieron guardar \n vuelva a intentarlo", "OK");
 
             }
             catch (Exception ex)
@@ -252,13 +251,16 @@ namespace SwipeMenu.ViewModel
             }
         }
 
-        async Task Task()
+       public async Task Task()
         {
             try
             {
                 var dat = await App.SQLiteDb.GetItemsAsync();
                 if (dat == null || dat.Count <= 0)
+                {
                     return;
+                    IsLogueo = false;
+                }
 
                 UsuarioServicio.Cliente = dat[0];
                 Cliente = dat[0];
@@ -284,14 +286,21 @@ namespace SwipeMenu.ViewModel
 
         public MisDatosViewModel(INavigation navigation)
         {
-
-            Navigation = navigation;
-            //Navigation = navigation;
-            _ = Task();
-            //_ = UsuarioServicio.EstadologinAsync();
-            //Cliente = UsuarioServicio.Cliente;
-            ColorUbicacion = "Red";
-            MensajeUbicacion = "Sin ubicacion";
+            try
+            {
+                Navigation = navigation;
+                //Navigation = navigation;
+                _ = Task();
+                //_ = UsuarioServicio.EstadologinAsync();
+                //Cliente = UsuarioServicio.Cliente;
+                ColorUbicacion = "Red";
+                MensajeUbicacion = "Sin ubicacion";
+            }
+            catch (System.Exception ex)
+            {
+                _ = DisplayAlert("main", ex.ToString(), "OK");
+            }
+            
         }
     }
 }
